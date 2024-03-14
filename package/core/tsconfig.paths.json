@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@config/*": ["config/*"],
+      "@router": ["Router"],
+      "@module/member/slice/*": ["module/member/slice/*"],
+      "@common_components_ui": ["common/components/common_ui_index.ts"],
+      "@common_components/*": ["common/components/*"],
+      "@main_page/*": ["main/*"]
+    }
+  }
+}
