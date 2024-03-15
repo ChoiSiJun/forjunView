@@ -28,7 +28,8 @@
     "vite-tsconfig-paths": "^4.3.2"
   },
   "scripts": {
-    "core": "yarn workspace @packages/core"
+    "core": "yarn workspace @packages/core",
+    "zmng": "yarn workspace @packages/zmng"
   },
   "dependencies": {
     "bootstrap": "^5.3.3",

@@ -632,6 +632,25 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@packages/zmng@workspace:package/zmng":
+  version: 0.0.0-use.local
+  resolution: "@packages/zmng@workspace:package/zmng"
+  dependencies:
+    "@types/react": "npm:^18.2.64"
+    "@types/react-dom": "npm:^18.2.21"
+    "@typescript-eslint/eslint-plugin": "npm:^7.1.1"
+    "@typescript-eslint/parser": "npm:^7.1.1"
+    "@vitejs/plugin-react": "npm:^4.2.1"
+    eslint: "npm:^8.57.0"
+    eslint-plugin-react-hooks: "npm:^4.6.0"
+    eslint-plugin-react-refresh: "npm:^0.4.5"
+    react: "npm:^18.2.0"
+    react-dom: "npm:^18.2.0"
+    typescript: "npm:^5.2.2"
+    vite: "npm:^5.1.6"
+  languageName: unknown
+  linkType: soft
+
 "@pkgjs/parseargs@npm:^0.11.0":
   version: 0.11.0
   resolution: "@pkgjs/parseargs@npm:0.11.0"
@@ -916,7 +935,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:7.2.0, @typescript-eslint/eslint-plugin@npm:^7.2.0":
+"@typescript-eslint/eslint-plugin@npm:7.2.0, @typescript-eslint/eslint-plugin@npm:^7.1.1, @typescript-eslint/eslint-plugin@npm:^7.2.0":
   version: 7.2.0
   resolution: "@typescript-eslint/eslint-plugin@npm:7.2.0"
   dependencies:
@@ -941,7 +960,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:7.2.0, @typescript-eslint/parser@npm:^7.2.0":
+"@typescript-eslint/parser@npm:7.2.0, @typescript-eslint/parser@npm:^7.1.1, @typescript-eslint/parser@npm:^7.2.0":
   version: 7.2.0
   resolution: "@typescript-eslint/parser@npm:7.2.0"
   dependencies:
@@ -2199,6 +2218,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-react-refresh@npm:^0.4.5":
+  version: 0.4.6
+  resolution: "eslint-plugin-react-refresh@npm:0.4.6"
+  peerDependencies:
+    eslint: ">=7"
+  checksum: 10c0/931d5623c7c694526e9d34f61af856bb1949a0b9b9b509da29cba6c3c68fd4e1e7e36d8a340f6aecfd22329d0425c7fbb2388dd7d24b0d05218067747f5d6fe3
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-react@npm:^7.34.0":
   version: 7.34.0
   resolution: "eslint-plugin-react@npm:7.34.0"
@@ -2244,7 +2272,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.0.1":
+"eslint@npm:^8.0.1, eslint@npm:^8.57.0":
   version: 8.57.0
   resolution: "eslint@npm:8.57.0"
   dependencies:
