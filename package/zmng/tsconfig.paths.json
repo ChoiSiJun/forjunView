@@ -2,11 +2,11 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "paths": {
-      "@config/*": ["config/*"],
-      "@router": ["Router"],
-      "@module/member/slice/*": ["module/member/slice/*"],
-      "@common_components_ui": ["common/components/common_ui_index.ts"],
-      "@common_components/*": ["common/components/*"],
+      "@config/*": ["config/*"], //설정파일
+      "@router": ["Router"], //라우터
+      "@module/member/slice/*": ["module/member/slice/*"], // 리덕스 슬라이스
+      "@common_components_ui": ["common/components/common_ui_index.ts"], //공통 화면 Component Index
+      "@common_components/*": ["common/components/*"], //공통화면 Component
       "@main_page/*": ["main/*"]
     }
   }
