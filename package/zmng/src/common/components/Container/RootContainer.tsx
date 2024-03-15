@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Container, ThemeProvider } from 'react-bootstrap';
 
 // RootContainer 자식 인터페이스
