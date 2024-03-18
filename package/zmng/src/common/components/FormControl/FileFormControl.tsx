@@ -3,39 +3,31 @@ import Form from 'react-bootstrap/Form';
 //Form size
 type SizeType = 'lg' | undefined | 'sm';
 
-//Form Type
-type TypeType = 'email' | 'text';
-
 interface InputFormControlProps {
   className: string;
   controlId: string;
   size: SizeType;
   label: string;
-  placeholder?: string;
-  type: TypeType;
   disabled?: boolean;
-  readOnly?: boolean;
+  multiple?: boolean;
 }
 
 function InputFormControl({
   className,
   controlId,
   label,
-  type,
   size,
-  placeholder = '',
+  multiple = false,
   disabled = false,
-  readOnly = false,
 }: InputFormControlProps) {
   return (
     <Form.Group className={className} controlId={controlId}>
       <Form.Label>{label}</Form.Label>
       <Form.Control
-        type={type}
+        type="file"
         size={size}
-        placeholder={placeholder}
+        multiple={multiple}
         disabled={disabled}
-        readOnly={readOnly}
       />
     </Form.Group>
   );
