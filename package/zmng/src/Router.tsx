@@ -5,6 +5,7 @@ function LibertyRouter() {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<MembetMain />} />
         <Route path="/member" element={<MembetMain />} />
       </Routes>
     </Router>
