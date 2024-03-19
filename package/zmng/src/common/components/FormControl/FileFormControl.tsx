@@ -6,7 +6,7 @@ type SizeType = 'lg' | undefined | 'sm';
 interface InputFormControlProps {
   className: string;
   controlId: string;
-  size: SizeType;
+  size?: SizeType;
   label: string;
   disabled?: boolean;
   multiple?: boolean;

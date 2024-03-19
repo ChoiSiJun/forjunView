@@ -1,9 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-interface MemberListErrorType {
-  errorMessage: string;
-}
+import { FieldListType, AsyncThunkErrorType } from '@common_type';
 
 //Member List Axios 호출시 요청 타입
 interface SearchQueryType {
@@ -11,44 +9,52 @@ interface SearchQueryType {
   searchKeyWord: string;
 }
 
-// Member List 응답 타입
+// MemberList 타입
 interface MemberType {
   id: string;
   name: string;
   email: string;
 }
 
-interface CoulmnType {
-  key: string;
-  name: string;
-}
-
-interface TotalData extends MemberType {
-  columnList: CoulmnType;
-}
-
 //Member List Axios 반환 타입
 interface MemeberListType {
-  RequestData: SearchQueryType;
-  TableHead: CoulmnType[];
-  ResponseData: MemberType[];
-  ResponseCode: number;
+  requestData: SearchQueryType;
+  responseData: MemberType[];
+  responseCode: number;
   loading: boolean;
   errorMessage: string | undefined;
+  fieldList: FieldListType[];
 }
+
+const initialFileList = [
+  {
+    order: 1,
+    key: 'id',
+    name: '아이디',
+  },
+  {
+    order: 2,
+    key: 'name',
+    name: '이름',
+  },
+  {
+    order: 3,
+    key: 'email',
+    name: '이메일',
+  },
+];
 
 //Member List Axios 초기상태
 const initialState: MemeberListType = {
-  TableHead: [],
-  RequestData: {
+  requestData: {
     searchType: '',
     searchKeyWord: '',
   },
-
-  ResponseData: [],
-  ResponseCode: 404,
+  responseData: [],
+  responseCode: 404,
   loading: false,
   errorMessage: '',
+  fieldList: initialFileList,
 };
 
 //비통기 통신 구현 createAsyncThunk :
@@ -59,12 +65,13 @@ const initialState: MemeberListType = {
 const fetchMemberList = createAsyncThunk<
   MemberType[],
   SearchQueryType,
-  { rejectValue: MemberListErrorType }
+  { rejectValue: AsyncThunkErrorType }
 >('member/list', async (inputData, thunkAPI) => {
   try {
     const responseData: MemberType[] = await axios.get(
       `https://localhost:3000/todos/${inputData}`,
     );
+
     return responseData;
   } catch (error) {
     return thunkAPI.rejectWithValue({
@@ -83,8 +90,8 @@ export const MemeberListSlice = createSlice({
   // 리듀서 기입
   reducers: {
     setMemberQuery: (state, action: PayloadAction<SearchQueryType>) => {
-      state.RequestData.searchKeyWord = action.payload.searchKeyWord;
-      state.RequestData.searchType = action.payload.searchType;
+      state.requestData.searchKeyWord = action.payload.searchKeyWord;
+      state.requestData.searchType = action.payload.searchType;
     },
   },
   extraReducers: builder => {
@@ -98,8 +105,8 @@ export const MemeberListSlice = createSlice({
       })
       // 통신 성공
       .addCase(fetchMemberList.fulfilled, (state, { payload }) => {
-        state.ResponseCode = 200;
-        state.ResponseData = payload;
+        state.responseCode = 200;
+        state.responseData = payload;
         state.loading = false;
         state.errorMessage = '';
       })

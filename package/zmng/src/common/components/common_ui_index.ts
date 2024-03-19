@@ -6,9 +6,11 @@ export { default as SubContainer } from '@common_components/Container/SubContain
 export { default as InsertButton } from '@common_components/Button/InsertButton';
 export { default as UpdateButton } from '@common_components/Button/UpdateButton';
 export { default as DeleteButton } from '@common_components/Button/DeleteButton';
+export { default as SearchButton } from '@common_components/Button/SearchButton';
 
 // Modal 영역
 export { default as MainModal } from '@common_components/Modal/MainModal';
 
 // FormControl 영역
 export { default as InputFormControl } from '@common_components/FormControl/InputFormControl';
+export { default as BasicTable } from '@common_components/Table/BasicTable';

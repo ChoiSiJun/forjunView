@@ -6,6 +6,7 @@
       "@router": ["Router"], //라우터
 
       //공통사항
+      "@common_type": ["common/type/commonType.ts"],
       "@common_components_ui": ["common/components/common_ui_index.ts"], //공통 화면 Component Index
       "@common_components/*": ["common/components/*"], //공통화면 Component
 

@@ -4,40 +4,40 @@ import Form from 'react-bootstrap/Form';
 type SizeType = 'lg' | undefined | 'sm';
 
 //Form Type
-type TypeType = 'email' | 'text';
+type formType = 'email' | 'text';
 
 interface InputFormControlProps {
   className: string;
-  controlId: string;
-  size: SizeType;
-  label: string;
+  size?: SizeType;
   placeholder?: string;
-  type: TypeType;
+  type: formType;
   disabled?: boolean;
   readOnly?: boolean;
+  ariaLabel?: string;
+  ariaDescribedby?: string;
 }
 
 function InputFormControl({
   className,
-  controlId,
-  label,
   type,
   size,
   placeholder = '',
   disabled = false,
   readOnly = false,
+  ariaLabel = '',
+  ariaDescribedby = '',
 }: InputFormControlProps) {
   return (
-    <Form.Group className={className} controlId={controlId}>
-      <Form.Label>{label}</Form.Label>
-      <Form.Control
-        type={type}
-        size={size}
-        placeholder={placeholder}
-        disabled={disabled}
-        readOnly={readOnly}
-      />
-    </Form.Group>
+    <Form.Control
+      className={className}
+      type={type}
+      size={size}
+      placeholder={placeholder}
+      disabled={disabled}
+      readOnly={readOnly}
+      aria-label={ariaLabel}
+      aria-describedby={ariaDescribedby}
+    />
   );
 }
 
