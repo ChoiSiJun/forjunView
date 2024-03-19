@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-
 import {
   RootContainer,
   InsertButton,
@@ -7,37 +5,19 @@ import {
 } from '@common_components_ui';
 
 import { useAppSelector } from '@config/ReduxHooks';
+import BasicTable from '@common_components/Table/BasicTable';
 
-//Member Test data
-const MemberInit = [
-  {
-    id: '01',
-    name: '최시준',
-    loc: '미르테크',
-  },
-  {
-    id: '02',
-    name: '최시준',
-    loc: '미르테크',
-  },
-  {
-    id: '01',
-    name: '최시준',
-    loc: '미르테크',
-  },
-];
+//Member Table Data
 
 function MembetMain() {
-  const id = useAppSelector(state => state.Member.id);
-  const name = useAppSelector(state => state.Member.name);
-  const email = useAppSelector(state => state.Member.email);
-
-  const [memberList, setMemberList] = useState('[]');
+  const columnList = useAppSelector(state => state.MemberList.TableHeadList);
+  const MemberList = useAppSelector(state => state.MemberList.ResponseData);
 
   return (
     <RootContainer>
       <SubContainer>
         <table></table>
+        <BasicTable TableHeadList={columnList} dataList={MemberList} />
       </SubContainer>
       <SubContainer>
         <InsertButton>테스트중</InsertButton>
