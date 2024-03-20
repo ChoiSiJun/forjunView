@@ -6,7 +6,7 @@ import { FieldListType, AsyncThunkErrorType } from '@common_type';
 //Member List Axios 호출시 요청 타입
 interface SearchQueryType {
   searchType: string;
-  searchKeyWord: string;
+  searchKeyWord: string | undefined;
 }
 
 // MemberList 타입
@@ -59,14 +59,14 @@ const initialState: MemeberListType = {
 
 //비통기 통신 구현 createAsyncThunk :
 //1. Member List 응답 타입
-//2. Member List Axios 호출시 요청 타입
+//2. Member List Axios 호출시 요청 인자 타입
 //3. 추가파라미터 타입: 실패시 요청객체인 rejectValue에 대한 타입 설정
 
-const fetchMemberList = createAsyncThunk<
+export const fetchMemberList = createAsyncThunk<
   MemberType[],
   SearchQueryType,
   { rejectValue: AsyncThunkErrorType }
->('member/list', async (inputData, thunkAPI) => {
+>('member', async (inputData, thunkAPI) => {
   try {
     const responseData: MemberType[] = await axios.get(
       `https://localhost:3000/todos/${inputData}`,

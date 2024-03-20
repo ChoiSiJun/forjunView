@@ -2,29 +2,30 @@ import { ReactNode } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
 interface MainModalProps {
-  Title: string;
-  Content: string;
-  Button: ReactNode;
+  title: string;
+  children: ReactNode;
+  buttonList: ReactNode;
+  show: boolean;
+  handleClose: () => void;
 }
 
-function MainModal({ Title, Content, Button }: MainModalProps) {
+function MainModal({
+  children,
+  title,
+  show,
+  buttonList,
+  handleClose,
+}: MainModalProps) {
   return (
-    <div
-      className="modal show"
-      style={{ display: 'block', position: 'initial' }}
-    >
-      <Modal.Dialog>
+    <>
+      <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>{Title}</Modal.Title>
+          <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
-
-        <Modal.Body>
-          <p>{Content}</p>
-        </Modal.Body>
-
-        <Modal.Footer>{Button}</Modal.Footer>
-      </Modal.Dialog>
-    </div>
+        <Modal.Body>{children}</Modal.Body>
+        <Modal.Footer>{buttonList}</Modal.Footer>
+      </Modal>
+    </>
   );
 }
 
