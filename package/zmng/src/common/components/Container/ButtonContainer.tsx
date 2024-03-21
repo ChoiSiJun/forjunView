@@ -1,10 +1,10 @@
 import { ReactElement } from 'react';
 
-interface ButtonContainerType {
+interface ButtonContainerProps {
   Children: ReactElement;
 }
 
-function ButtonContainer({ Children }: ButtonContainerType) {
+function ButtonContainer({ Children }: ButtonContainerProps) {
   return { Children };
 }
 

@@ -1,16 +1,16 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
-import { ReactNode } from 'react';
 
 interface DeleteButtonProps {
-  children: ReactNode;
+  buttonName?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-function DeleteButton({ children, onClick }: DeleteButtonProps) {
-  return <Button onClick={onClick}>{children}</Button>;
+function DeleteButton({
+  buttonName = '삭제',
+  onClick = () => null,
+}: DeleteButtonProps) {
+  return <Button onClick={onClick}>{buttonName}</Button>;
 }
-
-DeleteButton.defaultProps = { onClick: () => null };
 
 export default DeleteButton;

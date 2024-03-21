@@ -1,12 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { FieldListType, AsyncThunkErrorType } from '@common_type';
+import { FieldListProps, AsyncThunkErrorProps } from '@common_type';
 
 //Member List Axios 호출시 요청 타입
 interface SearchQueryType {
   searchType: string;
-  searchKeyWord: string | undefined;
+  memberId: string;
+  page: string;
+  size: string;
+  [key: string]: string; // 인덱스 시그니처 추가
 }
 
 // MemberList 타입
@@ -23,24 +26,33 @@ interface MemeberListType {
   responseCode: number;
   loading: boolean;
   errorMessage: string | undefined;
-  fieldList: FieldListType[];
+  fieldList: FieldListProps[];
 }
 
-const initialFileList = [
+const initialFileList: FieldListProps[] = [
   {
     order: 1,
-    key: 'id',
+    key: 'memberId',
     name: '아이디',
+    type: 'data',
   },
   {
     order: 2,
-    key: 'name',
+    key: 'memberName',
     name: '이름',
+    type: 'data',
   },
   {
     order: 3,
-    key: 'email',
-    name: '이메일',
+    key: 'memberKey',
+    name: '멤버키',
+    type: 'data',
+  },
+  {
+    order: 4,
+    key: 'memberKey',
+    name: '',
+    type: 'button',
   },
 ];
 
@@ -48,7 +60,9 @@ const initialFileList = [
 const initialState: MemeberListType = {
   requestData: {
     searchType: '',
-    searchKeyWord: '',
+    memberId: '',
+    size: '5',
+    page: '0',
   },
   responseData: [],
   responseCode: 404,
@@ -65,14 +79,20 @@ const initialState: MemeberListType = {
 export const fetchMemberList = createAsyncThunk<
   MemberType[],
   SearchQueryType,
-  { rejectValue: AsyncThunkErrorType }
->('member', async (inputData, thunkAPI) => {
+  { rejectValue: AsyncThunkErrorProps }
+>('member', async (SearchQuery, thunkAPI) => {
+  const params = new URLSearchParams();
+  for (const key in SearchQuery) {
+    if (SearchQuery[key] !== undefined) {
+      params.append(key, SearchQuery[key]);
+    }
+  }
   try {
-    const responseData: MemberType[] = await axios.get(
-      `https://localhost:3000/todos/${inputData}`,
+    const responseData = await axios.get(
+      `http://localhost:8081/members/search?${params}`,
     );
 
-    return responseData;
+    return responseData.data.content;
   } catch (error) {
     return thunkAPI.rejectWithValue({
       errorMessage: '알 수 없는 에러가 발생했습니다.',
@@ -105,6 +125,7 @@ export const MemeberListSlice = createSlice({
       })
       // 통신 성공
       .addCase(fetchMemberList.fulfilled, (state, { payload }) => {
+        console.log('111');
         state.responseCode = 200;
         state.responseData = payload;
         state.loading = false;

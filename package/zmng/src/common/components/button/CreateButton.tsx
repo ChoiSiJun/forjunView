@@ -1,16 +1,16 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
 
-interface UpdateButtonProps {
+interface CreateButtonProps {
   buttonName?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-function UpdateButton({
-  buttonName = '수정',
+function CreateButton({
+  buttonName = '추가',
   onClick = () => null,
-}: UpdateButtonProps) {
+}: CreateButtonProps) {
   return <Button onClick={onClick}>{buttonName}</Button>;
 }
 
-export default UpdateButton;
+export default CreateButton;

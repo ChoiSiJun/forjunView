@@ -35,8 +35,10 @@ function MembetList() {
   const handleSearch = () => {
     dispatch(
       fetchMemberList({
-        searchType: 'type',
-        searchKeyWord: searchInputRef.current?.value,
+        searchType: 'memberId',
+        memberId: searchInputRef.current?.value || '',
+        page: '0',
+        size: '5',
       }),
     );
   };

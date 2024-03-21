@@ -40,7 +40,6 @@ export const MemberGenerate = createAsyncThunk<
   MemberType,
   { rejectValue: AsyncThunkErrorType }
 >('post/member', async (member, thunkAPI) => {
-  console.log(member);
   try {
     const responseData: MemberType = await axios.post(
       `http://localhost:8081/members/`,
