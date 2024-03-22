@@ -1,15 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
-
-interface UpdateButtonProps {
-  buttonName?: string;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
-}
+import { ButtonProps } from '@common_type';
 
 function UpdateButton({
   buttonName = '수정',
   onClick = () => null,
-}: UpdateButtonProps) {
+}: ButtonProps) {
   return <Button onClick={onClick}>{buttonName}</Button>;
 }
 

@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { FieldListProps, AsyncThunkErrorProps } from '@common_type';
+import { TableFieldProps, AsyncThunkErrorProps } from '@common_type';
 
 //Member List Axios 호출시 요청 타입
 interface SearchQueryType {
@@ -26,10 +26,10 @@ interface MemeberListType {
   responseCode: number;
   loading: boolean;
   errorMessage: string | undefined;
-  fieldList: FieldListProps[];
+  fieldList: TableFieldProps[];
 }
 
-const initialFileList: FieldListProps[] = [
+const initialFileList: TableFieldProps[] = [
   {
     order: 1,
     key: 'memberId',
@@ -125,7 +125,6 @@ export const MemeberListSlice = createSlice({
       })
       // 통신 성공
       .addCase(fetchMemberList.fulfilled, (state, { payload }) => {
-        console.log('111');
         state.responseCode = 200;
         state.responseData = payload;
         state.loading = false;

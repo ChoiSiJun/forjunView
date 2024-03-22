@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
+//멤버 생성 모달
 interface MainModalProps {
   title: string;
   children: ReactNode;

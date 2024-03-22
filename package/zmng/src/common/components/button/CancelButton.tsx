@@ -1,15 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
-
-interface CancelButtonProps {
-  buttonName?: string;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
-}
+import { ButtonProps } from '@common_type';
 
 function CancelButton({
   buttonName = '취소',
   onClick = () => null,
-}: CancelButtonProps) {
+}: ButtonProps) {
   return <Button onClick={onClick}>{buttonName}</Button>;
 }
 
