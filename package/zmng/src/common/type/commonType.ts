@@ -6,6 +6,10 @@ export interface TableFieldProps {
   type: 'data' | 'button';
 }
 
+export interface TableDataProps {
+  [key: string]: string | number;
+}
+
 //AsyncThunk 비동기 처리에 대한 에러코드 타입
 export interface AsyncThunkErrorProps {
   errorMessage: string;

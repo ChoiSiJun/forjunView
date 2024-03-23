@@ -2,13 +2,12 @@ import {
   SubContainer,
   BasicTable,
   InputFormControl,
-  MainModal,
-  LabelWithInput,
   ButtonComponent,
 } from '@common_components_ui';
+
 import { useAppDispatch, useAppSelector } from '@config/ReduxHooks';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 
 import { fetchMemberList } from '@module/member/slice/MemberListSlice';
 
@@ -31,7 +30,9 @@ function MembetList() {
   };
 
   //필드리스트 -> 리덕스 전역상태
-  const fieldList = useAppSelector(state => state.MemberList.fieldList);
+  const tableFieldList = useAppSelector(
+    state => state.MemberList.tableFieldList,
+  );
 
   //유저검색결과 리스트 -> 리덕스 전역상태
   const memberList = useAppSelector(state => state.MemberList.responseData);
@@ -55,11 +56,10 @@ function MembetList() {
       <br />
       {/* 멤버 리스트 결과 컴포넌트 */}
       <SubContainer>
-        <BasicTable fieldList={fieldList} dataList={memberList}></BasicTable>
-      </SubContainer>
-
-      <SubContainer>
-        <ButtonComponent.CreateButton buttonName="신규" onClick={handleShow} />
+        <BasicTable
+          tableFieldList={tableFieldList}
+          dataList={memberList}
+        ></BasicTable>
       </SubContainer>
     </>
   );

@@ -1,7 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { TableFieldProps, AsyncThunkErrorProps } from '@common_type';
+import {
+  TableFieldProps,
+  AsyncThunkErrorProps,
+  TableDataProps,
+} from '@common_type';
 
 //Member List Axios 호출시 요청 타입
 interface SearchQueryType {
@@ -12,21 +16,14 @@ interface SearchQueryType {
   [key: string]: string; // 인덱스 시그니처 추가
 }
 
-// MemberList 타입
-interface MemberType {
-  id: string;
-  name: string;
-  email: string;
-}
-
 //Member List Axios 반환 타입
 interface MemeberListType {
   requestData: SearchQueryType;
-  responseData: MemberType[];
+  responseData: TableDataProps[];
   responseCode: number;
   loading: boolean;
   errorMessage: string | undefined;
-  fieldList: TableFieldProps[];
+  tableFieldList: TableFieldProps[];
 }
 
 const initialFileList: TableFieldProps[] = [
@@ -68,7 +65,7 @@ const initialState: MemeberListType = {
   responseCode: 404,
   loading: false,
   errorMessage: '',
-  fieldList: initialFileList,
+  tableFieldList: initialFileList,
 };
 
 //비통기 통신 구현 createAsyncThunk :
@@ -77,7 +74,7 @@ const initialState: MemeberListType = {
 //3. 추가파라미터 타입: 실패시 요청객체인 rejectValue에 대한 타입 설정
 
 export const fetchMemberList = createAsyncThunk<
-  MemberType[],
+  TableDataProps[],
   SearchQueryType,
   { rejectValue: AsyncThunkErrorProps }
 >('member', async (SearchQuery, thunkAPI) => {

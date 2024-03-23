@@ -14,12 +14,7 @@ interface MemberCreateModalProps {
   handleClose: () => void;
 }
 
-const MemberCreateModal = ({ show }: MemberCreateModalProps) => {
-  //모달창 제어 핸들러
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
+const MemberCreateModal = ({ show, handleClose }: MemberCreateModalProps) => {
   //버튼 연결 Ref
   const memberIdInputRef = useRef<HTMLInputElement>(null);
   const memberWebIdInputRef = useRef<HTMLInputElement>(null);
@@ -28,7 +23,7 @@ const MemberCreateModal = ({ show }: MemberCreateModalProps) => {
 
   //멤버 생성 핸들러 - 리덕스 디스패치
   const dispatch = useAppDispatch();
-  const handleGenerate = () => {
+  const HandleMemberCreate = () => {
     dispatch(
       MemberGenerate({
         memberId: memberIdInputRef.current?.value || '',
@@ -47,7 +42,7 @@ const MemberCreateModal = ({ show }: MemberCreateModalProps) => {
         <ButtonComponent.CreateButton
           key="save"
           buttonName="저장"
-          onClick={handleGenerate}
+          onClick={HandleMemberCreate}
         />,
         <ButtonComponent.CreateButton
           key="close"
