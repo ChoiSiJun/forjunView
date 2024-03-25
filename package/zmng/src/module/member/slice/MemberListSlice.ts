@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { ButtonComponent } from '@common_components_ui';
 import axios from 'axios';
 import {
   TableFieldProps,
@@ -8,17 +9,16 @@ import {
 } from '@common_type';
 
 //Member List Axios 호출시 요청 타입
-interface SearchQueryType {
+interface SearchQueryProps {
   searchType: string;
   memberId: string;
   page: string;
   size: string;
-  [key: string]: string; // 인덱스 시그니처 추가
 }
 
 //Member List Axios 반환 타입
-interface MemeberListType {
-  requestData: SearchQueryType;
+interface MemeberListProps {
+  requestData: SearchQueryProps;
   responseData: TableDataProps[];
   responseCode: number;
   loading: boolean;
@@ -50,11 +50,15 @@ const initialFileList: TableFieldProps[] = [
     key: 'memberKey',
     name: '',
     type: 'button',
+    buttonArray: [
+      ButtonComponent.UpdateButton({ buttonName: 'example1' }),
+      ButtonComponent.UpdateButton({ buttonName: 'example2' }),
+    ],
   },
 ];
 
 //Member List Axios 초기상태
-const initialState: MemeberListType = {
+const initialState: MemeberListProps = {
   requestData: {
     searchType: '',
     memberId: '',
@@ -75,18 +79,21 @@ const initialState: MemeberListType = {
 
 export const fetchMemberList = createAsyncThunk<
   TableDataProps[],
-  SearchQueryType,
+  SearchQueryProps,
   { rejectValue: AsyncThunkErrorProps }
 >('member', async (SearchQuery, thunkAPI) => {
   const params = new URLSearchParams();
   for (const key in SearchQuery) {
-    if (SearchQuery[key] !== undefined) {
-      params.append(key, SearchQuery[key]);
+    if (Object.prototype.hasOwnProperty.call(SearchQuery, key)) {
+      const typedKey = key as keyof SearchQueryProps; // 타입 단언을 사용하여 실제 속성임을 명시
+      if (SearchQuery[typedKey] !== undefined) {
+        params.append(typedKey, SearchQuery[typedKey]);
+      }
     }
   }
   try {
     const responseData = await axios.get(
-      `http://localhost:8081/members/search?${params}`,
+      `http://192.168.5.89:8081/members/search?${params}`,
     );
 
     return responseData.data.content;
@@ -106,8 +113,8 @@ export const MemeberListSlice = createSlice({
 
   // 리듀서 기입
   reducers: {
-    setMemberQuery: (state, action: PayloadAction<SearchQueryType>) => {
-      state.requestData.searchKeyWord = action.payload.searchKeyWord;
+    setMemberQuery: (state, action: PayloadAction<SearchQueryProps>) => {
+      state.requestData.memberId = action.payload.memberId;
       state.requestData.searchType = action.payload.searchType;
     },
   },

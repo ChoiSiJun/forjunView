@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { AsyncThunkErrorType } from '@common_type';
+import { AsyncThunkErrorProps } from '@common_type';
 import axios from 'axios';
 
 // member state type
@@ -38,11 +38,11 @@ const initialState: MemberType = {
 export const MemberGenerate = createAsyncThunk<
   MemberType,
   MemberType,
-  { rejectValue: AsyncThunkErrorType }
+  { rejectValue: AsyncThunkErrorProps }
 >('post/member', async (member, thunkAPI) => {
   try {
     const responseData: MemberType = await axios.post(
-      `http://localhost:8081/members/`,
+      `http://192.168.5.89:8081/members/`,
       JSON.stringify(member),
       {
         headers: {
