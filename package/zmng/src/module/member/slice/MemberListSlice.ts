@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { ButtonComponent } from '@common_components_ui';
 import axios from 'axios';
 import {
   TableFieldProps,
@@ -50,10 +49,6 @@ const initialFileList: TableFieldProps[] = [
     key: 'memberKey',
     name: '',
     type: 'button',
-    buttonArray: [
-      ButtonComponent.UpdateButton({ buttonName: 'example1' }),
-      ButtonComponent.UpdateButton({ buttonName: 'example2' }),
-    ],
   },
 ];
 

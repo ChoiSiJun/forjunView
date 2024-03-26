@@ -1,12 +1,9 @@
-import { ReactNode } from 'react';
-
 //사용할 필드 타입
 export interface TableFieldProps {
   order: number;
   key: string;
   name: string;
   type: 'data' | 'button';
-  buttonArray?: ReactNode;
 }
 
 export interface TableDataProps {

@@ -7,9 +7,11 @@ import {
 
 import { useAppDispatch, useAppSelector } from '@config/ReduxHooks';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 
 import { fetchMemberList } from '@module/member/slice/MemberListSlice';
+import { TableFieldProps, TableDataProps } from '@common_type';
+import { MemberUpdate } from '@module/member/slice/MemberSlice';
 
 //유저 리스트 검색 컴포넌트
 function MembetList() {
@@ -27,6 +29,10 @@ function MembetList() {
         size: '5',
       }),
     );
+  };
+
+  const handleUpdate = (memberKey: string) => {
+    dispatch(MemberUpdate(memberKey));
   };
 
   //필드리스트 -> 리덕스 전역상태
@@ -56,13 +62,47 @@ function MembetList() {
       <br />
       {/* 멤버 리스트 결과 컴포넌트 */}
       <SubContainer>
-        <BasicTable
-          tableFieldList={tableFieldList}
-          dataList={memberList}
-        ></BasicTable>
+        <BasicTable>
+          <thead>
+            <tr>
+              {tableFieldList.map((tableField, index) => (
+                <th key={index}>{tableField.name}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {memberList.map((data, index) => (
+              <tr key={index}>
+                {tableFieldList.map((tableField, index) => (
+                  <td key={index}>{RenderTableData(tableField, data)}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </BasicTable>
       </SubContainer>
     </>
   );
+
+  function RenderTableData(tableField: TableFieldProps, data: TableDataProps) {
+    console.log(tableField.type);
+    if (tableField.type == 'button') {
+      return (
+        <>
+          <ButtonComponent.UpdateButton
+            buttonName="수정"
+            onClick={() => {
+              handleUpdate(data[tableField.key] as string);
+            }}
+          />
+          &nbsp;
+          <ButtonComponent.CancelButton buttonName="취소" />
+        </>
+      );
+    }
+    // buttonArray가 없는 경우 해당 키 값 반환
+    return data[tableField.key];
+  }
 }
 
 export default MembetList;
