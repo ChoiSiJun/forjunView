@@ -88,7 +88,7 @@ export const fetchMemberList = createAsyncThunk<
   }
   try {
     const responseData = await axios.get(
-      `http://192.168.5.89:8081/members/search?${params}`,
+      `http://192.168.5.89:8081/members/search/member?${params}`,
     );
 
     return responseData.data.content;

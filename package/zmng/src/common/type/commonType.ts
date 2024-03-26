@@ -20,3 +20,8 @@ export interface ButtonProps {
   buttonName?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
+
+export interface ResponseEntityProps<T> {
+  data: T;
+  status: number;
+}

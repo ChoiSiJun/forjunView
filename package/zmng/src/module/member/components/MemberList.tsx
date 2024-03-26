@@ -7,11 +7,14 @@ import {
 
 import { useAppDispatch, useAppSelector } from '@config/ReduxHooks';
 import InputGroup from 'react-bootstrap/InputGroup';
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 
 import { fetchMemberList } from '@module/member/slice/MemberListSlice';
 import { TableFieldProps, TableDataProps } from '@common_type';
-import { MemberUpdate } from '@module/member/slice/MemberSlice';
+import {
+  MemberUpdateModal,
+  MemberDelete,
+} from '@module/member/slice/MemberSlice';
 
 //유저 리스트 검색 컴포넌트
 function MembetList() {
@@ -32,7 +35,11 @@ function MembetList() {
   };
 
   const handleUpdate = (memberKey: string) => {
-    dispatch(MemberUpdate(memberKey));
+    dispatch(MemberUpdateModal(memberKey));
+  };
+
+  const handleDelete = (memberKey: string) => {
+    dispatch(MemberDelete(memberKey));
   };
 
   //필드리스트 -> 리덕스 전역상태
@@ -95,8 +102,13 @@ function MembetList() {
               handleUpdate(data[tableField.key] as string);
             }}
           />
-          &nbsp;
-          <ButtonComponent.CancelButton buttonName="취소" />
+
+          <ButtonComponent.DeleteButton
+            buttonName="삭제"
+            onClick={() => {
+              handleDelete(data[tableField.key] as string);
+            }}
+          />
         </>
       );
     }

@@ -5,7 +5,7 @@ import {
 } from '@common_components_ui';
 
 import { useAppDispatch } from '@config/ReduxHooks';
-import { MemberGenerate } from '@module/member/slice/MemberSlice';
+import { MemberCreate } from '@module/member/slice/MemberSlice';
 
 import { useRef } from 'react';
 
@@ -25,13 +25,15 @@ const MemberCreateModal = ({ show, handleClose }: MemberCreateModalProps) => {
   const dispatch = useAppDispatch();
   const HandleMemberCreate = () => {
     dispatch(
-      MemberGenerate({
+      MemberCreate({
         memberId: memberIdInputRef.current?.value || '',
         memberWebId: memberWebIdInputRef.current?.value || '',
         loginPassword: loginPasswordInputRef.current?.value || '',
         memberName: memberNameInputRef.current?.value || '',
       }),
     );
+
+    handleClose();
   };
 
   return (

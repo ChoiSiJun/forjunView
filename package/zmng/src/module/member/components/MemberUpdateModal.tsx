@@ -5,9 +5,9 @@ import {
 } from '@common_components_ui';
 
 import { useAppDispatch, useAppSelector } from '@config/ReduxHooks';
-import { MemberGenerate, closeModal } from '@module/member/slice/MemberSlice';
+import { MemberUpdate, closeModal } from '@module/member/slice/MemberSlice';
 
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 const MemberUpdateModal = () => {
   //버튼 연결 Ref
@@ -16,21 +16,43 @@ const MemberUpdateModal = () => {
   const memberNameInputRef = useRef<HTMLInputElement>(null);
   const loginPasswordInputRef = useRef<HTMLInputElement>(null);
 
-  //멤버 생성 핸들러 - 리덕스 디스패치
+  //멤버 수정 핸들러 - 리덕스 디스패치
   const dispatch = useAppDispatch();
   const HandleMemberUpdate = () => {
     dispatch(
-      MemberGenerate({
+      MemberUpdate({
         memberId: memberIdInputRef.current?.value || '',
         memberWebId: memberWebIdInputRef.current?.value || '',
         loginPassword: loginPasswordInputRef.current?.value || '',
         memberName: memberNameInputRef.current?.value || '',
+        memberKey: MemberUpdateData.memberInfo.memberKey,
       }),
     );
   };
 
   //Member Update Modal set
-  const MemberUpdateModal = useAppSelector(state => state.Member.modal);
+  const MemberUpdateData = useAppSelector(state => state.Member);
+
+  //값 세팅
+  useEffect(() => {
+    if (memberIdInputRef.current) {
+      memberIdInputRef.current.value = MemberUpdateData.memberInfo.memberId;
+    }
+
+    if (memberWebIdInputRef.current) {
+      memberWebIdInputRef.current.value =
+        MemberUpdateData.memberInfo.memberWebId;
+    }
+
+    if (memberNameInputRef.current) {
+      memberNameInputRef.current.value = MemberUpdateData.memberInfo.memberName;
+    }
+
+    if (loginPasswordInputRef.current) {
+      loginPasswordInputRef.current.value =
+        MemberUpdateData.memberInfo.loginPassword;
+    }
+  });
 
   //Member Modal Close
   const HandleModalClose = () => dispatch(closeModal());
@@ -38,7 +60,7 @@ const MemberUpdateModal = () => {
   return (
     <MainModal
       title="멤버생성 모달"
-      show={MemberUpdateModal}
+      show={MemberUpdateData.modal}
       buttonList={[
         <ButtonComponent.UpdateButton
           key="save"
