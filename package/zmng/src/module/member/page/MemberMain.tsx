@@ -18,6 +18,7 @@ function MembetMain() {
 
   return (
     <RootContainer>
+      {/*멤버리스트*/}
       <MembetList />
 
       <SubContainer>
@@ -27,11 +28,13 @@ function MembetMain() {
         />
       </SubContainer>
 
+      {/*멤버생성모달*/}
       <MemberCreateModal
         show={createModal}
         handleClose={CreateModalClose}
       ></MemberCreateModal>
 
+      {/*멤버수정모달*/}
       <MemberUpdateModal />
     </RootContainer>
   );

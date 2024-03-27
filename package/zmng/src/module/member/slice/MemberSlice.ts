@@ -3,7 +3,7 @@ import { AsyncThunkErrorProps, ResponseEntityProps } from '@common_type';
 import axios from 'axios';
 
 // MEMBER 정보 타입
-export interface MemberInfoProps {
+export interface MemberDataProps {
   memberKey?: string;
   memberId: string;
   memberWebId: string;
@@ -18,14 +18,8 @@ export interface MemberInfoProps {
   state?: string;
 }
 
-// MEMEBER slice 타입
-export interface MemberProps {
-  memberInfo: MemberInfoProps;
-  modal: boolean;
-}
-
 // MEMBER 정보 초기값
-const MemberInfoInit: MemberInfoProps = {
+const MemberInfoInit: MemberDataProps = {
   memberKey: 'GUEST',
   memberId: '',
   memberWebId: '',
@@ -40,6 +34,12 @@ const MemberInfoInit: MemberInfoProps = {
   state: '',
 };
 
+// MEMEBER slice 타입
+export interface MemberProps {
+  memberInfo: MemberDataProps;
+  modal: boolean;
+}
+
 // MEMBER slice 초기값
 const initialState: MemberProps = {
   memberInfo: MemberInfoInit,
@@ -48,12 +48,12 @@ const initialState: MemberProps = {
 
 //멤버생성처리
 export const MemberCreate = createAsyncThunk<
-  MemberInfoProps,
-  MemberInfoProps,
+  MemberDataProps,
+  MemberDataProps,
   { rejectValue: AsyncThunkErrorProps }
 >('post/member', async (member, thunkAPI) => {
   try {
-    const responseData: ResponseEntityProps<MemberInfoProps> = await axios.post(
+    const responseData: ResponseEntityProps<MemberDataProps> = await axios.post(
       `http://127.0.0.1:8081/members/`,
       JSON.stringify(member),
       {
@@ -77,13 +77,13 @@ export const MemberCreate = createAsyncThunk<
 
 //멤버 수정처리
 export const MemberUpdate = createAsyncThunk<
-  MemberInfoProps,
-  MemberInfoProps,
+  MemberDataProps,
+  MemberDataProps,
   { rejectValue: AsyncThunkErrorProps }
 >('put/member', async (member, thunkAPI) => {
   try {
     console.log(JSON.stringify(member));
-    const responseData: ResponseEntityProps<MemberInfoProps> = await axios.put(
+    const responseData: ResponseEntityProps<MemberDataProps> = await axios.put(
       `http://127.0.0.1:8081/members/`,
       JSON.stringify(member),
       {
@@ -107,12 +107,12 @@ export const MemberUpdate = createAsyncThunk<
 
 //멤버 삭제처리
 export const MemberDelete = createAsyncThunk<
-  MemberInfoProps,
+  MemberDataProps,
   string,
   { rejectValue: AsyncThunkErrorProps }
 >('delete/member', async (memberKey, thunkAPI) => {
   try {
-    const responseData: ResponseEntityProps<MemberInfoProps> =
+    const responseData: ResponseEntityProps<MemberDataProps> =
       await axios.delete(`http://192.168.5.89:8081/members/${memberKey}`);
 
     return responseData.data;
@@ -123,14 +123,14 @@ export const MemberDelete = createAsyncThunk<
   }
 });
 
-//멤버 정보 + 수정 모달
-export const MemberUpdateModal = createAsyncThunk<
-  MemberInfoProps,
+//멤버 정보 가져오기
+export const searchMemberThunk = createAsyncThunk<
+  MemberDataProps,
   string,
   { rejectValue: AsyncThunkErrorProps }
 >('get/member', async (memberKey, thunkAPI) => {
   try {
-    const responseData: ResponseEntityProps<MemberInfoProps> = await axios.get(
+    const responseData: ResponseEntityProps<MemberDataProps> = await axios.get(
       `http://192.168.5.89:8081/members/${memberKey}`,
     );
 
@@ -151,6 +151,12 @@ export const MemeberSlice = createSlice({
 
   // 리듀서 기입
   reducers: {
+    //멤버 모달 열기
+    openModal: state => {
+      state.modal = true;
+      return state;
+    },
+
     //멤버 모달 닫기
     closeModal: state => {
       state.modal = false;
@@ -186,19 +192,19 @@ export const MemeberSlice = createSlice({
       // 통신 에러
       .addCase(MemberDelete.rejected, () => {})
       // 통신 중
-      .addCase(MemberUpdateModal.pending, () => {})
+      .addCase(searchMemberThunk.pending, () => {})
       // 통신 성공
-      .addCase(MemberUpdateModal.fulfilled, (state, { payload }) => {
+      .addCase(searchMemberThunk.fulfilled, (state, { payload }) => {
         //가지고 온 이용자 데이터 넣기
         state.memberInfo = payload;
         state.modal = true;
       })
       // 통신 에러
-      .addCase(MemberUpdateModal.rejected, (state, { payload }) => {
+      .addCase(searchMemberThunk.rejected, (state, { payload }) => {
         console.log(payload?.errorMessage);
       });
   },
 });
 
-export const { closeModal } = MemeberSlice.actions;
+export const { openModal, closeModal } = MemeberSlice.actions;
 export default MemeberSlice.reducer;

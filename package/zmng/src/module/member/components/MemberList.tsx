@@ -9,11 +9,12 @@ import { useAppDispatch, useAppSelector } from '@config/ReduxHooks';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { useRef } from 'react';
 
-import { fetchMemberList } from '@module/member/slice/MemberListSlice';
+import { searchMemberListThunk } from '@module/member/slice/MemberListSlice';
 import { TableFieldProps, TableDataProps } from '@common_type';
 import {
-  MemberUpdateModal,
+  searchMemberThunk,
   MemberDelete,
+  openModal,
 } from '@module/member/slice/MemberSlice';
 
 //유저 리스트 검색 컴포넌트
@@ -23,32 +24,40 @@ function MembetList() {
 
   // 검색 액션 핸들러 - 리덕스 디스패치
   const dispatch = useAppDispatch();
-  const handleSearch = () => {
-    dispatch(
-      fetchMemberList({
-        searchType: 'memberId',
-        memberId: searchInputRef.current?.value || '',
-        page: '0',
-        size: '5',
-      }),
-    );
+  const handleSearch = async () => {
+    try {
+      //멤버정보 세팅
+      await dispatch(
+        searchMemberListThunk({
+          searchType: 'memberId',
+          memberId: searchInputRef.current?.value || '',
+          page: '0',
+          size: '5',
+        }),
+      );
+
+      //모달 오픈
+      dispatch(openModal());
+    } catch (error) {
+      console.log('실패');
+    }
   };
 
   const handleUpdate = (memberKey: string) => {
-    dispatch(MemberUpdateModal(memberKey));
+    dispatch(searchMemberThunk(memberKey));
   };
 
   const handleDelete = (memberKey: string) => {
     dispatch(MemberDelete(memberKey));
   };
 
-  //필드리스트 -> 리덕스 전역상태
+  //Member FieldList -> Redux 전역
   const tableFieldList = useAppSelector(
-    state => state.MemberList.tableFieldList,
+    state => state.MemberList.memberFieldList,
   );
 
-  //유저검색결과 리스트 -> 리덕스 전역상태
-  const memberList = useAppSelector(state => state.MemberList.responseData);
+  //Member DataList -> Redux 전역
+  const memberList = useAppSelector(state => state.MemberList.memberDataList);
   return (
     <>
       {/* 멤버 검색창 컴포넌트 */}
@@ -92,7 +101,6 @@ function MembetList() {
   );
 
   function RenderTableData(tableField: TableFieldProps, data: TableDataProps) {
-    console.log(tableField.type);
     if (tableField.type == 'button') {
       return (
         <>
@@ -112,7 +120,6 @@ function MembetList() {
         </>
       );
     }
-    // buttonArray가 없는 경우 해당 키 값 반환
     return data[tableField.key];
   }
 }
