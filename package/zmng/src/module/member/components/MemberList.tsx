@@ -1,20 +1,19 @@
 import {
-  SubContainer,
+  MirContainer,
   BasicTable,
   InputFormControl,
-  ButtonComponent,
+  MirButton,
 } from '@common_components_ui';
 
 import { useAppDispatch, useAppSelector } from '@config/ReduxHooks';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { useRef } from 'react';
 
-import { searchMemberListThunk } from '@module/member/slice/MemberListSlice';
+import { searchMemberList } from '@module/member/slice/MemberListSlice';
 import { TableFieldProps, TableDataProps } from '@common_type';
 import {
-  searchMemberThunk,
-  MemberDelete,
-  openModal,
+  deleteMember,
+  openMemberModal,
 } from '@module/member/slice/MemberSlice';
 
 //유저 리스트 검색 컴포넌트
@@ -28,27 +27,24 @@ function MembetList() {
     try {
       //멤버정보 세팅
       await dispatch(
-        searchMemberListThunk({
+        searchMemberList({
           searchType: 'memberId',
           memberId: searchInputRef.current?.value || '',
           page: '0',
           size: '5',
         }),
       );
-
-      //모달 오픈
-      dispatch(openModal());
     } catch (error) {
-      console.log('실패');
+      console.log('오류');
     }
   };
 
   const handleUpdate = (memberKey: string) => {
-    dispatch(searchMemberThunk(memberKey));
+    dispatch(openMemberModal(memberKey));
   };
 
   const handleDelete = (memberKey: string) => {
-    dispatch(MemberDelete(memberKey));
+    dispatch(deleteMember(memberKey));
   };
 
   //Member FieldList -> Redux 전역
@@ -61,7 +57,7 @@ function MembetList() {
   return (
     <>
       {/* 멤버 검색창 컴포넌트 */}
-      <SubContainer>
+      <MirContainer.SubContainer>
         <InputGroup className="mb-3">
           <InputFormControl
             ref={searchInputRef}
@@ -69,15 +65,12 @@ function MembetList() {
             type="text"
           ></InputFormControl>
 
-          <ButtonComponent.ReadButton
-            buttonName="검색"
-            onClick={handleSearch}
-          />
+          <MirButton.ReadButton buttonName="검색" onClick={handleSearch} />
         </InputGroup>
-      </SubContainer>
+      </MirContainer.SubContainer>
       <br />
       {/* 멤버 리스트 결과 컴포넌트 */}
-      <SubContainer>
+      <MirContainer.SubContainer>
         <BasicTable>
           <thead>
             <tr>
@@ -96,7 +89,7 @@ function MembetList() {
             ))}
           </tbody>
         </BasicTable>
-      </SubContainer>
+      </MirContainer.SubContainer>
     </>
   );
 
@@ -104,14 +97,14 @@ function MembetList() {
     if (tableField.type == 'button') {
       return (
         <>
-          <ButtonComponent.UpdateButton
+          <MirButton.UpdateButton
             buttonName="수정"
             onClick={() => {
               handleUpdate(data[tableField.key] as string);
             }}
           />
 
-          <ButtonComponent.DeleteButton
+          <MirButton.DeleteButton
             buttonName="삭제"
             onClick={() => {
               handleDelete(data[tableField.key] as string);

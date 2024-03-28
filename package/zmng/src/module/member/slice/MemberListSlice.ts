@@ -7,12 +7,17 @@ import {
   ResponseEntityProps,
 } from '@common_type';
 
+const api_url = import.meta.env.VITE_MEMBER_API;
 //searchMemberListThunk Request Type
 interface SearchMemberListProps {
   searchType: string;
   memberId: string;
   page: string;
   size: string;
+}
+//searchMemberList Props
+interface searchMemberListProps {
+  content: TableDataProps[];
 }
 
 //Member List Slice Props
@@ -59,7 +64,7 @@ const initialState: MemeberListProps = {
 //2. Member List Axios 호출시 요청 인자 타입
 //3. 추가파라미터 타입: 실패시 요청객체인 rejectValue에 대한 타입 설정
 
-export const searchMemberListThunk = createAsyncThunk<
+export const searchMemberList = createAsyncThunk<
   TableDataProps[],
   SearchMemberListProps,
   { rejectValue: AsyncThunkErrorProps }
@@ -74,15 +79,14 @@ export const searchMemberListThunk = createAsyncThunk<
     }
   }
   try {
-    const responseData: ResponseEntityProps<TableDataProps[]> = await axios.get(
-      `http://192.168.5.89:8081/members/search/member?${params}`,
-    );
+    const responseData: ResponseEntityProps<searchMemberListProps> =
+      await axios.get(`${api_url}/members/search/member?${params}`);
 
     if (responseData.status !== 200) {
       throw new Error('응답코드 반환에러');
     }
 
-    return responseData.data;
+    return responseData.data.content;
   } catch (error) {
     return thunkAPI.rejectWithValue({
       errorMessage: '알 수 없는 에러가 발생했습니다.',
@@ -102,13 +106,13 @@ export const MemeberListSlice = createSlice({
   extraReducers: builder => {
     builder
       // 통신 중
-      .addCase(searchMemberListThunk.pending, () => {})
+      .addCase(searchMemberList.pending, () => {})
       // 통신 성공
-      .addCase(searchMemberListThunk.fulfilled, (state, { payload }) => {
+      .addCase(searchMemberList.fulfilled, (state, { payload }) => {
         state.memberDataList = payload;
       })
       // 통신 에러
-      .addCase(searchMemberListThunk.rejected, () => {});
+      .addCase(searchMemberList.rejected, () => {});
   },
 });
 

@@ -1,11 +1,10 @@
-import {
-  MainModal,
-  LabelWithInput,
-  ButtonComponent,
-} from '@common_components_ui';
+import { MirModal, MirButton, LabelWithInput } from '@common_components_ui';
 
 import { useAppDispatch, useAppSelector } from '@config/ReduxHooks';
-import { MemberUpdate, closeModal } from '@module/member/slice/MemberSlice';
+import {
+  updateMember,
+  closeMemberModal,
+} from '@module/member/slice/MemberSlice';
 
 import { useEffect, useRef } from 'react';
 
@@ -18,14 +17,14 @@ const MemberUpdateModal = () => {
 
   //멤버 수정 핸들러 - 리덕스 디스패치
   const dispatch = useAppDispatch();
-  const HandleMemberUpdate = () => {
+  const handleMemberUpdate = () => {
     dispatch(
-      MemberUpdate({
+      updateMember({
         memberId: memberIdInputRef.current?.value || '',
         memberWebId: memberWebIdInputRef.current?.value || '',
         loginPassword: loginPasswordInputRef.current?.value || '',
         memberName: memberNameInputRef.current?.value || '',
-        memberKey: MemberUpdateData.memberInfo.memberKey,
+        memberKey: MemberUpdateData.memberData.memberKey,
       }),
     );
   };
@@ -36,44 +35,44 @@ const MemberUpdateModal = () => {
   //값 세팅
   useEffect(() => {
     if (memberIdInputRef.current) {
-      memberIdInputRef.current.value = MemberUpdateData.memberInfo.memberId;
+      memberIdInputRef.current.value = MemberUpdateData.memberData.memberId;
     }
 
     if (memberWebIdInputRef.current) {
       memberWebIdInputRef.current.value =
-        MemberUpdateData.memberInfo.memberWebId;
+        MemberUpdateData.memberData.memberWebId;
     }
 
     if (memberNameInputRef.current) {
-      memberNameInputRef.current.value = MemberUpdateData.memberInfo.memberName;
+      memberNameInputRef.current.value = MemberUpdateData.memberData.memberName;
     }
 
     if (loginPasswordInputRef.current) {
       loginPasswordInputRef.current.value =
-        MemberUpdateData.memberInfo.loginPassword;
+        MemberUpdateData.memberData.loginPassword;
     }
   });
 
   //Member Modal Close
-  const HandleModalClose = () => dispatch(closeModal());
+  const handleModalClose = () => dispatch(closeMemberModal());
 
   return (
-    <MainModal
+    <MirModal.MainModal
       title="멤버생성 모달"
       show={MemberUpdateData.modal}
       buttonList={[
-        <ButtonComponent.UpdateButton
+        <MirButton.UpdateButton
           key="save"
           buttonName="저장"
-          onClick={HandleMemberUpdate}
+          onClick={handleMemberUpdate}
         />,
-        <ButtonComponent.UpdateButton
+        <MirButton.UpdateButton
           key="close"
           buttonName="닫기"
-          onClick={HandleModalClose}
+          onClick={handleModalClose}
         />,
       ]}
-      handleClose={HandleModalClose}
+      handleClose={handleModalClose}
     >
       <LabelWithInput
         type="text"
@@ -99,7 +98,7 @@ const MemberUpdateModal = () => {
         labelType="row"
         ref={loginPasswordInputRef}
       />
-    </MainModal>
+    </MirModal.MainModal>
   );
 };
 

@@ -1,7 +1,13 @@
 // Container 컴포넌트
-export { default as RootContainer } from '@common_components/Container/RootContainer';
-export { default as SubContainer } from '@common_components/Container/SubContainer';
-export { default as ButtonContainer } from '@common_components/Container/ButtonContainer';
+import { default as RootContainer } from '@common_components/Container/RootContainer';
+import { default as SubContainer } from '@common_components/Container/SubContainer';
+import { default as ButtonContainer } from '@common_components/Container/ButtonContainer';
+
+export const MirContainer = {
+  RootContainer,
+  SubContainer,
+  ButtonContainer,
+};
 
 // button 컴포넌트
 import { default as CreateButton } from '@common_components/Button/CreateButton';
@@ -12,7 +18,7 @@ import { default as ConfirmButton } from '@common_components/Button/ConfirmButto
 import { default as CancelButton } from '@common_components/Button/CancelButton';
 import { default as CustomButton } from '@common_components/Button/CustomButton';
 
-export const ButtonComponent = {
+export const MirButton = {
   CreateButton,
   UpdateButton,
   DeleteButton,
@@ -23,9 +29,14 @@ export const ButtonComponent = {
 };
 
 // Modal 컴포넌트
-export { default as MainModal } from '@common_components/Modal/MainModal';
+import { default as MainModal } from '@common_components/Modal/MainModal';
+export const MirModal = {
+  MainModal,
+};
 
 //FormControl 컴포넌트
 export { default as InputFormControl } from '@common_components/FormControl/InputFormControl';
 export { default as LabelWithInput } from '@common_components/FormControl/ui/LabelWithInput';
+
+//Table 컴포넌트
 export { default as BasicTable } from '@common_components/Table/BasicTable';

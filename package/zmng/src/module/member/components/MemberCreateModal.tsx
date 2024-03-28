@@ -1,11 +1,7 @@
-import {
-  MainModal,
-  LabelWithInput,
-  ButtonComponent,
-} from '@common_components_ui';
+import { MirModal, LabelWithInput, MirButton } from '@common_components_ui';
 
 import { useAppDispatch } from '@config/ReduxHooks';
-import { MemberCreate } from '@module/member/slice/MemberSlice';
+import { createMember } from '@module/member/slice/MemberSlice';
 
 import { useRef } from 'react';
 
@@ -25,7 +21,7 @@ const MemberCreateModal = ({ show, handleClose }: MemberCreateModalProps) => {
   const dispatch = useAppDispatch();
   const HandleMemberCreate = () => {
     dispatch(
-      MemberCreate({
+      createMember({
         memberId: memberIdInputRef.current?.value || '',
         memberWebId: memberWebIdInputRef.current?.value || '',
         loginPassword: loginPasswordInputRef.current?.value || '',
@@ -37,16 +33,16 @@ const MemberCreateModal = ({ show, handleClose }: MemberCreateModalProps) => {
   };
 
   return (
-    <MainModal
+    <MirModal.MainModal
       title="멤버생성 모달"
       show={show}
       buttonList={[
-        <ButtonComponent.CreateButton
+        <MirButton.CreateButton
           key="save"
           buttonName="저장"
           onClick={HandleMemberCreate}
         />,
-        <ButtonComponent.CreateButton
+        <MirButton.CreateButton
           key="close"
           buttonName="닫기"
           onClick={handleClose}
@@ -78,7 +74,7 @@ const MemberCreateModal = ({ show, handleClose }: MemberCreateModalProps) => {
         labelType="row"
         ref={loginPasswordInputRef}
       />
-    </MainModal>
+    </MirModal.MainModal>
   );
 };
 
