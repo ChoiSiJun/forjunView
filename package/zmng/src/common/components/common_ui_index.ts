@@ -40,3 +40,6 @@ export { default as LabelWithInput } from '@common_components/FormControl/ui/Lab
 
 //Table 컴포넌트
 export { default as BasicTable } from '@common_components/Table/BasicTable';
+
+//Toast 컴포넌트
+export { default as ReactToast } from '@common_components/Toasts/ReactToast';

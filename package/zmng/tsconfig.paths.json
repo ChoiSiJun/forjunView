@@ -7,11 +7,13 @@
 
       //공통사항
       "@common_type": ["common/type/commonType.ts"],
+
       "@common_components_ui": ["common/components/common_ui_index.ts"], //공통 화면 Component Index
       "@common_components/*": ["common/components/*"], //공통화면 Component
       "@common_slice/*": ["common/slice/*"], //공통 slice
 
       //모듈
+      "@module_setting": ["module/ModuleSetting.ts"],
       "@module/member/*": ["module/member/*"] //멤버
     }
   }

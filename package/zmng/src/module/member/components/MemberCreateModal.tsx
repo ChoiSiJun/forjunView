@@ -1,9 +1,8 @@
 import { MirModal, LabelWithInput, MirButton } from '@common_components_ui';
-
 import { useAppDispatch } from '@config/ReduxHooks';
 import { createMember } from '@module/member/slice/MemberSlice';
-
 import { useRef } from 'react';
+import { toast } from 'react-toastify';
 
 interface MemberCreateModalProps {
   show: boolean;
@@ -19,17 +18,23 @@ const MemberCreateModal = ({ show, handleClose }: MemberCreateModalProps) => {
 
   //멤버 생성 핸들러 - 리덕스 디스패치
   const dispatch = useAppDispatch();
-  const HandleMemberCreate = () => {
-    dispatch(
-      createMember({
-        memberId: memberIdInputRef.current?.value || '',
-        memberWebId: memberWebIdInputRef.current?.value || '',
-        loginPassword: loginPasswordInputRef.current?.value || '',
-        memberName: memberNameInputRef.current?.value || '',
-      }),
-    );
+  const HandleMemberCreate = async () => {
+    try {
+      await dispatch(
+        createMember({
+          memberId: memberIdInputRef.current?.value || '',
+          memberWebId: memberWebIdInputRef.current?.value || '',
+          loginPassword: loginPasswordInputRef.current?.value || '',
+          memberName: memberNameInputRef.current?.value || '',
+        }),
+      ).unwrap();
 
-    handleClose();
+      handleClose();
+
+      toast.success('저장되었습니다.');
+    } catch (error) {
+      toast.error('오류가 발생하였습니다.');
+    }
   };
 
   return (
