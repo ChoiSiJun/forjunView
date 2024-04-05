@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
 import { LineChart, axisClasses } from '@mui/x-charts';
 import { ChartsTextStyle } from '@mui/x-charts/ChartsText';
-import Title from './Title';
+import Title from '@dashboard/components/atoms/Title';
 
 // Generate Sales Data
 function createData(
@@ -67,8 +67,12 @@ export default function Chart() {
             },
           ]}
           sx={{
-            [`.${axisClasses.root} line`]: { stroke: theme.palette.text.secondary },
-            [`.${axisClasses.root} text`]: { fill: theme.palette.text.secondary },
+            [`.${axisClasses.root} line`]: {
+              stroke: theme.palette.text.secondary,
+            },
+            [`.${axisClasses.root} text`]: {
+              fill: theme.palette.text.secondary,
+            },
             [`& .${axisClasses.left} .${axisClasses.label}`]: {
               transform: 'translateX(-25px)',
             },

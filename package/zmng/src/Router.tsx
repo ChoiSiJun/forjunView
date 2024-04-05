@@ -1,14 +1,11 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import MembetMain from 'module/member/page/MemberMain';
-import Dashboard from 'dashboard/Dashboard';
+import Dashboard from 'dashboard/page/Dashboard';
 
 function LibertyRouter() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Dashboard />} />
-        <Route path="/app" element={<MembetMain />} />
-        <Route path="/member" element={<MembetMain />} />
       </Routes>
     </Router>
   );
