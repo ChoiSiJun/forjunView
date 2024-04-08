@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Dashboard from 'dashboard/page/Dashboard';
+import AppLayout from 'routerLayout/appLayout';
 
 function LibertyRouter() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/liberty" element={<AppLayout />} />
       </Routes>
     </Router>
   );

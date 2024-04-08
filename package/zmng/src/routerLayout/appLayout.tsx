@@ -8,6 +8,9 @@ import SideBar from '@common/components/template/SideBar';
 import LibertyDashboard from '@dashboard/components/template/Dashboard';
 import { green, blue } from '@mui/material/colors';
 
+//라우터 Import
+import { Route } from 'react-router-dom';
+
 //사이드바 기본 확장 넓이
 const drawerWidth: number = 240;
 
@@ -51,7 +54,7 @@ const defaultTheme = createTheme({
   },
 });
 
-export default function Dashboard() {
+export default function AppLayout() {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -74,7 +77,7 @@ export default function Dashboard() {
           toggleDrawer={toggleDrawer}
           drawerWidth={drawerWidth}
         />
-        <LibertyDashboard />
+        <Route path="/dashboard" element={<LibertyDashboard />}></Route>
       </Box>
     </ThemeProvider>
   );
