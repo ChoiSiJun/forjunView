@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import AppLayout from 'routerLayout/appLayout';
+import AppContainer from '@ui-kit/containers/app/appContainer';
 
 function LibertyRouter() {
   return (
     <Router>
       <Routes>
-        <Route path="/liberty" element={<AppLayout />} />
+        <Route path="/liberty" element={<AppContainer />} />
       </Routes>
     </Router>
   );

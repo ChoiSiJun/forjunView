@@ -5,7 +5,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Title from '@dashboard/components/atoms/Title';
+import Title from '@features/dashboard/components/atoms/Title';
 
 // Generate Order Data
 function createData(

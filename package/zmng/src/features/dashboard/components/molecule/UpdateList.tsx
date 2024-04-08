@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import Title from '@dashboard/components/atoms/Title';
+import Title from '@features/dashboard/components/atoms/Title';
 
 function preventDefault(event: React.MouseEvent) {
   event.preventDefault();

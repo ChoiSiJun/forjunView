@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 
 import HeaderBar from '@common/components/template/HeaderBar';
 import SideBar from '@common/components/template/SideBar';
-import LibertyDashboard from '@dashboard/components/template/Dashboard';
+import LibertyDashboard from '@features/dashboard/components/template/Dashboard';
 import { green, blue } from '@mui/material/colors';
 
 //라우터 Import

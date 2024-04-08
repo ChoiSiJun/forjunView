@@ -10,11 +10,14 @@
       //공통사항
       "@common/*": ["common/*"],
 
-      //대쉬보드
-      "@dashboard/*": ["dashboard/*"],
+      //모듈제외 기능
+      "@features/*": ["features/*"],
 
       //모듈
-      "@module/*": ["module/*"]
+      "@module/*": ["module/*"],
+
+      //UI-kit
+      "@ui-kit/*": ["ui-kit/*"]
     }
   }
 }

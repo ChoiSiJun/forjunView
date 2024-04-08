@@ -5,9 +5,9 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 
-import Chart from '@dashboard/components/molecule/Chart';
-import UpdateList from '@dashboard/components/molecule/UpdateList';
-import Orders from '@dashboard/components/molecule/Orders';
+import Chart from '@features/dashboard/components/molecule/Chart';
+import UpdateList from '@features/dashboard/components/molecule/UpdateList';
+import Orders from '@features/dashboard/components/molecule/Orders';
 
 const LibertyDashboard = () => {
   return (
