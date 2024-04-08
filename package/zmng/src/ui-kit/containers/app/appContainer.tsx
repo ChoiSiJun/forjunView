@@ -6,8 +6,10 @@ import Box from '@mui/material/Box';
 import HeaderBar from '@common/components/template/HeaderBar';
 import SideBar from '@common/components/template/SideBar';
 import Dashboard from '@features/dashboard/components/template/Dashboard';
+import MemberMain from '@module/member/page/MemberMain';
 
 import { appTheme } from '@ui-kit/themes/appTheme';
+import Container from '@mui/material/Container';
 
 //라우터 Import
 import { Route, Routes } from 'react-router-dom';
@@ -30,7 +32,7 @@ export default function AppContainer() {
           open={open}
           toggleDrawer={toggleDrawer}
           drawerWidth={drawerWidth}
-          title={'리버티 클라우드'}
+          title={'Liberty Cloud'}
         />
 
         <SideBar
@@ -38,9 +40,25 @@ export default function AppContainer() {
           toggleDrawer={toggleDrawer}
           drawerWidth={drawerWidth}
         />
-        <Routes>
-          <Route path="/" element={<Dashboard />}></Route>
-        </Routes>
+        <Box
+          component="main"
+          sx={{
+            backgroundColor: theme =>
+              theme.palette.mode === 'light'
+                ? 'white'
+                : theme.palette.grey[900],
+            flexGrow: 1,
+            height: '100vh',
+            overflow: 'auto',
+          }}
+        >
+          <Container maxWidth="lg" sx={{ mt: 14, mb: 4 }}>
+            <Routes>
+              <Route path="/" element={<Dashboard />}></Route>
+              <Route path="/member" element={<MemberMain />} />
+            </Routes>
+          </Container>
+        </Box>
       </Box>
     </ThemeProvider>
   );

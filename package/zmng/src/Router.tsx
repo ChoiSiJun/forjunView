@@ -5,7 +5,7 @@ function LibertyRouter() {
   return (
     <Router>
       <Routes>
-        <Route path="/liberty" element={<AppContainer />} />
+        <Route path="/liberty/*" element={<AppContainer />} />
       </Routes>
     </Router>
   );
