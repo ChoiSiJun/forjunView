@@ -1,4 +1,5 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
+
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -12,13 +13,19 @@ import { appTheme } from '@ui-kit/themes/appTheme';
 import Container from '@mui/material/Container';
 
 //라우터 Import
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 
 //사이드바 기본 확장 넓이
 const drawerWidth: number = 240;
 
 export default function AppContainer() {
-  const [open, setOpen] = React.useState(true);
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log(location);
+  }, [location]);
+
+  const [open, setOpen] = useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };

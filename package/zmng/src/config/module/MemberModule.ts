@@ -2,7 +2,7 @@ export const MemberModule = [
   {
     menuCode: 'MEMBER_LIST',
     menuName: '이용자 리스트',
-    menuPath: '/',
+    menuPath: '/liberty/member',
     children: [
       {
         menuCode: 'MEMBER_LIST_SEARCH',
