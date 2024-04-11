@@ -3,8 +3,6 @@ import { styled } from '@mui/material/styles';
 import Drawer, { DrawerProps } from '@mui/material/Drawer';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import { ReactNode } from 'react';
-import moduleInfo from '@config/module/ModuleInfo';
-
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 
@@ -12,6 +10,8 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+
+import { useAppSelector } from '@config/ReduxHooks';
 
 import {
   Accordion,
@@ -23,6 +23,7 @@ import {
 } from '@mui/material';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { Link } from 'react-router-dom';
 
 interface Drawer extends DrawerProps {
   drawerWidth: number;
@@ -31,7 +32,9 @@ interface Drawer extends DrawerProps {
 
 //사이드 메뉴 리스트 컴포넌트 정의
 export const SideBarMenuList = (): ReactNode => {
-  return moduleInfo.map((item, index) => (
+  const ModuleList = useAppSelector(state => state.Module.moduleList);
+
+  return ModuleList.map((item, index) => (
     <Accordion disableGutters key={index}>
       <AccordionSummary expandIcon={<KeyboardArrowDownIcon />}>
         <ListItemIcon>
@@ -40,10 +43,12 @@ export const SideBarMenuList = (): ReactNode => {
         <ListItemText primary={item.moduleName} />
       </AccordionSummary>
       <AccordionDetails>
-        {item.data?.map((menuItem, menuIndex) => (
-          <ListItemButton key={menuIndex} href={menuItem.menuPath}>
-            <ListItemText primary={menuItem.menuName} />
-          </ListItemButton>
+        {item.menuList?.map((menuItem, menuIndex) => (
+          <Link to={menuItem.menuPath}>
+            <ListItemButton key={menuIndex}>
+              <ListItemText primary={menuItem.menuName} />
+            </ListItemButton>
+          </Link>
         ))}
       </AccordionDetails>
     </Accordion>

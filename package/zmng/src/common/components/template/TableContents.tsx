@@ -1,20 +1,32 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import SearchField from '@common/components/atoms/input/SearchField';
+import SearchField, {
+  SearchFieldProps,
+} from '@common/components/atoms/input/SearchField';
 import DataTable, {
   DataTableProps,
 } from '@common/components/atoms/table/DataTable';
-import { ReactNode } from 'react';
 
-interface TableContentsProps extends DataTableProps {
-  toolbar: ReactNode;
-}
+import ToolbarContent, {
+  ToolbarContentProps,
+} from '@common/components/molecule/ToolbarContent';
 
-const TableContents = ({ toolbar }: TableContentsProps) => {
+interface TableContentsProps
+  extends DataTableProps,
+    ToolbarContentProps,
+    SearchFieldProps {}
+
+const TableContents = ({
+  buttonList,
+  rows,
+  columns,
+  searchInputRef,
+  onClick,
+}: TableContentsProps) => {
   return (
     <Grid container spacing={1}>
       <Grid item xs={12} md={12} lg={12}>
-        {toolbar}
+        <ToolbarContent buttonList={buttonList} />
       </Grid>
 
       <Grid item xs={12} md={12} lg={12}>
@@ -25,7 +37,7 @@ const TableContents = ({ toolbar }: TableContentsProps) => {
           }}
         >
           <Grid item xs={12} md={12} lg={12}>
-            <SearchField />
+            <SearchField searchInputRef={searchInputRef} onClick={onClick} />
           </Grid>
         </Paper>
       </Grid>
@@ -37,7 +49,7 @@ const TableContents = ({ toolbar }: TableContentsProps) => {
             flexDirection: 'column',
           }}
         >
-          <DataTable rows={[]} columns={[]} />
+          <DataTable rows={rows} columns={columns} />
         </Paper>
       </Grid>
     </Grid>

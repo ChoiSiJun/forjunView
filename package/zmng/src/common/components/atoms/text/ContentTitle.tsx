@@ -1,13 +1,12 @@
 import { Typography } from '@mui/material';
+import { useAppSelector } from '@config/ReduxHooks';
 
-interface ContentTitleProps {
-  titleName: string;
-}
+const ContentTitle = () => {
+  const menuName = useAppSelector(state => state.Module.accessMenuName);
 
-const ContentTitle = ({ titleName }: ContentTitleProps) => {
   return (
     <Typography variant="h5" fontWeight="bold">
-      {titleName}
+      {menuName}
     </Typography>
   );
 };

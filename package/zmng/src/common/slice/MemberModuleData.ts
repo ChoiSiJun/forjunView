@@ -20,7 +20,7 @@ export const MemberModule = [
   {
     menuCode: 'MEMBER_LIMIT',
     menuName: '서비스 제한 ',
-    menuPath: '/',
+    menuPath: '/liberty/dashboard',
     children: [
       {
         menuCode: 'MEMBER_LIMIT_SEARCH',

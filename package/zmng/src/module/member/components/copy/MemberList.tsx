@@ -5,6 +5,7 @@ import CreateButton from '@common/components/atoms/button/CreateButton';
 import { Toolbar } from '@mui/material';
 import ContentTitle from '@common/components/atoms/text/ContentTitle';
 import SearchField from '@common/components/atoms/input/SearchField';
+import ModuleSettingUtill from '@common/utill/ModuleSettingUtill';
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -38,51 +39,54 @@ const rows = [
   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
 ];
 
-const MemberMain = () => {
+const MemberList = () => {
   return (
-    <Grid container spacing={1}>
-      <Grid item xs={12} md={12} lg={12}>
-        <Toolbar>
-          <ContentTitle titleName="이용자 리스트" />
-          <CreateButton buttonName="신규" />
-        </Toolbar>
-      </Grid>
+    <>
+      <ModuleSettingUtill />
+      <Grid container spacing={1}>
+        <Grid item xs={12} md={12} lg={12}>
+          <Toolbar>
+            <ContentTitle />
+            <CreateButton buttonName="신규" />
+          </Toolbar>
+        </Grid>
 
-      <Grid item xs={12} md={12} lg={12}>
-        <Paper
-          sx={{
-            p: 2,
-            display: 'flex',
-          }}
-        >
-          <Grid item xs={12} md={12} lg={12}>
-            <SearchField />
-          </Grid>
-        </Paper>
-      </Grid>
-      <Grid item xs={12} md={12} lg={12}>
-        <Paper
-          sx={{
-            p: 2,
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-              },
+        <Grid item xs={12} md={12} lg={12}>
+          <Paper
+            sx={{
+              p: 2,
+              display: 'flex',
             }}
-            pageSizeOptions={[5, 10]}
-            checkboxSelection
-          />
-        </Paper>
+          >
+            <Grid item xs={12} md={12} lg={12}>
+              <SearchField searchInputRef={undefined} />
+            </Grid>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={12} lg={12}>
+          <Paper
+            sx={{
+              p: 2,
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 },
+                },
+              }}
+              pageSizeOptions={[5, 10]}
+              checkboxSelection
+            />
+          </Paper>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 };
 
-export default MemberMain;
+export default MemberList;
