@@ -49,9 +49,6 @@ export const ModuleInfoSlice = createSlice({
             state.accessMenuCode = menuItem.menuCode;
             state.accessMenuName = menuItem.menuName;
             state.accessPath = menuItem.menuPath;
-
-            console.log(state.accessPath);
-            console.log(state.accessMenuName);
           }
         });
       });

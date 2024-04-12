@@ -4,10 +4,10 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 
-import HeaderBar from '@common/components/template/HeaderBar';
-import SideBar from '@common/components/template/SideBar';
+import HeaderBar from '@ui-kit/app/components/HeaderBar';
+import SideBar from '@ui-kit/app/components/SideBar';
 
-import { appTheme } from '@ui-kit/themes/appTheme';
+import { appTheme } from '@ui-kit/app/themes/appTheme';
 import Container from '@mui/material/Container';
 
 //라우터 Import

@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import LibertyRouter from '@router';
 import { Provider } from 'react-redux';

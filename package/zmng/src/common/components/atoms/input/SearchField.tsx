@@ -13,7 +13,7 @@ const SearchField = ({ searchInputRef, onClick }: SearchFieldProps) => {
       fullWidth
       variant="outlined"
       placeholder="Search..."
-      ref={searchInputRef}
+      inputRef={searchInputRef}
       InputProps={{
         endAdornment: (
           <IconButton type="submit" aria-label="search" onClick={onClick}>

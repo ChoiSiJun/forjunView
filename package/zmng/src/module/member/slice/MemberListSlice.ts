@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { AsyncThunkErrorProps } from '@common/type/commonType';
-
 import { DataTableProps } from '@common/components/atoms/table/DataTable';
 import { GridColDef } from '@mui/x-data-grid';
 
 const api_url = import.meta.env.VITE_MEMBER_API;
+
 //searchMemberListThunk Request Type
 interface SearchMemberListProps {
   searchType: string;
@@ -52,7 +52,6 @@ export const searchMemberList = createAsyncThunk<
     if (responseData.status !== 200) {
       throw new Error('응답코드 반환에러');
     }
-    console.log(responseData.data.content);
     return responseData.data.content;
   } catch (error) {
     return thunkAPI.rejectWithValue({
