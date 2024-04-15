@@ -15,6 +15,11 @@
     "noFallthroughCasesInSwitch": true
   },
   "extends": ["../../tsconfig.base.json", "./tsconfig.paths.json"],
-  "include": ["src/**/*.tsx", "src/**/*.ts", "*.js"],
+  "include": [
+    "src/**/*.tsx",
+    "src/**/*.ts",
+    "*.js",
+    "src/ui-kit/app/components/SideBar3tsx"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -17,10 +17,7 @@
       "@module/*": ["module/*"],
 
       //UI-kit
-      "@ui-kit/*": ["ui-kit/*"],
-
-      //UI - componrnt
-      "ui-component/*": ["common/ui-component/*"]
+      "@ui-kit/*": ["ui-kit/*"]
     }
   }
 }

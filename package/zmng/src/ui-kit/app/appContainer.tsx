@@ -5,7 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 
 import HeaderBar from '@ui-kit/app/components/HeaderBar';
-import SideBar from '@ui-kit/app/components/SideBar';
+import SideBar3 from '@ui-kit/app/components/SideBar/index';
 
 import { appTheme } from '@ui-kit/app/themes/appTheme';
 import Container from '@mui/material/Container';
@@ -14,7 +14,7 @@ import Container from '@mui/material/Container';
 import { Outlet } from 'react-router-dom';
 
 //사이드바 기본 확장 넓이
-const drawerWidth: number = 240;
+const drawerWidth: number = 270;
 
 export default function AppContainer() {
   const [open, setOpen] = useState(true);
@@ -34,11 +34,7 @@ export default function AppContainer() {
           title={'Liberty Cloud'}
         />
 
-        <SideBar
-          open={open}
-          toggleDrawer={toggleDrawer}
-          drawerWidth={drawerWidth}
-        />
+        <SideBar3 />
         <Box
           component="main"
           sx={{
