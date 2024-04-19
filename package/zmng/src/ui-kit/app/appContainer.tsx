@@ -5,7 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 
 import HeaderBar from '@ui-kit/app/components/HeaderBar';
-import SideBar3 from '@ui-kit/app/components/SideBar/index';
+import SideBar from '@ui-kit/app/components/SideBar/Sidebar';
 
 import { appTheme } from '@ui-kit/app/themes/appTheme';
 import Container from '@mui/material/Container';
@@ -22,6 +22,9 @@ export default function AppContainer() {
     setOpen(!open);
   };
 
+  const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
   return (
     <ThemeProvider theme={appTheme}>
       <Box sx={{ display: 'flex' }}>
@@ -34,7 +37,11 @@ export default function AppContainer() {
           title={'Liberty Cloud'}
         />
 
-        <SideBar3 />
+        <SideBar
+          isSidebarOpen={isSidebarOpen}
+          isMobileSidebarOpen={isMobileSidebarOpen}
+          onSidebarClose={() => setMobileSidebarOpen(false)}
+        />
         <Box
           component="main"
           sx={{

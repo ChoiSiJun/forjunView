@@ -910,6 +910,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mui/styled-engine-sc@npm:6.0.0-alpha.18":
+  version: 6.0.0-alpha.18
+  resolution: "@mui/styled-engine-sc@npm:6.0.0-alpha.18"
+  dependencies:
+    "@babel/runtime": "npm:^7.23.9"
+    csstype: "npm:^3.1.3"
+    hoist-non-react-statics: "npm:^3.3.2"
+    prop-types: "npm:^15.8.1"
+  peerDependencies:
+    styled-components: ^6.0.0
+  checksum: 10c0/19dbb31b543f5655560181f363d1dcaf5737acbd0a3ab1541cb3fa8362322349e69aaa8dfb3c3a7943146f4a757d0366b92e84de6305087c8201bbd128e90198
+  languageName: node
+  linkType: hard
+
 "@mui/styled-engine@npm:^5.15.14":
   version: 5.15.14
   resolution: "@mui/styled-engine@npm:5.15.14"
@@ -1371,6 +1385,24 @@ __metadata:
   dependencies:
     tslib: "npm:^2.4.0"
   checksum: 10c0/ae43e2130b0c47a8c5dc51148925604707ee7801fef90674f71d2266a98b272c8f16145931fc7d51daf6795c4f3a86ccecd472e94a7ea562e0db7c333447d9e6
+  languageName: node
+  linkType: hard
+
+"@tabler/icons-react@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "@tabler/icons-react@npm:3.2.0"
+  dependencies:
+    "@tabler/icons": "npm:3.2.0"
+  peerDependencies:
+    react: ">= 16"
+  checksum: 10c0/65bdcbf930601212285bf3200e448a7cc51536e4a9a8e82d04a19b6cbf90f9c79f99574628a8816f5fa083836abbcd85e35378bdac5d276c2c8297d3035f9554
+  languageName: node
+  linkType: hard
+
+"@tabler/icons@npm:3.2.0":
+  version: 3.2.0
+  resolution: "@tabler/icons@npm:3.2.0"
+  checksum: 10c0/5d310f89677550971b0f2120c735afc9b979dead896070dbbe1880231d24b960f0915c68b49a368a373325db12b1a3ad0e9a4d2141667493ebad0a4e9d7fc4f2
   languageName: node
   linkType: hard
 
@@ -3583,7 +3615,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hoist-non-react-statics@npm:^3.3.1":
+"hoist-non-react-statics@npm:^3.3.1, hoist-non-react-statics@npm:^3.3.2":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
   dependencies:
@@ -4156,8 +4188,10 @@ __metadata:
     "@emotion/styled": "npm:^11.11.5"
     "@mui/icons-material": "npm:^5.15.14"
     "@mui/material": "npm:^5.15.14"
+    "@mui/styled-engine-sc": "npm:6.0.0-alpha.18"
     "@mui/x-charts": "npm:^7.1.0"
     "@mui/x-data-grid": "npm:^7.1.1"
+    "@tabler/icons-react": "npm:^3.2.0"
     "@types/node": "npm:^20.11.27"
     "@typescript-eslint/eslint-plugin": "npm:^7.2.0"
     "@typescript-eslint/parser": "npm:^7.2.0"
