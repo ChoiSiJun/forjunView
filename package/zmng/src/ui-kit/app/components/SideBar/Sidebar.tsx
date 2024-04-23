@@ -17,8 +17,8 @@ const Sidebar = ({
   const lgUp = useMediaQuery(currentTheme.breakpoints.up('lg'));
 
   const sidebarWidth = '270px';
-
   if (lgUp) {
+    /* 데스크탑 사이드바 */
     return (
       <Box
         sx={{
@@ -26,9 +26,6 @@ const Sidebar = ({
           flexShrink: 0,
         }}
       >
-        {/* ------------------------------------------- */}
-        {/* Sidebar for desktop */}
-        {/* ------------------------------------------- */}
         <Drawer
           anchor="left"
           open={isSidebarOpen}
@@ -40,26 +37,17 @@ const Sidebar = ({
             },
           }}
         >
-          {/* ------------------------------------------- */}
-          {/* Sidebar Box */}
-          {/* ------------------------------------------- */}
           <Box
             sx={{
               height: '100%',
             }}
           >
-            {/* ------------------------------------------- */}
-            {/* Logo */}
-            {/* ------------------------------------------- */}
             <Box px={3}>
               <SideBarHeader />
             </Box>
             <br />
             <Divider />
             <Box>
-              {/* ------------------------------------------- */}
-              {/* Sidebar Items */}
-              {/* ------------------------------------------- */}
               <ItemContainer />
             </Box>
           </Box>
@@ -68,6 +56,7 @@ const Sidebar = ({
     );
   }
 
+  /* 모바일 사이드바 */
   return (
     <Drawer
       anchor="left"
@@ -77,19 +66,14 @@ const Sidebar = ({
       PaperProps={{
         sx: {
           width: sidebarWidth,
+          marginTop: '60px',
           boxShadow: theme => theme.shadows[8],
         },
       }}
     >
-      {/* ------------------------------------------- */}
-      {/* Logo */}
-      {/* ------------------------------------------- */}
       <Box px={2}>
         <SideBarHeader />
       </Box>
-      {/* ------------------------------------------- */}
-      {/* Sidebar For Mobile */}
-      {/* ------------------------------------------- */}
       <ItemContainer />
     </Drawer>
   );

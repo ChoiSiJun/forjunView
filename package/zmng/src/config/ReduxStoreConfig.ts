@@ -1,14 +1,25 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import MemberSlice from '@module/member/slice/MemberSlice';
 import MemberListSlice from '@module/member/slice/MemberListSlice';
-import ModuleSlice from '@common/slice/ModuleSlice';
+import MenuSlice from '@common/slice/MenuSlice';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
+const reducers = combineReducers({
+  Menu: MenuSlice,
+  Member: MemberSlice,
+  MemberList: MemberListSlice,
+});
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['Menu'],
+};
+
+const persistedReducer = persistReducer(persistConfig, reducers);
 export const store = configureStore({
-  reducer: {
-    Module: ModuleSlice,
-    Member: MemberSlice,
-    MemberList: MemberListSlice,
-  },
+  reducer: persistedReducer,
 });
 
 export type RootState = ReturnType<typeof store.getState>;

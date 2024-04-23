@@ -1,12 +1,13 @@
 import { ListSubheader, styled } from '@mui/material';
-import { moduleProps } from '@common/slice/ModuleSlice';
 
 interface NavGroupProps {
-  module: moduleProps;
+  name: string;
+  path?: string;
 }
 
-const ListSubheaderStyle = styled(ListSubheader)(({ theme }) => ({
-  ...theme.typography.overline,
+//스타일 컴포넌트 재구성
+const ListSubheaderStyled = styled(ListSubheader)(({ theme }) => ({
+  ...theme.typography.subtitle1,
   fontWeight: '700',
   marginTop: theme.spacing(3),
   marginBottom: theme.spacing(0),
@@ -15,10 +16,9 @@ const ListSubheaderStyle = styled(ListSubheader)(({ theme }) => ({
   padding: '3px 12px',
 }));
 
-const NavGroup = ({ module }: NavGroupProps) => {
-  return (
-    <ListSubheaderStyle disableSticky>{module.moduleName}</ListSubheaderStyle>
-  );
+//렌더링
+const NavGroup = ({ name }: NavGroupProps) => {
+  return <ListSubheaderStyled disableSticky>{name}</ListSubheaderStyled>;
 };
 
 export default NavGroup;

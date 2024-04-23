@@ -1,10 +1,26 @@
 import { Link } from 'react-router-dom';
-import { Box, Typography, styled, useTheme } from '@mui/material';
+import {
+  Box,
+  Typography,
+  styled,
+  useTheme,
+  Popover,
+  MenuItem,
+  MenuList,
+  Paper,
+} from '@mui/material';
 import mirlogo from '/asset/mirlogo.png';
 import Button from '@mui/material/Button';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import AccessibilityIcon from '@mui/icons-material/Accessibility';
+import { useState } from 'react';
+import packageInfo from '@common/slice/Package';
+import React from 'react';
+import { useAppDispatch, useAppSelector } from '@config/ReduxHooks';
+import { packageAccess } from '@common/slice/MenuSlice';
 
+//**************************컴포넌트 스타일 재설정
+//Link 스타일 컴포넌트 재정의
 const LinkStyled = styled(Link)(() => ({
   height: '90px',
   width: '180px',
@@ -12,8 +28,45 @@ const LinkStyled = styled(Link)(() => ({
   display: 'block',
 }));
 
+const PaperStyled = styled(Paper)(({ theme }) => ({
+  borderRadius: '10px',
+  borderWidth: '2px', // 테두리 두께를 설정합니다.
+  borderStyle: 'solid', // 테두리 스타일을 설정합니다.
+  borderColor: theme.palette.divider, // 테두리 색상을 검은색으로 설정합니다.
+}));
+
 const SideBarHeader = () => {
-  const theme = useTheme(); // 테마 객체를 가져옵니다.
+  //**************************컴포넌트 구성에 필요한 값들 설정
+  console.log('렌더링!');
+  const theme = useTheme();
+  const dispatch = useAppDispatch();
+  const packageIndex = useAppSelector(state => state.Menu.accessPackageIndex);
+  console.log(packageIndex);
+
+  const handlePackageItemClick = (index: number) => {
+    setAnchorEl(null);
+    dispatch(packageAccess(index));
+  };
+
+  //패키지 선택박스 제어
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const moduleSelectBox = Boolean(anchorEl);
+
+  //*******************************컴포넌트 이벤트 정의
+
+  //패키지 선택박스 열기 이벤트
+  const handlePackageSelectOpen = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  //패키지 선택박스 닫힘 이벤트
+  const handlePackageSelectClose = () => {
+    setAnchorEl(null);
+  };
+
+  //************************컴포넌트 렌더링 */
   return (
     <Box
       sx={{
@@ -34,21 +87,22 @@ const SideBarHeader = () => {
         <img src={mirlogo} alt="Logo" width={'50%'} height={'50%'} />
       </LinkStyled>
 
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', width: '220px' }}>
         <Button
           variant="contained"
           color="primary"
+          onClick={handlePackageSelectOpen}
           sx={{
             display: 'flex',
             flexDirection: 'row', // 이미지와 텍스트를 가로로 정렬합니다.
             borderRadius: '10px',
             backgroundColor: 'transparent',
             width: '100%',
-            color: theme.palette.text.primary, // 텍스트 색상을 흰색으로 설정합니다.
+            color: theme.palette.text.primary,
             borderColor: theme.palette.divider, // 테두리 색상을 검은색으로 설정합니다.
             borderWidth: '2px', // 테두리 두께를 설정합니다.
             borderStyle: 'solid', // 테두리 스타일을 설정합니다.
-          }} // 모서리를 둥글게 만듭니다.
+          }}
           endIcon={<ArrowDropDownIcon />} // 버튼 오른쪽에 화살표 아이콘을 추가합니다.
         >
           <Box
@@ -63,20 +117,46 @@ const SideBarHeader = () => {
           >
             <AccessibilityIcon />
           </Box>
-
           <Box
             sx={{
               flexDirection: 'column',
             }}
           >
-            <Typography variant="body1" align="left">
-              Workspace
-            </Typography>
             <Typography variant="h6" align="left">
-              이용자관리
+              {packageInfo[packageIndex].packageName}
             </Typography>
           </Box>
         </Button>
+        <Popover
+          id={'packageSelectPopOver'}
+          open={moduleSelectBox}
+          anchorEl={anchorEl}
+          onClose={handlePackageSelectClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+        >
+          <Box sx={{ width: '200px' }}>
+            <PaperStyled>
+              <MenuList id="split-button-menu" autoFocusItem>
+                {packageInfo.map((item, index) => (
+                  <MenuItem
+                    key={item.packageCode}
+                    selected={index === packageIndex}
+                    onClick={() => handlePackageItemClick(index)}
+                  >
+                    {item.packageName}
+                  </MenuItem>
+                ))}
+              </MenuList>
+            </PaperStyled>
+          </Box>
+        </Popover>
       </Box>
     </Box>
   );

@@ -2,56 +2,58 @@
 import {
   ListItemIcon,
   ListItemButton,
-  List,
+  ListItem,
   styled,
   ListItemText,
-  useTheme,
 } from '@mui/material';
 
-import { moduleMenuProps } from '@common/slice/ModuleSlice';
 import { Link } from 'react-router-dom';
 
 import ArticleIcon from '@mui/icons-material/Article';
 
+//타입지정
 interface NavItemProps {
-  menu: moduleMenuProps;
-  level: number;
-  pathDirect: string;
+  name: string;
+  path: string;
+  code: string;
+  accessPath: string;
   onClick?: () => void;
 }
 
-const NavItem = ({ menu, level, pathDirect, onClick }: NavItemProps) => {
-  const theme = useTheme();
-
-  const NavItemStyle = styled(ListItemButton)(() => ({
-    whiteSpace: 'nowrap',
-    marginBottom: '2px',
-    padding: '8px 10px',
-    borderRadius: '8px',
-    backgroundColor: level > 1 ? 'transparent !important' : 'inherit',
-    color: theme.palette.text.secondary,
-    paddingLeft: '10px',
+//스타일 컴포넌트 재구성
+const NavItemStyled = styled(ListItemButton)(({ theme }) => ({
+  whiteSpace: 'nowrap',
+  marginBottom: '2px',
+  padding: '8px 10px',
+  borderRadius: '8px',
+  color: theme.palette.text.secondary,
+  paddingLeft: '10px',
+  '&:hover': {
+    backgroundColor: theme.palette.primary.light,
+    color: theme.palette.primary.main,
+  },
+  '&.Mui-selected': {
+    color: 'white',
+    backgroundColor: theme.palette.primary.main,
     '&:hover': {
-      backgroundColor: theme.palette.primary.light,
-      color: theme.palette.primary.main,
-    },
-    '&.Mui-selected': {
-      color: 'white',
       backgroundColor: theme.palette.primary.main,
-      '&:hover': {
-        backgroundColor: theme.palette.primary.main,
-        color: 'white',
-      },
     },
-  }));
+  },
+}));
 
+const NavItem = ({ name, path, code, accessPath, onClick }: NavItemProps) => {
+  //컴포넌트 렌더링
   return (
-    <List component="li" disablePadding key={menu.menuCode}>
+    <ListItem component="li" disablePadding key={code}>
       <Link
-        to={menu.menuPath}
-        style={{ textDecoration: 'none', color: 'inherit' }}
+        to={path}
+        style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}
       >
-        <NavItemStyle onClick={onClick} selected={pathDirect === menu.menuPath}>
+        <NavItemStyled
+          onClick={onClick}
+          selected={accessPath === path}
+          sx={{ width: '100%' }}
+        >
           <ListItemIcon
             sx={{
               minWidth: '36px',
@@ -61,12 +63,12 @@ const NavItem = ({ menu, level, pathDirect, onClick }: NavItemProps) => {
           >
             <ArticleIcon />
           </ListItemIcon>
-          <ListItemText>
-            <>{menu.menuName}</>
+          <ListItemText sx={{ width: '100%' }}>
+            <>{name}</>
           </ListItemText>
-        </NavItemStyle>
+        </NavItemStyled>
       </Link>
-    </List>
+    </ListItem>
   );
 };
 

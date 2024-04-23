@@ -52,7 +52,7 @@ export const appTheme = createTheme({
     action: {
       disabledBackground: 'rgba(73,82,88,0.12)',
       hoverOpacity: 0.02,
-      hover: '#f6f9fc',
+      hover: '#ECF2FF',
     },
     divider: '#e5eaef',
   },
