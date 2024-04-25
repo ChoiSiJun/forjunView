@@ -10,22 +10,24 @@ import { styled } from '@mui/material/styles';
 
 //Mui AppBar Type
 interface AppBarProps extends MuiAppBarProps {
-  drawerWidth: number;
+  headerBarHeight: number;
+  sidebarWidth: number;
   open?: boolean;
 }
 
 //Mui AppBar 스타일 정의 컴포넌트
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: prop => prop !== 'open' && prop !== 'drawerWidth',
-})<AppBarProps>(({ theme, open, drawerWidth }) => ({
+  shouldForwardProp: prop => prop !== 'open' && prop !== 'sidebarWidth',
+})<AppBarProps>(({ theme, open, sidebarWidth, headerBarHeight }) => ({
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: sidebarWidth,
+    width: `calc(100% - ${sidebarWidth}px)`,
+    height: headerBarHeight,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -38,17 +40,19 @@ interface HeaderBarProps {
   open: boolean;
   setMobileSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   toggleDrawer: () => void;
-  drawerWidth: number;
+  headerBarHeight: number;
+  sidebarWidth: number;
   title: string;
 }
 
 //Liberty HeaderBar 컴포넌트
 const HeaderBar = ({
+  title,
+  headerBarHeight,
+  sidebarWidth,
   open,
   toggleDrawer,
-  drawerWidth,
   setMobileSidebarOpen,
-  title,
 }: HeaderBarProps) => {
   const currentTheme = useTheme(); // 현재 테마 객체 가져오기
   const lgUp = useMediaQuery(currentTheme.breakpoints.up('lg'));
@@ -61,7 +65,8 @@ const HeaderBar = ({
     <AppBar
       position="absolute"
       open={open}
-      drawerWidth={lgUp ? drawerWidth : 0}
+      sidebarWidth={lgUp ? sidebarWidth : 0}
+      headerBarHeight={headerBarHeight}
     >
       <Toolbar
         sx={{

@@ -8,6 +8,7 @@ function LibertyRouter() {
     <Router>
       <Routes>
         <Route path="liberty/*" element={<AppContainer />}>
+          <Route index element={<Dashboard />} />
           <Route path="dashBoard" element={<Dashboard />} />
           <Route path="member" element={<MemberList />} />
         </Route>

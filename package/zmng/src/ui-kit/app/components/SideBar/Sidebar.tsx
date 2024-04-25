@@ -3,12 +3,14 @@ import SideBarHeader from '@ui-kit/app/components/SideBar/SideBarHeader';
 import ItemContainer from '@ui-kit/app/components/SideBar/ItemContainer';
 
 interface SidebarProps {
+  sidebarWidth: number;
   isSidebarOpen: boolean;
   isMobileSidebarOpen: boolean;
   onSidebarClose: () => void;
 }
 
 const Sidebar = ({
+  sidebarWidth,
   isSidebarOpen,
   isMobileSidebarOpen,
   onSidebarClose,
@@ -16,7 +18,6 @@ const Sidebar = ({
   const currentTheme = useTheme(); // 현재 테마 객체 가져오기
   const lgUp = useMediaQuery(currentTheme.breakpoints.up('lg'));
 
-  const sidebarWidth = '270px';
   if (lgUp) {
     /* 데스크탑 사이드바 */
     return (
@@ -32,7 +33,7 @@ const Sidebar = ({
           variant="permanent"
           PaperProps={{
             sx: {
-              width: sidebarWidth,
+              width: 270,
               boxSizing: 'border-box',
             },
           }}
@@ -42,7 +43,7 @@ const Sidebar = ({
               height: '100%',
             }}
           >
-            <Box px={3}>
+            <Box px={4}>
               <SideBarHeader />
             </Box>
             <br />
