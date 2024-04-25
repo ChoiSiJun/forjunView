@@ -37,9 +37,7 @@ const AppBar = styled(MuiAppBar, {
 
 //Liberty HeaderBar Type
 interface HeaderBarProps {
-  open: boolean;
   setMobileSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  toggleDrawer: () => void;
   headerBarHeight: number;
   sidebarWidth: number;
   title: string;
@@ -50,8 +48,6 @@ const HeaderBar = ({
   title,
   headerBarHeight,
   sidebarWidth,
-  open,
-  toggleDrawer,
   setMobileSidebarOpen,
 }: HeaderBarProps) => {
   const currentTheme = useTheme(); // 현재 테마 객체 가져오기
@@ -64,7 +60,7 @@ const HeaderBar = ({
   return (
     <AppBar
       position="absolute"
-      open={open}
+      open={lgUp ? true : false}
       sidebarWidth={lgUp ? sidebarWidth : 0}
       headerBarHeight={headerBarHeight}
     >
@@ -80,7 +76,7 @@ const HeaderBar = ({
           onClick={HandleMobileSideOpen}
           sx={{
             marginRight: '36px',
-            ...(open && { display: lgUp ? 'none' : 'block' }),
+            display: lgUp ? 'none' : 'block',
           }}
         >
           <MenuIcon />

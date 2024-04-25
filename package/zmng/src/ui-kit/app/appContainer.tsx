@@ -22,12 +22,6 @@ const headerBarHeight: number = 60;
 const sidebarWidth: number = 270;
 
 export default function AppContainer() {
-  const [open, setOpen] = useState(true);
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
-
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   return (
@@ -37,7 +31,7 @@ export default function AppContainer() {
 
         <SideBar
           sidebarWidth={sidebarWidth}
-          isSidebarOpen={isSidebarOpen}
+          isSidebarOpen={true}
           isMobileSidebarOpen={isMobileSidebarOpen}
           onSidebarClose={() => setMobileSidebarOpen(false)}
         />
@@ -55,9 +49,7 @@ export default function AppContainer() {
           }}
         >
           <HeaderBar
-            open={open}
             setMobileSidebarOpen={setMobileSidebarOpen}
-            toggleDrawer={toggleDrawer}
             headerBarHeight={headerBarHeight}
             sidebarWidth={sidebarWidth}
             title={'Liberty Cloud'}
