@@ -1,4 +1,4 @@
-import { Toolbar } from '@mui/material';
+import { Box, Toolbar } from '@mui/material';
 import ContentTitle from '@common/components/atoms/text/ContentTitle';
 import { ReactNode } from 'react';
 
@@ -8,9 +8,11 @@ export interface ToolbarContentProps {
 
 const ToolbarContent = ({ buttonList }: ToolbarContentProps) => {
   return (
-    <Toolbar>
+    <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
       <ContentTitle />
-      {buttonList}
+      <Box sx={{ display: 'flex', marginLeft: 'auto', gap: '5px' }}>
+        {buttonList}
+      </Box>
     </Toolbar>
   );
 };

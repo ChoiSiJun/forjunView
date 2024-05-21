@@ -37,11 +37,10 @@ const PaperStyled = styled(Paper)(({ theme }) => ({
 
 const SideBarHeader = () => {
   //**************************컴포넌트 구성에 필요한 값들 설정
-  console.log('렌더링!');
+
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const packageIndex = useAppSelector(state => state.Menu.accessPackageIndex);
-  console.log(packageIndex);
 
   const handlePackageItemClick = (index: number) => {
     setAnchorEl(null);

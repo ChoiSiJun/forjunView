@@ -5,10 +5,14 @@
       //설정파일
       "@config/*": ["config/*"],
 
+      //라우터
       "@router": ["Router.tsx"],
 
-      //공통사항
+      //공통
       "@common/*": ["common/*"],
+
+      //템플릿
+      "@template/*": ["template/*"],
 
       //모듈제외 기능
       "@features/*": ["features/*"],
