@@ -1,47 +1,27 @@
 import Grid from '@mui/material/Grid';
-
-import CreateButton from '@common/components/atoms/button/CreateButton';
-import DeleteButton from '@common/components/atoms/button/DeleteButton';
-import UpdateButton from '@common/components/atoms/button/UpdateButton';
-import ExportButton from '@common/components/atoms/button/ExportButton';
-
 import CardLayout from '@template/CardLayout';
+import MirTextField from '@common/components/atoms/input/MirTextField';
+import { useRef } from 'react';
 
-export default function TemplateButton() {
+export default function TemplateInput() {
+  const inputRef = useRef(null);
   return (
     <Grid container spacing={3}>
-      <Grid item xs={3} width={600} height={500}>
+      <Grid item xs={6} minWidth={600} height={500}>
         <CardLayout
-          component={<CreateButton buttonName={'Create'}></CreateButton>}
-          title={'생성버튼'}
-          note={['buttonName: string', 'onClick?: () => void']}
-          copyCode={'<CreateButton buttonName={} onClick={}></CreateButton>'}
-        ></CardLayout>
-      </Grid>
-
-      <Grid item xs={3} width={600} height={500}>
-        <CardLayout
-          component={<DeleteButton buttonName={'Delete'}></DeleteButton>}
-          title={'삭제버튼'}
-          note={['buttonName: string', 'onClick?: () => void']}
-          copyCode={'<DeleteButton buttonName={} onClick={}></DeleteButton>'}
-        ></CardLayout>
-      </Grid>
-
-      <Grid item xs={3} width={600} height={500}>
-        <CardLayout
-          component={<UpdateButton buttonName={'Update'}></UpdateButton>}
-          title={'수정버튼'}
-          note={['buttonName: string', 'onClick?: () => void']}
-          copyCode={'<UpdateButton buttonName={} onClick={}></UpdateButton>'}
-        ></CardLayout>
-      </Grid>
-
-      <Grid item xs={3} width={600} height={500}>
-        <CardLayout
-          component={<ExportButton buttonName={'Export'}></ExportButton>}
-          title={'내보내기버튼'}
-          note={['buttonName: string', 'onClick?: () => void']}
+          component={
+            <MirTextField
+              textFieldType={'outlined-basic'}
+              label={'텍스트필드'}
+              InputRef={inputRef}
+            />
+          }
+          title={'텍스트필드'}
+          note={[
+            'textFieldType: 텍스트 필드 타입 ( outlined-basic ,filled-basic, standard-basic)',
+            'label: 텍스트 필드 라벨값',
+            'InputRef : 텍스트 필드에 연결될 Ref값',
+          ]}
           copyCode={'<ExportButton buttonName={} onClick={}></ExportButton>'}
         ></CardLayout>
       </Grid>

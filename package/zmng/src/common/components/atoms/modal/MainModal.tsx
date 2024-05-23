@@ -1,26 +1,44 @@
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 
-interface MainModalProps {
-  modal: boolean;
-  setModal: (modal: boolean) => void;
+export interface MainModalProps {
+  modalOpen: boolean;
+  width?: number | string;
+  closeModalEvent: (modal: boolean) => void;
   children: React.ReactNode;
 }
 
-const MainModal = ({ modal, setModal, children }: MainModalProps) => {
+const mainModalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: 'background.paper',
+  border: '1px solid #000',
+  boxShadow: 24,
+};
+
+const MainModal = ({
+  modalOpen,
+  closeModalEvent,
+  width,
+  children,
+}: MainModalProps) => {
   //모달닫기 핸들러
   const handelCloseModal = () => {
-    setModal(false);
+    closeModalEvent(false);
   };
 
   return (
     <Modal
-      open={modal}
+      open={modalOpen}
       onClose={handelCloseModal}
       aria-labelledby="parent-modal-title"
       aria-describedby="parent-modal-description"
     >
-      <Box sx={{ width: 400 }}>{children}</Box>
+      <Box sx={mainModalStyle} width={width}>
+        {children}
+      </Box>
     </Modal>
   );
 };

@@ -1,11 +1,7 @@
 import Button from '@mui/material/Button';
+import ButtonProps from '@common/components/atoms/button/ButtonProps';
 
-interface CreateButton {
-  buttonName: string;
-  onClick?: () => void;
-}
-
-const CreateButton = ({ buttonName, onClick }: CreateButton) => {
+const CreateButton = ({ buttonName, ButtonClick }: ButtonProps) => {
   return (
     <Button
       variant="contained"
@@ -16,7 +12,7 @@ const CreateButton = ({ buttonName, onClick }: CreateButton) => {
         margin: '30',
         marginTop: 2,
       }}
-      onClick={onClick}
+      onClick={ButtonClick}
     >
       {buttonName}
     </Button>

@@ -1,11 +1,7 @@
 import Button from '@mui/material/Button';
+import ButtonProps from '@common/components/atoms/button/ButtonProps';
 
-interface DeleteButton {
-  buttonName: string;
-  onClick?: () => void;
-}
-
-const DeleteButton = ({ buttonName, onClick }: DeleteButton) => {
+const DeleteButton = ({ buttonName, ButtonClick }: ButtonProps) => {
   return (
     <Button
       variant="contained"
@@ -16,7 +12,7 @@ const DeleteButton = ({ buttonName, onClick }: DeleteButton) => {
         margin: '30',
         marginTop: 2,
       }}
-      onClick={onClick}
+      onClick={ButtonClick}
     >
       {buttonName}
     </Button>

@@ -1,11 +1,7 @@
 import Button from '@mui/material/Button';
+import ButtonProps from '@common/components/atoms/button/ButtonProps';
 
-interface UpdateButton {
-  buttonName: string;
-  onClick?: () => void;
-}
-
-const UpdateButton = ({ buttonName, onClick }: UpdateButton) => {
+const UpdateButton = ({ buttonName, ButtonClick }: ButtonProps) => {
   return (
     <Button
       variant="contained"
@@ -16,7 +12,7 @@ const UpdateButton = ({ buttonName, onClick }: UpdateButton) => {
         margin: '30',
         marginTop: 2,
       }}
-      onClick={onClick}
+      onClick={ButtonClick}
     >
       {buttonName}
     </Button>

@@ -1,13 +1,11 @@
 import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 import TemplateButton from '@template/TemplateButton';
 import TemplateTable from '@template/TemplateTable';
 import {
-  Divider,
   FormControl,
   InputLabel,
   MenuItem,
@@ -16,7 +14,8 @@ import {
   ThemeProvider,
 } from '@mui/material';
 import { appTheme } from '@ui-kit/app/themes/appTheme';
-import TemplateModal from './TemplateModal';
+import TemplateModal from '@template/TemplateModal';
+import TemplateInput from '@template/TemplateInput';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -142,7 +141,7 @@ export default function TemplateGuide() {
           <TemplateModal />
         </TabPanel>
         <TabPanel value={value} index={6}>
-          <TemplateButton />
+          <TemplateInput />
         </TabPanel>
       </Box>
     </ThemeProvider>

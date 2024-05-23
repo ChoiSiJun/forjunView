@@ -1,11 +1,7 @@
 import Button from '@mui/material/Button';
+import ButtonProps from '@common/components/atoms/button/ButtonProps';
 
-interface ExportButton {
-  buttonName: string;
-  onClick?: () => void;
-}
-
-const ExportButton = ({ buttonName, onClick }: ExportButton) => {
+const ExportButton = ({ buttonName, ButtonClick }: ButtonProps) => {
   return (
     <Button
       variant="contained"
@@ -16,7 +12,7 @@ const ExportButton = ({ buttonName, onClick }: ExportButton) => {
         margin: '30',
         marginTop: 2,
       }}
-      onClick={onClick}
+      onClick={ButtonClick}
     >
       {buttonName}
     </Button>
