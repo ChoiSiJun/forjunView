@@ -1,15 +1,15 @@
 import Grid from '@mui/material/Grid';
 
-import CreateButton from '@common/components/atoms/button/CreateButton';
+import CreateButton from '@common/components/atoms/button/MirCreateButton';
 
 import CardLayout from '@template/CardLayout';
 import StyledCardContainer from '@template/CardContainer';
-import MainModal from '@common/components/atoms/modal/MainModal';
+import MainModal from '@common/components/atoms/modal/MirModal';
 import React from 'react';
 import ModalContent from '@common/components/molecule/ModalContent';
-import UpdateButton from '@common/components/atoms/button/UpdateButton';
-import ExportButton from '@common/components/atoms/button/ExportButton';
-import DataTable from '@common/components/atoms/table/DataTable';
+import UpdateButton from '@common/components/atoms/button/MirUpdateButton';
+import ExportButton from '@common/components/atoms/button/MirExportButton';
+import DataTable from '@common/components/atoms/table/MirDataTable';
 
 export default function TemplateModal() {
   const [openModal1, setopenModal1] = React.useState(false);
@@ -40,7 +40,7 @@ export default function TemplateModal() {
 
     <CreateButton
     buttonName={'모달열기 버튼'}
-    ButtonClick={handleModalOpen}>
+    onClick={handleModalOpen}>
     
     </CreateButton>
 
@@ -59,7 +59,7 @@ export default function TemplateModal() {
 
   <CreateButton
   buttonName={'모달열기 버튼'}
-  ButtonClick={handleModalOpen}>
+  onClick={handleModalOpen}>
   
   </CreateButton>
 
@@ -82,12 +82,12 @@ export default function TemplateModal() {
         <Grid item xs={3} minWidth={400} height={500}>
           <StyledCardContainer>
             <CardLayout
-              component={
+              component={[
                 <CreateButton
                   buttonName={'Modal Open'}
-                  ButtonClick={handleModal1Open}
-                ></CreateButton>
-              }
+                  onClick={handleModal1Open}
+                ></CreateButton>,
+              ]}
               title={'기본모달'}
               note={[
                 'modalOpen: 모달 열림상태값',
@@ -106,7 +106,7 @@ export default function TemplateModal() {
               component={
                 <CreateButton
                   buttonName={'Modal Open'}
-                  ButtonClick={handleModal2Open}
+                  onClick={handleModal2Open}
                 ></CreateButton>
               }
               title={'모달 템플릿 예제1'}

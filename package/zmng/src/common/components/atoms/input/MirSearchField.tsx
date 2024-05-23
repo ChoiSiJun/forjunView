@@ -2,21 +2,26 @@ import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 
-export interface SearchFieldProps {
-  searchInputRef: React.RefObject<HTMLInputElement>;
+export interface MirSearchFieldProps {
+  InputRef: React.RefObject<HTMLInputElement>;
+  placeholder?: string;
   onClick: () => void;
 }
 
-const SearchField = ({ searchInputRef, onClick }: SearchFieldProps) => {
+const MirSearchField = ({
+  InputRef,
+  onClick,
+  placeholder,
+}: MirSearchFieldProps) => {
   return (
     <TextField
       fullWidth
       variant="outlined"
-      placeholder="Search..."
-      inputRef={searchInputRef}
+      placeholder={placeholder}
+      inputRef={InputRef}
       InputProps={{
         endAdornment: (
-          <IconButton type="submit" aria-label="search" onClick={onClick}>
+          <IconButton type="button" aria-label="search" onClick={onClick}>
             <SearchIcon />
           </IconButton>
         ),
@@ -25,4 +30,4 @@ const SearchField = ({ searchInputRef, onClick }: SearchFieldProps) => {
   );
 };
 
-export default SearchField;
+export default MirSearchField;

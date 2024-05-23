@@ -1,4 +1,4 @@
-import DataTable from '@common/components/atoms/table/DataTable';
+import DataTable from '@common/components/atoms/table/MirDataTable';
 import TableContents from '@common/components/template/TableContents';
 
 import Grid from '@mui/material/Grid';
@@ -6,9 +6,9 @@ import CardLayout from '@template/CardLayout';
 import { useRef } from 'react';
 import StyledCardContainer from '@template/CardContainer';
 
-import CreateButton from '@common/components/atoms/button/CreateButton';
-import UpdateButton from '@common/components/atoms/button/UpdateButton';
-import ExportButton from '@common/components/atoms/button/ExportButton';
+import CreateButton from '@common/components/atoms/button/MirCreateButton';
+import UpdateButton from '@common/components/atoms/button/MirUpdateButton';
+import ExportButton from '@common/components/atoms/button/MirExportButton';
 
 export default function TemplateTable() {
   const columnsData = [

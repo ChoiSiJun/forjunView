@@ -2,12 +2,12 @@ import { DataGrid, GridColDef, GridSlots } from '@mui/x-data-grid';
 import LinearProgress from '@mui/material/LinearProgress';
 import CustomNoRowsOverlay from '@common/components/atoms/table/customOverlay/NoRowsOverlay';
 
-export interface DataTableProps {
+export interface MirDataTableProps {
   rows: Record<string, string | number | null>[];
   columns: GridColDef[];
 }
 
-const DataTable = ({ rows, columns }: DataTableProps) => {
+const MirDataTable = ({ rows, columns }: MirDataTableProps) => {
   return (
     <div style={{ height: 400, width: '100%' }}>
       <DataGrid
@@ -29,4 +29,4 @@ const DataTable = ({ rows, columns }: DataTableProps) => {
   );
 };
 
-export default DataTable;
+export default MirDataTable;

@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import TextField from '@mui/material/TextField';
+import MuiTextField from '@mui/material/TextField';
 
 export interface MirTextFieldProps {
   textFieldType?: 'outlined-basic' | 'filled-basic' | 'standard-basic';
@@ -21,7 +21,7 @@ const MirTextField = ({
       noValidate
       autoComplete="off"
     >
-      <TextField ref={InputRef} id={textFieldType} label={label} />
+      <MuiTextField ref={InputRef} id={textFieldType} label={label} />
     </Box>
   );
 };

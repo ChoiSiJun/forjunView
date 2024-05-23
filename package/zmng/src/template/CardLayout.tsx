@@ -21,12 +21,19 @@ const handleCopyClick = (textToCopy: string) => {
 
 interface CardLayout {
   component: ReactNode;
+  component2?: ReactNode;
   title: string;
   note: string[];
   copyCode: string;
 }
 
-const CardLayout = ({ component, title, note, copyCode }: CardLayout) => {
+const CardLayout = ({
+  component,
+  component2,
+  title,
+  note,
+  copyCode,
+}: CardLayout) => {
   return (
     <Card>
       <Box borderBottom={1} padding={2}>
@@ -41,6 +48,7 @@ const CardLayout = ({ component, title, note, copyCode }: CardLayout) => {
         }}
       >
         {component}
+        {component2}
       </Box>
       <Divider></Divider>
       <CardContent>

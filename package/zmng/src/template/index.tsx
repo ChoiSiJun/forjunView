@@ -116,7 +116,7 @@ export default function TemplateGuide() {
             <Tab label="Button" {...a11yProps(3)} />
             <Tab label="Table" {...a11yProps(4)} />
             <Tab label="Modal" {...a11yProps(5)} />
-            <Tab label="Text" {...a11yProps(6)} />
+            <Tab label="Input" {...a11yProps(6)} />
             <Tab label="Item Six" {...a11yProps(7)} />
             <Tab label="Item Seven" {...a11yProps(8)} />
             <Tab label="<페이지>" disabled />

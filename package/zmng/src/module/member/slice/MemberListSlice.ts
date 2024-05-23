@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { AsyncThunkErrorProps } from '@common/type/commonType';
-import { DataTableProps } from '@common/components/atoms/table/DataTable';
+import { DataTableProps } from '@common/components/atoms/table/MirDataTable';
 import { GridColDef } from '@mui/x-data-grid';
 
 const api_url = import.meta.env.VITE_MEMBER_API;

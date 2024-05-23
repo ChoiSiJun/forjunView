@@ -1,6 +1,6 @@
 import ModuleSettingUtill from '@common/utill/ModuleSettingUtill';
 import TableContents from '@common/components/template/TableContents';
-import CreateButton from '@common/components/atoms/button/CreateButton';
+import CreateButton from '@common/components/atoms/button/MirCreateButton';
 import { useAppSelector, useAppDispatch } from '@config/ReduxHooks';
 import { searchMemberList } from '@module/member/slice/MemberListSlice';
 import { useRef } from 'react';

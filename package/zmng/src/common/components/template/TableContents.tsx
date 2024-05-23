@@ -2,10 +2,10 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import SearchField, {
   SearchFieldProps,
-} from '@common/components/atoms/input/SearchField';
+} from '@common/components/atoms/input/MirSearchField';
 import DataTable, {
   DataTableProps,
-} from '@common/components/atoms/table/DataTable';
+} from '@common/components/atoms/table/MirDataTable';
 
 import ToolbarContent, {
   ToolbarContentProps,

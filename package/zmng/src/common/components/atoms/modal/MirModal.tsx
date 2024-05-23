@@ -1,14 +1,14 @@
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 
-export interface MainModalProps {
+export interface MirModalProps {
   modalOpen: boolean;
   width?: number | string;
   closeModalEvent: (modal: boolean) => void;
   children: React.ReactNode;
 }
 
-const mainModalStyle = {
+const MirModalStyle = {
   position: 'absolute',
   top: '50%',
   left: '50%',
@@ -18,12 +18,12 @@ const mainModalStyle = {
   boxShadow: 24,
 };
 
-const MainModal = ({
+const MirModal = ({
   modalOpen,
   closeModalEvent,
   width,
   children,
-}: MainModalProps) => {
+}: MirModalProps) => {
   //모달닫기 핸들러
   const handelCloseModal = () => {
     closeModalEvent(false);
@@ -36,11 +36,11 @@ const MainModal = ({
       aria-labelledby="parent-modal-title"
       aria-describedby="parent-modal-description"
     >
-      <Box sx={mainModalStyle} width={width}>
+      <Box sx={MirModalStyle} width={width}>
         {children}
       </Box>
     </Modal>
   );
 };
 
-export default MainModal;
+export default MirModal;

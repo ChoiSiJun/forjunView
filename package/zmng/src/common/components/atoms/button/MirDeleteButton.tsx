@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
-import ButtonProps from '@common/components/atoms/button/ButtonProps';
+import MirButtonProps from '@common/components/atoms/button/MirButtonProps';
 
-const UpdateButton = ({ buttonName, ButtonClick }: ButtonProps) => {
+const MirDeleteButton = ({ buttonName, onClick }: MirButtonProps) => {
   return (
     <Button
       variant="contained"
@@ -12,11 +12,11 @@ const UpdateButton = ({ buttonName, ButtonClick }: ButtonProps) => {
         margin: '30',
         marginTop: 2,
       }}
-      onClick={ButtonClick}
+      onClick={onClick}
     >
       {buttonName}
     </Button>
   );
 };
 
-export default UpdateButton;
+export default MirDeleteButton;

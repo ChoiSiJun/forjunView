@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
-import ButtonProps from '@common/components/atoms/button/ButtonProps';
+import ButtonProps from '@common/components/atoms/button/MirButtonProps';
 
-const ExportButton = ({ buttonName, ButtonClick }: ButtonProps) => {
+const MirCreateButton = ({ buttonName, onClick }: ButtonProps) => {
   return (
     <Button
       variant="contained"
@@ -12,11 +12,11 @@ const ExportButton = ({ buttonName, ButtonClick }: ButtonProps) => {
         margin: '30',
         marginTop: 2,
       }}
-      onClick={ButtonClick}
+      onClick={onClick}
     >
       {buttonName}
     </Button>
   );
 };
 
-export default ExportButton;
+export default MirCreateButton;

@@ -1,10 +1,10 @@
 import MainModal, {
-  MainModalProps,
-} from '@common/components/atoms/modal/MainModal';
+  MirModalProps,
+} from '@common/components/atoms/modal/MirModal';
 import { Card, CardActions, CardContent, CardHeader } from '@mui/material';
 import { ReactNode } from 'react';
 
-interface ModalContentProps extends MainModalProps {
+interface ModalContentProps extends MirModalProps {
   title: string;
   subTitle?: string;
   modalType?: string;

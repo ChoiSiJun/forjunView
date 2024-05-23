@@ -1,23 +1,76 @@
 import Grid from '@mui/material/Grid';
 
-import CreateButton from '@common/components/atoms/button/CreateButton';
-import DeleteButton from '@common/components/atoms/button/DeleteButton';
-import UpdateButton from '@common/components/atoms/button/UpdateButton';
-import ExportButton from '@common/components/atoms/button/ExportButton';
+import MirCreateButton from '@common/components/atoms/button/MirCreateButton';
+import MirDeleteButton from '@common/components/atoms/button/MirDeleteButton';
+import MirUpdateButton from '@common/components/atoms/button/MirUpdateButton';
+import MirExportButton from '@common/components/atoms/button/MirExportButton';
 
 import CardLayout from '@template/CardLayout';
 import StyledCardContainer from '@template/CardContainer';
 
 export default function TemplateButton() {
+  const clickHandler = () => {
+    alert('클릭동작!!');
+  };
+
+  const MirCreateButtonGuide = {
+    title: '생성 버튼',
+    code: `
+    const clickHandler = () => {
+      alert('클릭동작!!');
+    };
+    <MirCreateButton buttonName={} onClick={clickHandler}></MirCreateButton>
+  `,
+    note: ['buttonName: 버튼이름', 'onClick: 클릭이벤트'],
+  };
+
+  const MirDeleteButtonGuide = {
+    title: '삭제 버튼',
+    code: `
+    const clickHandler = () => {
+      alert('클릭동작!!');
+    };
+    <MirDeleteButton buttonName={} onClick={clickHandler}></MirDeleteButton>
+  `,
+    note: ['buttonName: 버튼이름', 'onClick: 클릭이벤트'],
+  };
+
+  const MirUpdateButtonGuide = {
+    title: '수정 버튼',
+    code: `
+    const clickHandler = () => {
+      alert('클릭동작!!');
+    };
+    <MirUpdateButton buttonName={} onClick={clickHandler}></MirUpdateButton>
+  `,
+    note: ['buttonName: 버튼이름', 'onClick: 클릭이벤트'],
+  };
+
+  const MirExportButtonGuide = {
+    title: '내보내기 버튼',
+    code: `
+    const clickHandler = () => {
+      alert('클릭동작!!');
+    };
+    <MirExportButton buttonName={} onClick={clickHandler}></MirExportButton>
+  `,
+    note: ['buttonName: 버튼이름', 'onClick: 클릭이벤트'],
+  };
+
   return (
     <Grid container spacing={3}>
       <Grid item xs={3} width={600} height={500}>
         <StyledCardContainer>
           <CardLayout
-            component={<CreateButton buttonName={'Create'}></CreateButton>}
-            title={'생성버튼'}
-            note={['buttonName: string', 'onClick?: () => void']}
-            copyCode={'<CreateButton buttonName={} onClick={}></CreateButton>'}
+            component={
+              <MirCreateButton
+                buttonName={'Create'}
+                onClick={clickHandler}
+              ></MirCreateButton>
+            }
+            title={MirCreateButtonGuide.title}
+            note={MirCreateButtonGuide.note}
+            copyCode={MirCreateButtonGuide.code}
           ></CardLayout>
         </StyledCardContainer>
       </Grid>
@@ -25,10 +78,15 @@ export default function TemplateButton() {
       <Grid item xs={3} width={600} height={500}>
         <StyledCardContainer>
           <CardLayout
-            component={<DeleteButton buttonName={'Delete'}></DeleteButton>}
-            title={'삭제버튼'}
-            note={['buttonName: string', 'onClick?: () => void']}
-            copyCode={'<DeleteButton buttonName={} onClick={}></DeleteButton>'}
+            component={
+              <MirDeleteButton
+                buttonName={'Delete'}
+                onClick={clickHandler}
+              ></MirDeleteButton>
+            }
+            title={MirDeleteButtonGuide.title}
+            note={MirDeleteButtonGuide.note}
+            copyCode={MirDeleteButtonGuide.code}
           ></CardLayout>
         </StyledCardContainer>
       </Grid>
@@ -36,10 +94,15 @@ export default function TemplateButton() {
       <Grid item xs={3} width={600} height={500}>
         <StyledCardContainer>
           <CardLayout
-            component={<UpdateButton buttonName={'Update'}></UpdateButton>}
-            title={'수정버튼'}
-            note={['buttonName: string', 'onClick?: () => void']}
-            copyCode={'<UpdateButton buttonName={} onClick={}></UpdateButton>'}
+            component={
+              <MirUpdateButton
+                buttonName={'Update'}
+                onClick={clickHandler}
+              ></MirUpdateButton>
+            }
+            title={MirUpdateButtonGuide.title}
+            note={MirUpdateButtonGuide.note}
+            copyCode={MirUpdateButtonGuide.code}
           ></CardLayout>
         </StyledCardContainer>
       </Grid>
@@ -47,10 +110,15 @@ export default function TemplateButton() {
       <Grid item xs={3} width={600} height={500}>
         <StyledCardContainer>
           <CardLayout
-            component={<ExportButton buttonName={'Export'}></ExportButton>}
-            title={'내보내기버튼'}
-            note={['buttonName: string', 'onClick?: () => void']}
-            copyCode={'<ExportButton buttonName={} onClick={}></ExportButton>'}
+            component={
+              <MirExportButton
+                buttonName={'Export'}
+                onClick={clickHandler}
+              ></MirExportButton>
+            }
+            title={MirExportButtonGuide.title}
+            note={MirExportButtonGuide.note}
+            copyCode={MirExportButtonGuide.code}
           ></CardLayout>
         </StyledCardContainer>
       </Grid>
