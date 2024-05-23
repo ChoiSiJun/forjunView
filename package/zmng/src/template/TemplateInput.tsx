@@ -4,6 +4,9 @@ import TextField from '@common/components/atoms/input/MirTextField';
 import { useRef } from 'react';
 import SearchField from '@common/components/atoms/input/MirSearchField';
 import MirCheckbox from '@common/components/atoms/input/MirCheckBox';
+import Box from '@mui/material/Box';
+import { FormGroup } from '@mui/material';
+import MirSwitch from '@common/components/atoms/input/MirSwitch';
 
 export default function TemplateInput() {
   const MirTextFieldGuide = {
@@ -39,6 +42,20 @@ export default function TemplateInput() {
       'required : 라벨사용시 -> 필수값 체크 표시',
       'defaultChecked : 기본값 체크',
       'disabled : 체크박스 비활성화',
+      'color: 체크박스 컬러 ( secondary , success , default)',
+    ],
+  };
+
+  const MirSwitchGuide = {
+    title: '스위치',
+    code: `<MirCheckbox label="라벨값" />`,
+
+    note: [
+      'label: 스위치 라벨',
+      'required : 라벨사용시 -> 필수값 체크 표시',
+      'defaultChecked : 기본값 체크',
+      'disabled : 스위치 비활성화',
+      'color: 스위치 컬러 ( secondary , warning , default)',
     ],
   };
 
@@ -78,11 +95,41 @@ export default function TemplateInput() {
 
       <Grid item xs={6} minWidth={400}>
         <CardLayout
-          component={<MirCheckbox />}
-          component2={<MirCheckbox label="라벨값" />}
-          title={'체크박스'}
+          component={
+            <Box>
+              <MirCheckbox />
+              <MirCheckbox defaultChecked={true} />
+            </Box>
+          }
+          component2={
+            <FormGroup>
+              <MirCheckbox label="라벨값1" />
+              <MirCheckbox required label="라벨값2" color="success" />
+            </FormGroup>
+          }
+          title={MirCheckBoxGuide.title}
           note={MirCheckBoxGuide.note}
           copyCode={MirCheckBoxGuide.code}
+        ></CardLayout>
+      </Grid>
+
+      <Grid item xs={6} minWidth={400}>
+        <CardLayout
+          component={
+            <Box>
+              <MirSwitch />
+              <MirSwitch defaultChecked={true} color="secondary" />
+            </Box>
+          }
+          component2={
+            <FormGroup>
+              <MirSwitch label="라벨값1" />
+              <MirSwitch required label="라벨값2" color="warning" />
+            </FormGroup>
+          }
+          title={MirSwitchGuide.title}
+          note={MirSwitchGuide.note}
+          copyCode={MirSwitchGuide.code}
         ></CardLayout>
       </Grid>
     </Grid>

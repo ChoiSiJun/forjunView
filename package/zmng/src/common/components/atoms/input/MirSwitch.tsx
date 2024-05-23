@@ -1,29 +1,28 @@
-import Checkbox from '@mui/material/Checkbox';
-import { FormControlLabel, styled } from '@mui/material';
+import { FormControlLabel, Switch, styled } from '@mui/material';
 import { isEmpty } from 'lodash';
 
-interface MirCheckboxProps {
+interface MirSwitchProps {
   label?: string;
   defaultChecked?: boolean;
   disabled?: boolean;
   required?: boolean;
-  color?: 'secondary' | 'success' | 'default';
+  color?: 'secondary' | 'warning' | 'default';
   onChange?: () => void;
 }
 
-const MuiCheckboxStyled = styled(Checkbox)({});
+const SwitchStyled = styled(Switch)({});
 
-const MirCheckbox = ({
+const MirSwitch = ({
   label,
   defaultChecked = false,
   disabled = false,
   required = false,
   color,
   onChange,
-}: MirCheckboxProps) => {
+}: MirSwitchProps) => {
   if (isEmpty(label)) {
     return (
-      <MuiCheckboxStyled
+      <SwitchStyled
         defaultChecked={defaultChecked}
         disabled={disabled}
         required={required}
@@ -34,14 +33,19 @@ const MirCheckbox = ({
   } else {
     return (
       <FormControlLabel
-        defaultChecked={defaultChecked}
-        disabled={disabled}
-        required={required}
-        control={<MuiCheckboxStyled onChange={onChange} color={color} />}
         label={label}
+        control={
+          <SwitchStyled
+            defaultChecked={defaultChecked}
+            disabled={disabled}
+            required={required}
+            onChange={onChange}
+            color={color}
+          />
+        }
       />
     );
   }
 };
 
-export default MirCheckbox;
+export default MirSwitch;
