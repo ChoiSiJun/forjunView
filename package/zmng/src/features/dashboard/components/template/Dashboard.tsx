@@ -5,7 +5,7 @@ import Chart from '@features/dashboard/components/molecule/Chart';
 import UpdateList from '@features/dashboard/components/molecule/UpdateList';
 import Orders from '@features/dashboard/components/molecule/Orders';
 import ModuleSettingUtill from '@common/utill/ModuleSettingUtill';
-import ContentTitle from '@common/components/atoms/text/ContentTitle';
+import ContentTitle from '@common/components/atoms/text/MirContentTitle';
 import { Toolbar } from '@mui/material';
 
 const LibertyDashboard = () => {

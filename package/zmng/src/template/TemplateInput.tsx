@@ -1,135 +1,118 @@
 import Grid from '@mui/material/Grid';
 import CardLayout from '@template/CardLayout';
-import TextField from '@common/components/atoms/input/MirTextField';
+import MirTextField, {
+  MirTextFieldGuide,
+} from '@common/components/atoms/input/MirTextField';
 import { useRef } from 'react';
-import SearchField from '@common/components/atoms/input/MirSearchField';
-import MirCheckbox from '@common/components/atoms/input/MirCheckBox';
-import Box from '@mui/material/Box';
-import { FormGroup } from '@mui/material';
-import MirSwitch from '@common/components/atoms/input/MirSwitch';
+import SearchField, {
+  MirSearchFieldGuide,
+} from '@common/components/atoms/input/MirSearchField';
+import MirCheckbox, {
+  MirCheckBoxGuide,
+} from '@common/components/atoms/input/MirCheckBox';
+
+import MirSwitch, {
+  MirSwitchGuide,
+} from '@common/components/atoms/input/MirSwitch';
+import MirSelectBox, {
+  MirSelectBoxGuide,
+} from '@common/components/atoms/input/MirSelectBox';
 
 export default function TemplateInput() {
-  const MirTextFieldGuide = {
-    title: '텍스트 필드',
-    code: `const inputRef = useRef(null);
-    <TextField textFieldType={'outlined-basic'} label={'텍스트필드'} InputRef={inputRef}/>`,
-
-    note: [
-      'textFieldType: 텍스트 필드 타입 ( outlined-basic ,filled-basic, standard-basic)',
-      'label: 텍스트 필드 라벨값',
-      'InputRef : 텍스트 필드에 연결될 Ref값',
-    ],
-  };
-
-  const MirSearchFieldGuide = {
-    title: '검색 필드',
-    code: ` const inputRef = useRef(null);
-    <SearchField searchInputRef={inputRef} searchClick={function (): void {alert('검색');}} />`,
-
-    note: [
-      'placeholder: placeholder',
-      'InputRef : 검색 필드에 연결될 Ref값',
-      'onClick : 검색버튼 클릭시 호출 이벤트',
-    ],
-  };
-
-  const MirCheckBoxGuide = {
-    title: '체크박스',
-    code: `<MirCheckbox label="라벨값" />`,
-
-    note: [
-      'label: 체크박스 라벨',
-      'required : 라벨사용시 -> 필수값 체크 표시',
-      'defaultChecked : 기본값 체크',
-      'disabled : 체크박스 비활성화',
-      'color: 체크박스 컬러 ( secondary , success , default)',
-    ],
-  };
-
-  const MirSwitchGuide = {
-    title: '스위치',
-    code: `<MirCheckbox label="라벨값" />`,
-
-    note: [
-      'label: 스위치 라벨',
-      'required : 라벨사용시 -> 필수값 체크 표시',
-      'defaultChecked : 기본값 체크',
-      'disabled : 스위치 비활성화',
-      'color: 스위치 컬러 ( secondary , warning , default)',
-    ],
-  };
-
   const inputRef = useRef(null);
   return (
     <Grid container spacing={3}>
       <Grid item xs={6} minWidth={400}>
         <CardLayout
-          component={
-            <TextField
-              textFieldType={'outlined-basic'}
-              label={'텍스트필드'}
-              InputRef={inputRef}
-            />
-          }
+          component={[
+            {
+              component: (
+                <MirTextField
+                  textFieldType={'outlined-basic'}
+                  label={'텍스트필드'}
+                  InputRef={inputRef}
+                />
+              ),
+            },
+          ]}
           title={MirTextFieldGuide.title}
-          note={MirTextFieldGuide.note}
+          requireNote={MirTextFieldGuide.requireNote}
+          optionNote={MirTextFieldGuide.optionNote}
           copyCode={MirTextFieldGuide.code}
         ></CardLayout>
       </Grid>
 
       <Grid item xs={6} minWidth={400}>
         <CardLayout
-          component={
-            <SearchField
-              InputRef={inputRef}
-              onClick={function (): void {
-                alert('검색');
-              }}
-            />
-          }
-          title={MirTextFieldGuide.title}
-          note={MirSearchFieldGuide.note}
+          component={[
+            {
+              component: (
+                <SearchField
+                  InputRef={inputRef}
+                  onClick={function (): void {
+                    alert('검색');
+                  }}
+                  menuOpenClick={function (): void {
+                    alert('메뉴오픈');
+                  }}
+                />
+              ),
+            },
+          ]}
+          title={MirSearchFieldGuide.title}
+          requireNote={MirSearchFieldGuide.requireNote}
+          optionNote={MirSearchFieldGuide.optionNote}
           copyCode={MirSearchFieldGuide.code}
         ></CardLayout>
       </Grid>
 
       <Grid item xs={6} minWidth={400}>
         <CardLayout
-          component={
-            <Box>
-              <MirCheckbox />
-              <MirCheckbox defaultChecked={true} />
-            </Box>
-          }
-          component2={
-            <FormGroup>
-              <MirCheckbox label="라벨값1" />
-              <MirCheckbox required label="라벨값2" color="success" />
-            </FormGroup>
-          }
+          component={[{ component: <MirCheckbox /> }]}
           title={MirCheckBoxGuide.title}
-          note={MirCheckBoxGuide.note}
+          requireNote={MirCheckBoxGuide.requireNote}
+          optionNote={MirCheckBoxGuide.optionNote}
           copyCode={MirCheckBoxGuide.code}
         ></CardLayout>
       </Grid>
 
       <Grid item xs={6} minWidth={400}>
         <CardLayout
-          component={
-            <Box>
-              <MirSwitch />
-              <MirSwitch defaultChecked={true} color="secondary" />
-            </Box>
-          }
-          component2={
-            <FormGroup>
-              <MirSwitch label="라벨값1" />
-              <MirSwitch required label="라벨값2" color="warning" />
-            </FormGroup>
-          }
+          component={[
+            {
+              note: '테스트',
+              component: <MirSwitch />,
+            },
+          ]}
           title={MirSwitchGuide.title}
-          note={MirSwitchGuide.note}
+          requireNote={MirSwitchGuide.requireNote}
+          optionNote={MirSwitchGuide.optionNote}
           copyCode={MirSwitchGuide.code}
+        ></CardLayout>
+      </Grid>
+
+      <Grid item xs={6} minWidth={400}>
+        <CardLayout
+          component={[
+            {
+              note: '테스트',
+              component: (
+                <MirSelectBox
+                  menuItem={[
+                    { name: 'itme1', value: 'item1' },
+                    { name: 'itme2', value: 'item2' },
+                    { name: 'itme3', value: 'item3' },
+                  ]}
+                  defaultValue={'item1'}
+                  label={'item1'}
+                />
+              ),
+            },
+          ]}
+          title={MirSelectBoxGuide.title}
+          requireNote={MirSelectBoxGuide.requireNote}
+          optionNote={MirSelectBoxGuide.optionNote}
+          copyCode={MirSelectBoxGuide.code}
         ></CardLayout>
       </Grid>
     </Grid>

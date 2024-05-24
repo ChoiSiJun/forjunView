@@ -1,6 +1,6 @@
 import ModuleSettingUtill from '@common/utill/ModuleSettingUtill';
-import TableContents from '@common/components/template/TableContents';
-import CreateButton from '@common/components/atoms/button/MirCreateButton';
+import TableContents from '@common/components/template/MirTableContents';
+import MirButton from '@common/components/atoms/button/MirButton';
 import { useAppSelector, useAppDispatch } from '@config/ReduxHooks';
 import { searchMemberList } from '@module/member/slice/MemberListSlice';
 import { useRef } from 'react';
@@ -33,7 +33,7 @@ const MemberList = () => {
       <TableContents
         rows={rows}
         columns={columns}
-        buttonList={[<CreateButton buttonName={'신규'} />]}
+        buttonList={[<MirButton ButtonType="default" buttonName={'신규'} />]}
         searchInputRef={searchInputRef}
         onClick={handleSearch}
       />

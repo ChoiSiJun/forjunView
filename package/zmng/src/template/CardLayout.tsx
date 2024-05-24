@@ -19,41 +19,74 @@ const handleCopyClick = (textToCopy: string) => {
     });
 };
 
-interface CardLayout {
+interface item {
+  note?: string;
   component: ReactNode;
-  component2?: ReactNode;
+  copyCode?: undefined | string;
+}
+
+interface CardLayout {
+  component: item[];
   title: string;
-  note: string[];
-  copyCode: string;
+  copyCode?: string;
+  requireNote: string[];
+  optionNote: string[];
 }
 
 const CardLayout = ({
   component,
-  component2,
   title,
-  note,
+  requireNote,
+  optionNote,
   copyCode,
 }: CardLayout) => {
   return (
-    <Card>
+    <Card sx={{ height: 500, display: 'flex', flexDirection: 'column' }}>
       <Box borderBottom={1} padding={2}>
         <Typography variant="h5">{title}</Typography>
       </Box>
       <Box
         sx={{
-          textAlign: 'center', // 수평 가운데 정렬 (텍스트 정렬)
-          minHeight: 80, // 최소 높이 설정 (필요에 따라 조절)
-          paddingTop: 2, // 상단 여백 설정
-          paddingBottom: 2, // 하단 여백 설정
+          overflowY: 'auto',
+          flex: 1, // 남은 공간을 채우도록 설정
+          textAlign: 'center',
+          padding: 1,
         }}
       >
-        {component}
-        {component2}
+        {component.map((item, index) => (
+          <Box margin={5} key={index}>
+            <Typography variant="h5">{item.note}</Typography>
+            <br />
+            <Box marginBottom={5}>{item.component}</Box>
+            <Box
+              marginBottom={5}
+              display={item.copyCode == undefined ? 'none' : 'block'}
+            >
+              <Button
+                size="small"
+                onClick={() => {
+                  handleCopyClick(
+                    item.copyCode !== undefined ? item.copyCode : '',
+                  );
+                }}
+              >
+                Copy
+              </Button>
+            </Box>
+            <Divider></Divider>
+          </Box>
+        ))}
       </Box>
-      <Divider></Divider>
-      <CardContent>
+
+      <CardContent sx={{ height: 50, overflowY: 'auto' }}>
         <Typography variant="body2" color="text.secondary">
-          {note.map((item, index) => (
+          {requireNote.map((item, index) => (
+            <li key={index}>{item}</li>
+          ))}
+        </Typography>
+
+        <Typography variant="body2" color="text.secondary">
+          {optionNote.map((item, index) => (
             <li key={index}>{item}</li>
           ))}
         </Typography>
@@ -62,7 +95,7 @@ const CardLayout = ({
         <Button
           size="small"
           onClick={() => {
-            handleCopyClick(copyCode);
+            handleCopyClick(copyCode !== undefined ? copyCode : '');
           }}
         >
           Copy

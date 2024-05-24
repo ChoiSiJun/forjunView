@@ -2,6 +2,19 @@ import Checkbox from '@mui/material/Checkbox';
 import { FormControlLabel, styled } from '@mui/material';
 import { isEmpty } from 'lodash';
 
+export const MirCheckBoxGuide = {
+  title: '체크박스',
+  code: `<MirCheckbox label="라벨값" />`,
+  requireNote: [''],
+  optionNote: [
+    'label: 체크박스 라벨',
+    'required : 라벨사용시 -> 필수값 체크 표시',
+    'defaultChecked : 기본값 체크',
+    'disabled : 체크박스 비활성화',
+    'color: 체크박스 컬러 ( secondary , success , default)',
+  ],
+};
+
 interface MirCheckboxProps {
   label?: string;
   defaultChecked?: boolean;

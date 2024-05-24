@@ -1,9 +1,8 @@
 import { Typography } from '@mui/material';
 import { useAppSelector } from '@config/ReduxHooks';
 
-const ContentTitle = () => {
+const MirContentTitle = () => {
   const menuName = useAppSelector(state => state.Menu.accessMenuName);
-
   return (
     <Typography variant="h5" fontWeight="bold">
       {menuName}
@@ -11,4 +10,4 @@ const ContentTitle = () => {
   );
 };
 
-export default ContentTitle;
+export default MirContentTitle;

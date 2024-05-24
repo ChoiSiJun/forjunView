@@ -1,34 +1,33 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import SearchField, {
-  SearchFieldProps,
+  MirSearchFieldProps,
 } from '@common/components/atoms/input/MirSearchField';
 import DataTable, {
-  DataTableProps,
+  MirDataTableProps,
 } from '@common/components/atoms/table/MirDataTable';
 
-import ToolbarContent, {
-  ToolbarContentProps,
-} from '@common/components/molecule/ToolbarContent';
+import MirToolbarContent, {
+  MirToolbarContentProps,
+} from '@common/components/molecule/MirToolbarContent';
 
-interface TableContentsProps
-  extends DataTableProps,
-    ToolbarContentProps,
-    SearchFieldProps {}
+interface MirTableContentsProps
+  extends MirDataTableProps,
+    MirToolbarContentProps,
+    MirSearchFieldProps {}
 
-const TableContents = ({
-  buttonList,
+const MirTableContents = ({
   rows,
   columns,
-  searchInputRef,
+  buttonList,
+  InputRef,
   onClick,
-}: TableContentsProps) => {
+}: MirTableContentsProps) => {
   return (
     <Grid container spacing={1}>
       <Grid item xs={12} md={12} lg={12}>
-        <ToolbarContent buttonList={buttonList} />
+        <MirToolbarContent buttonList={buttonList} />
       </Grid>
-
       <Grid item xs={12} md={12} lg={12}>
         <Paper
           sx={{
@@ -37,7 +36,7 @@ const TableContents = ({
           }}
         >
           <Grid item xs={12} md={12} lg={12}>
-            <SearchField searchInputRef={searchInputRef} onClick={onClick} />
+            <SearchField InputRef={InputRef} onClick={onClick} />
           </Grid>
         </Paper>
       </Grid>
@@ -56,4 +55,4 @@ const TableContents = ({
   );
 };
 
-export default TableContents;
+export default MirTableContents;
