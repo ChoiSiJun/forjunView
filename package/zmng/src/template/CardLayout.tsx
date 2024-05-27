@@ -79,12 +79,20 @@ const CardLayout = ({
       </Box>
 
       <CardContent sx={{ height: 50, overflowY: 'auto' }}>
+        <Typography variant="inherit" color="text.primary">
+          필수값
+        </Typography>
+        <Divider variant="fullWidth" sx={{ border: 1 }} />
         <Typography variant="body2" color="text.secondary">
           {requireNote.map((item, index) => (
             <li key={index}>{item}</li>
           ))}
         </Typography>
-
+        <br />
+        <Typography variant="inherit" color="text.primary">
+          옵션값
+        </Typography>
+        <Divider variant="fullWidth" sx={{ border: 1 }} />
         <Typography variant="body2" color="text.secondary">
           {optionNote.map((item, index) => (
             <li key={index}>{item}</li>

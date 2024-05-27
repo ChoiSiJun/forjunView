@@ -28,7 +28,7 @@ export const MirModalGuide = {
   optionNote: [
     'subTitle: 모달창 부제목',
     'modalType : 모달호출타입 (기본값 : mainModal)',
-    'modalSize : 모달창 사이즈 (기본값 : 800)',
+    'modalSize : 모달창 사이즈(s,m,l,f) (기본값 : m)',
     'buttonList : 모달창 버튼 리스트',
     'children: 내용',
   ],
@@ -39,7 +39,7 @@ export interface MirModalProps {
   subTitle?: string;
   modalType?: string;
   modalOpen: boolean;
-  modalSize?: number | string;
+  modalSize?: 's' | 'm' | 'l' | 'f';
   buttonList?: ReactNode[];
   closeModalEvent: (modal: boolean) => void;
   children?: React.ReactNode;
@@ -59,7 +59,7 @@ const MirModal = ({
   title,
   subTitle,
   modalType = 'mainModal',
-  modalSize = 800,
+  modalSize = 'm',
   modalOpen,
   closeModalEvent,
   children,
@@ -70,6 +70,29 @@ const MirModal = ({
     closeModalEvent(false);
   };
 
+  let modalWidth = '0%';
+  let modalHeight = '0%';
+
+  if (modalSize == 's') {
+    modalWidth = '25%';
+    modalHeight = '25%';
+  }
+
+  if (modalSize == 'm') {
+    modalWidth = '50%';
+    modalHeight = '50%';
+  }
+
+  if (modalSize == 'l') {
+    modalWidth = '75%';
+    modalHeight = '75%';
+  }
+
+  if (modalSize == 'f') {
+    modalWidth = '100%';
+    modalHeight = '100%';
+  }
+
   if (modalType == 'mainModal') {
     return (
       <Modal
@@ -78,10 +101,21 @@ const MirModal = ({
         aria-labelledby="parent-modal-title"
         aria-describedby="parent-modal-description"
       >
-        <Box sx={MirModalStyle} width={modalSize}>
-          <Card>
+        <Box sx={MirModalStyle} width={modalWidth} height={modalHeight}>
+          <Card
+            sx={{
+              minWidth: 300,
+              minHeight: 400,
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
             <CardHeader title={title} subheader={subTitle} />
-            <CardContent>{children}</CardContent>
+            <CardContent sx={{ flex: 1, overflow: 'auto' }}>
+              {children}
+            </CardContent>
             <CardActions>{buttonList}</CardActions>
           </Card>
         </Box>

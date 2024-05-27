@@ -17,6 +17,9 @@ import MirSwitch, {
 import MirSelectBox, {
   MirSelectBoxGuide,
 } from '@common/components/atoms/input/MirSelectBox';
+import MirRadio, {
+  MirRadioGuide,
+} from '@common/components/atoms/input/MirRadio';
 
 export default function TemplateInput() {
   const inputRef = useRef(null);
@@ -95,7 +98,7 @@ export default function TemplateInput() {
         <CardLayout
           component={[
             {
-              note: '테스트',
+              note: 'default',
               component: (
                 <MirSelectBox
                   menuItem={[
@@ -103,8 +106,53 @@ export default function TemplateInput() {
                     { name: 'itme2', value: 'item2' },
                     { name: 'itme3', value: 'item3' },
                   ]}
-                  defaultValue={'item1'}
-                  label={'item1'}
+                  defaultValue={'default'}
+                  label={'default'}
+                />
+              ),
+            },
+            {
+              note: 'standard',
+              component: (
+                <MirSelectBox
+                  menuItem={[
+                    { name: 'itme1', value: 'item1' },
+                    { name: 'itme2', value: 'item2' },
+                    { name: 'itme3', value: 'item3' },
+                  ]}
+                  layout="standard"
+                  defaultValue={'item2'}
+                  label={'standard'}
+                />
+              ),
+            },
+            {
+              note: 'outlined',
+              component: (
+                <MirSelectBox
+                  menuItem={[
+                    { name: 'itme1', value: 'item1' },
+                    { name: 'itme2', value: 'item2' },
+                    { name: 'itme3', value: 'item3' },
+                  ]}
+                  defaultValue={'item2'}
+                  label={'outlined'}
+                  layout="outlined"
+                />
+              ),
+            },
+            {
+              note: 'filled',
+              component: (
+                <MirSelectBox
+                  menuItem={[
+                    { name: 'itme1', value: 'item1' },
+                    { name: 'itme2', value: 'item2' },
+                    { name: 'itme3', value: 'item3' },
+                  ]}
+                  defaultValue={'filled'}
+                  label={'filled'}
+                  layout="filled"
                 />
               ),
             },
@@ -113,6 +161,46 @@ export default function TemplateInput() {
           requireNote={MirSelectBoxGuide.requireNote}
           optionNote={MirSelectBoxGuide.optionNote}
           copyCode={MirSelectBoxGuide.code}
+        ></CardLayout>
+      </Grid>
+
+      <Grid item xs={6} minWidth={400}>
+        <CardLayout
+          component={[
+            {
+              note: 'default',
+              component: (
+                <MirRadio
+                  label={'기본'}
+                  defaultValue={'item1'}
+                  radioItem={[
+                    { label: 'itme1', value: 'itme1' },
+                    { label: 'itme2', value: 'itme2' },
+                    { label: 'itme3', value: 'itme3' },
+                  ]}
+                ></MirRadio>
+              ),
+            },
+            {
+              note: 'direction -> row 적용',
+              component: (
+                <MirRadio
+                  label={'기본'}
+                  defaultValue={'item1'}
+                  radioItem={[
+                    { label: 'itme1', value: 'itme1' },
+                    { label: 'itme2', value: 'itme2' },
+                    { label: 'itme3', value: 'itme3' },
+                  ]}
+                  direction="row"
+                ></MirRadio>
+              ),
+            },
+          ]}
+          title={MirRadioGuide.title}
+          requireNote={MirRadioGuide.requireNote}
+          optionNote={MirRadioGuide.optionNote}
+          copyCode={MirRadioGuide.code}
         ></CardLayout>
       </Grid>
     </Grid>
