@@ -37,7 +37,8 @@ const AppBar = styled(MuiAppBar, {
 
 //Liberty HeaderBar Type
 interface HeaderBarProps {
-  setMobileSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isSidebarOpen: boolean;
   headerBarHeight: number;
   sidebarWidth: number;
   title: string;
@@ -48,25 +49,36 @@ const HeaderBar = ({
   title,
   headerBarHeight,
   sidebarWidth,
-  setMobileSidebarOpen,
+  setSidebarOpen,
+  isSidebarOpen,
 }: HeaderBarProps) => {
   const currentTheme = useTheme(); // 현재 테마 객체 가져오기
   const lgUp = useMediaQuery(currentTheme.breakpoints.up('lg'));
 
   const HandleMobileSideOpen = () => {
-    setMobileSidebarOpen(true);
+    if (isSidebarOpen == false) {
+      setSidebarOpen(true);
+    } else {
+      setSidebarOpen(false);
+    }
   };
 
   return (
     <AppBar
       position="absolute"
-      open={lgUp ? true : false}
+      open={isSidebarOpen}
       sidebarWidth={lgUp ? sidebarWidth : 0}
       headerBarHeight={headerBarHeight}
     >
       <Toolbar
         sx={{
+          minHeight: `${headerBarHeight}px`, // Toolbar 높이 설정
+          height: `${headerBarHeight}px`, // Toolbar 높이 설정
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
           pr: '24px', // keep right padding when drawer closed
+          pl: '24px', // left padding 추가
         }}
       >
         <IconButton
@@ -76,14 +88,13 @@ const HeaderBar = ({
           onClick={HandleMobileSideOpen}
           sx={{
             marginRight: '36px',
-            display: lgUp ? 'none' : 'block',
           }}
         >
           <MenuIcon />
         </IconButton>
         <Typography
           component="h1"
-          variant="h6"
+          variant="h4"
           color="inherit"
           noWrap
           sx={{ flexGrow: 1 }}

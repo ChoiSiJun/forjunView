@@ -5,14 +5,12 @@ import ItemContainer from '@ui-kit/app/components/SideBar/ItemContainer';
 interface SidebarProps {
   sidebarWidth: number;
   isSidebarOpen: boolean;
-  isMobileSidebarOpen: boolean;
   onSidebarClose: () => void;
 }
 
 const Sidebar = ({
   sidebarWidth,
   isSidebarOpen,
-  isMobileSidebarOpen,
   onSidebarClose,
 }: SidebarProps) => {
   const currentTheme = useTheme(); // 현재 테마 객체 가져오기
@@ -21,39 +19,33 @@ const Sidebar = ({
   if (lgUp) {
     /* 데스크탑 사이드바 */
     return (
-      <Box
-        sx={{
-          width: sidebarWidth,
-          flexShrink: 0,
+      <Drawer
+        open={isSidebarOpen}
+        onClose={onSidebarClose}
+        anchor="left"
+        variant="persistent"
+        PaperProps={{
+          sx: {
+            width: sidebarWidth,
+            boxSizing: 'border-box',
+          },
         }}
       >
-        <Drawer
-          anchor="left"
-          open={isSidebarOpen}
-          variant="permanent"
-          PaperProps={{
-            sx: {
-              width: 270,
-              boxSizing: 'border-box',
-            },
+        <Box
+          sx={{
+            height: '100%',
           }}
         >
-          <Box
-            sx={{
-              height: '100%',
-            }}
-          >
-            <Box px={4}>
-              <SideBarHeader />
-            </Box>
-            <br />
-            <Divider />
-            <Box>
-              <ItemContainer />
-            </Box>
+          <Box px={4}>
+            <SideBarHeader />
           </Box>
-        </Drawer>
-      </Box>
+          <br />
+          <Divider />
+          <Box>
+            <ItemContainer />
+          </Box>
+        </Box>
+      </Drawer>
     );
   }
 
@@ -61,7 +53,7 @@ const Sidebar = ({
   return (
     <Drawer
       anchor="left"
-      open={isMobileSidebarOpen}
+      open={isSidebarOpen}
       onClose={onSidebarClose}
       variant="temporary"
       PaperProps={{

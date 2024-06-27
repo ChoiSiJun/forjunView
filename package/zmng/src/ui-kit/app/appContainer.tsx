@@ -16,13 +16,13 @@ import { useMediaQuery } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 
 //헤더바 높이
-const headerBarHeight: number = 60;
+const headerBarHeight: number = 70;
 
 //사이드바 기본 확장 넓이
 const sidebarWidth: number = 270;
 
 export default function AppContainer() {
-  const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <ThemeProvider theme={appTheme}>
@@ -31,9 +31,8 @@ export default function AppContainer() {
 
         <SideBar
           sidebarWidth={sidebarWidth}
-          isSidebarOpen={true}
-          isMobileSidebarOpen={isMobileSidebarOpen}
-          onSidebarClose={() => setMobileSidebarOpen(false)}
+          isSidebarOpen={isSidebarOpen}
+          onSidebarClose={() => setSidebarOpen(false)}
         />
 
         <Box
@@ -46,11 +45,17 @@ export default function AppContainer() {
             flexGrow: 1,
             height: '100vh',
             overflow: 'auto',
+            transition: 'margin-left 0.3s',
+            marginLeft:
+              useMediaQuery(appTheme.breakpoints.up('lg')) && isSidebarOpen
+                ? `${sidebarWidth}px`
+                : '0',
           }}
         >
           <HeaderBar
-            setMobileSidebarOpen={setMobileSidebarOpen}
+            setSidebarOpen={setSidebarOpen}
             headerBarHeight={headerBarHeight}
+            isSidebarOpen={isSidebarOpen}
             sidebarWidth={sidebarWidth}
             title={'Liberty Cloud'}
           />
@@ -58,10 +63,7 @@ export default function AppContainer() {
           <Container
             maxWidth={false}
             sx={{
-              mt: headerBarHeight + 10 + 'px',
-              width: useMediaQuery(appTheme.breakpoints.up('lg'))
-                ? '75vw'
-                : '100%',
+              mt: `${headerBarHeight + 10}px`,
             }}
           >
             <Outlet />
