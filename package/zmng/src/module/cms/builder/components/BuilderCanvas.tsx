@@ -6,6 +6,7 @@ const BuilderCanvas = () => {
       sx={{
         width: '100%',
         height: '100%',
+        minHeight: '600px',
         backgroundColor: '#f0f0f0',
         display: 'flex',
         alignItems: 'center',

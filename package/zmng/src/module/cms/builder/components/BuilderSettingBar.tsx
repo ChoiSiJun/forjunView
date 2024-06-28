@@ -31,12 +31,12 @@ const BuilderSettingBar = ({ AppBarHeight }: BuilderSettingBarProps) => {
   return (
     <Box
       sx={{
-        width: 50,
+        width: 60,
+        position: 'fixed',
         height: '100vh',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
         marginTop: `${AppBarHeight}px`, // 앱바 높이만큼 상단 여백 추가
         p: 1,
       }}

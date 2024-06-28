@@ -10,11 +10,12 @@ function LibertyRouter() {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/builder" element={<BuilderLayout />} />
+
         <Route path="login" element={<Login />} />
         <Route path="template/Guide" element={<TemplateGuide />} />
         <Route path="liberty/*" element={<AppContainer />}>
           <Route index element={<Dashboard />} />
+          <Route path="cms/builder" element={<BuilderLayout />} />
           <Route path="dashBoard" element={<Dashboard />} />
           <Route path="member" element={<MemberList />} />
         </Route>

@@ -5,9 +5,8 @@ import BuilderCanvas from './BuilderCanvas';
 import BuilderSidebar from './BuilderSideBar';
 
 import BuilderSettingBar from './BuilderSettingBar';
-import BuilderAppBar from './BuilderAppBar';
 
-const SidebarWidth = 240;
+const SidebarWidth = 340;
 const AppBarHeight = 64;
 
 const BuilderLayout = () => {
@@ -21,8 +20,6 @@ const BuilderLayout = () => {
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
       <CssBaseline />
 
-      <BuilderAppBar />
-
       <BuilderSettingBar AppBarHeight={AppBarHeight} />
 
       <Box
@@ -34,21 +31,30 @@ const BuilderLayout = () => {
               duration: theme.transitions.duration.leavingScreen,
             }),
           width: isSidebarOpen ? `calc(100% - ${SidebarWidth}px)` : '100%',
-          marginRight: !isSidebarOpen ? `-240px` : 0,
+          marginRight: !isSidebarOpen ? `-${SidebarWidth - 40}px` : 0,
+          marginLeft: '80px',
           marginTop: `${AppBarHeight}px`, // 앱바 높이만큼 상단 여백 추가
         }}
       >
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleSideBar}
-          edge="end"
-          sx={{ position: 'fixed', top: 16, right: 16, zIndex: 1300 }}
-        >
-          <AddCircleRoundedIcon fontSize="large" />
-        </IconButton>
         <BuilderCanvas />
       </Box>
+
+      <IconButton //우측 콘텐츠바 버튼
+        color="inherit"
+        aria-label="open drawer"
+        onClick={handleSideBar}
+        edge="end"
+        sx={{
+          position: 'fixed',
+          top: 100,
+          right: 36,
+          zIndex: 1300,
+          display: isSidebarOpen ? 'none' : 'block',
+        }}
+      >
+        <AddCircleRoundedIcon fontSize="large" />
+      </IconButton>
+
       <Drawer
         variant="persistent"
         anchor="right"
@@ -58,11 +64,12 @@ const BuilderLayout = () => {
           flexShrink: 0,
           '& .MuiDrawer-paper': {
             width: SidebarWidth,
+            top: `${AppBarHeight + 10}px`,
             boxSizing: 'border-box',
           },
         }}
       >
-        <BuilderSidebar width={SidebarWidth} />
+        <BuilderSidebar />
       </Drawer>
     </Box>
   );
