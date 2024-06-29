@@ -17,7 +17,7 @@ export const MirSelectBoxGuide = {
     'label : label',
   ],
   optionNote: [
-    'layout : 레이아웃타입 (undefined , standard ,outlined ,filled)',
+    'layout : 레이아웃타입 (undefined (default) , standard ,outlined ,filled)',
     'inputRef : 연결 Ref',
     'onChange : select Box 변경시 수행 함수',
   ],

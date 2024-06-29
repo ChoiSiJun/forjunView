@@ -6,11 +6,16 @@ import MirModal, {
 import MirButton from '@common/components/atoms/button/MirButton';
 import { Grid } from '@mui/material';
 import CardLayout from './CardLayout';
+import MirDataTable from '@common/components/atoms/table/MirDataTable';
 
 export default function TemplateModal() {
   const [openModal, setopenModal] = React.useState(false);
   const handleModalOpen = () => setopenModal(true);
   const handleModalClose = () => setopenModal(false);
+
+  const [openModal2, setopenModal2] = React.useState(false);
+  const handleModalOpen2 = () => setopenModal2(true);
+  const handleModalClose2 = () => setopenModal2(false);
 
   const columnsData = [
     { field: 'memberId', headerName: '아이디', width: 100 },
@@ -33,9 +38,18 @@ export default function TemplateModal() {
                 component: (
                   <MirButton
                     ButtonType={'etc'}
-                    buttonName={'모달오픈'}
+                    buttonName={'모달'}
                     onClick={handleModalOpen}
                   ></MirButton>
+                ),
+              },
+              {
+                component: (
+                  <MirButton
+                    ButtonType={'etc'}
+                    buttonName={'모달(테이블 + 버튼)'}
+                    onClick={handleModalOpen2}
+                  />
                 ),
               },
             ]}
@@ -53,6 +67,19 @@ export default function TemplateModal() {
         buttonList={[]}
         closeModalEvent={handleModalClose}
       ></MirModal>
+
+      <MirModal
+        title={'내용 + 버튼'}
+        modalOpen={openModal2}
+        buttonList={[
+          <MirButton ButtonType={'default'} buttonName={'버튼1'} />,
+          <MirButton ButtonType={'default'} buttonName={'버튼2'} />,
+          <MirButton ButtonType={'default'} buttonName={'버튼3'} />,
+        ]}
+        closeModalEvent={handleModalClose2}
+      >
+        <MirDataTable rows={rowsData} columns={columnsData} />
+      </MirModal>
     </>
   );
 }

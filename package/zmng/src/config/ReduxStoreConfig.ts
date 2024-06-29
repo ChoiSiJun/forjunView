@@ -3,8 +3,7 @@ import MemberSlice from '@module/member/slice/MemberSlice';
 import MemberListSlice from '@module/member/slice/MemberListSlice';
 import MenuSlice from '@common/slice/MenuSlice';
 import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-
+import sessionStorage from 'redux-persist/lib/storage/session';
 const reducers = combineReducers({
   Menu: MenuSlice,
   Member: MemberSlice,
@@ -13,7 +12,7 @@ const reducers = combineReducers({
 
 const persistConfig = {
   key: 'root',
-  storage,
+  storage: sessionStorage,
   whitelist: ['Menu'],
 };
 

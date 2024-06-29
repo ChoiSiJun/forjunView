@@ -1,12 +1,6 @@
-import DataTable from '@common/components/atoms/table/MirDataTable';
-import TableContents from '@common/components/template/MirTableContents';
-
 import Grid from '@mui/material/Grid';
 import CardLayout from '@template/CardLayout';
-import { useRef } from 'react';
-import StyledCardContainer from '@template/CardContainer';
 
-import MirButton from '@common/components/atoms/button/MirButton';
 import MirDataTable, {
   MirDataTableGuide,
 } from '@common/components/atoms/table/MirDataTable';
@@ -22,11 +16,6 @@ export default function TemplateTable() {
     { id: 2, memberId: 'slima', memberName: '슬리마' },
     { id: 3, memberId: 'guest', memberName: 'GUEST' },
   ];
-
-  const InputRef = useRef<HTMLInputElement>(null);
-  const handelClick = async () => {
-    alert('click!');
-  };
 
   return (
     <Grid container spacing={3}>

@@ -4,7 +4,7 @@ export const appTheme = createTheme({
   direction: 'ltr',
   palette: {
     primary: {
-      main: '#5D87FF',
+      main: '#1976d2',
       light: '#ECF2FF',
       dark: '#4570EA',
     },
@@ -84,7 +84,7 @@ export const appTheme = createTheme({
     '0 0 1px 0 rgba(0,0,0,0.31), 0 24px 36px -8px rgba(0,0,0,0.25)',
   ],
   typography: {
-    fontFamily: "'Plus Jakarta Sans', sans-serif;",
+    fontFamily: "'Roboto', 'Helvetica', 'Arial',sans-serif;",
     h1: {
       fontWeight: 600,
       fontSize: '2.25rem',

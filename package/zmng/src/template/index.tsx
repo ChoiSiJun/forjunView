@@ -116,20 +116,12 @@ export default function TemplateGuide() {
             <Tab label="Button" {...a11yProps(3)} />
             <Tab label="Table" {...a11yProps(4)} />
             <Tab label="Modal" {...a11yProps(5)} />
-            <Tab label="Input" {...a11yProps(6)} />
-            <Tab label="Item Six" {...a11yProps(7)} />
-            <Tab label="Item Seven" {...a11yProps(8)} />
             <Tab label="<페이지>" disabled />
           </Tabs>
         </Box>
-        <TabPanel value={value} index={0}>
-          <TemplateButton />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <TemplateButton />
-        </TabPanel>
+        <TabPanel value={value} index={1}></TabPanel>
         <TabPanel value={value} index={2}>
-          <TemplateButton />
+          <TemplateInput />
         </TabPanel>
         <TabPanel value={value} index={3}>
           <TemplateButton />
@@ -139,9 +131,6 @@ export default function TemplateGuide() {
         </TabPanel>
         <TabPanel value={value} index={5}>
           <TemplateModal />
-        </TabPanel>
-        <TabPanel value={value} index={6}>
-          <TemplateInput />
         </TabPanel>
       </Box>
     </ThemeProvider>

@@ -5,7 +5,7 @@ import { isEmpty } from 'lodash';
 export const MirCheckBoxGuide = {
   title: '체크박스',
   code: `<MirCheckbox label="라벨값" />`,
-  requireNote: [''],
+  requireNote: [],
   optionNote: [
     'label: 체크박스 라벨',
     'required : 라벨사용시 -> 필수값 체크 표시',
