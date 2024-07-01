@@ -33,16 +33,24 @@ const BuilderLayout = () => {
   //Dnd 관련 상태관리
 
   //캔버스에 스페이서가 들어갔는지 참조
-  const spacerInsertedRef = useRef();
+  const spacerInsertedRef = useRef(false);
 
-  //현재 드래그중인 필드를 참조조
-  const currentDragFieldRef = useRef();
+  //현재 드래그중인 필드를 참조
+
+  interface DragField {
+    id: string;
+    type: string;
+    name: string;
+    parent: string | null;
+  }
+
+  const currentDragFieldRef = useRef<DragField | null>(null);
 
   //사이드바에서 드래그중인 활성화된 필드
-  const [activeSidebarField, setActiveSidebarField] = useState(); // only for fields from the sidebar
+  const [activeSidebarField, setActiveSidebarField] = useState(null); // only for fields from the sidebar
 
   //캔버스에서 드래그중인 필드
-  const [activeField, setActiveField] = useState(); // only for fields that are in the form.
+  const [activeField, setActiveField] = useState(null); // only for fields that are in the form.
 
   //드래그앤 드롭을 통해 변경될 필드 목록을 저장하는 필드
   const [data, updateData] = useImmer({
@@ -58,11 +66,12 @@ const BuilderLayout = () => {
   };
 
   //드래그 시작
-  const handleDragStart = e => {
+  const handleDragStart = (e: any) => {
     const { active } = e;
     const activeData = getData(active);
 
     // This is where the cloning starts.
+    // This Long time COns
     // We set up a ref to the field we're dragging
     // from the sidebar so that we can finish the clone
     // in the onDragEnd handler.
@@ -72,6 +81,7 @@ const BuilderLayout = () => {
       setActiveSidebarField(field);
       // Create a new field that'll be added to the fields array
       // if we drag it over the canvas.
+
       currentDragFieldRef.current = {
         id: active.id,
         type,
@@ -167,7 +177,7 @@ const BuilderLayout = () => {
     // We take the field from the this ref and replace the spacer we inserted.
     // Since the ref just holds a reference to a field that the context is aware of
     // we just swap out the spacer with the referenced field.
-    let nextField = currentDragFieldRef.current;
+    const nextField = currentDragFieldRef.current;
 
     if (nextField) {
       const overData = getData(over);
@@ -288,6 +298,7 @@ const BuilderLayout = () => {
 };
 
 export default BuilderLayout;
+
 function useImmer(arg0: { fields: never[] }): [any, any] {
   throw new Error('Function not implemented.');
 }
