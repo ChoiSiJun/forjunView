@@ -42,9 +42,11 @@
     "@tabler/icons-react": "^3.2.0",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
+    "immer": "^10.1.1",
     "react-bootstrap": "^2.10.1",
     "react-toastify": "^10.0.5",
     "redux-persist": "^6.0.0",
-    "simplebar-react": "^3.2.4"
+    "simplebar-react": "^3.2.4",
+    "use-immer": "^0.10.0"
   }
 }
