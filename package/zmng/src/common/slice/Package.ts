@@ -2,6 +2,7 @@
 import { member } from '@common/slice/Member';
 import { mymenu } from '@common/slice/MyMenu';
 import { Cms } from '@common/slice/Cms';
+import { system } from '@common/slice/System';
 
 //모듈 정의 ( 사용권한에 따라 오픈 )
 const packageInfo = [
@@ -28,6 +29,11 @@ const packageInfo = [
   {
     packageCode: 'LAS',
     packageName: 'LAS',
+  },
+  {
+    packageCode: 'SYSTEM',
+    packageName: 'SYSTEM',
+    moduleList: system,
   },
 ];
 
