@@ -1,12 +1,18 @@
-import ModuleSettingUtill from '@common/utill/ModuleSettingUtill';
+//import ModuleSettingUtill from '@common/utill/ModuleSettingUtill';
 import { useAppSelector, useAppDispatch } from '@config/ReduxHooks';
 import MirList from '@common/components/molecule/MirCodeNameList';
+import { getLocationList } from '@module/system/slice/SystemLocationSlice';
 
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 const SystemLocationList = () => {
-  const searchInputRef = useRef<HTMLInputElement>(null);
+  
   const dispatch = useAppDispatch();
+  const data = useAppSelector(state => state.LocationList);
+
+  const createClickHandler = () => {
+    alert('생성!!');
+  };
 
   const deleteClickHandler = () => {
     alert('삭제!!');
@@ -16,19 +22,19 @@ const SystemLocationList = () => {
     alert('수정!!');
   };
 
-  const rowsData = [
-    { key: 1, code: 'MIRL', name: '미르테크 중앙도서관' },
-    { key: 2, code: 'MSTI', name: '서초도서관' },
-    { key: 3, code: 'KKDD', name: '양재도서관' },
-  ];
+  useEffect(() => {
+    dispatch(getLocationList());
+  }, []);
+
 
   return (
     <>
-      <ModuleSettingUtill />
+      {/* <ModuleSettingUtill /> */}
       <MirList
-        codeNameList={rowsData}
-        onModifyClick={modifyClickHandler}
-        onDeleteClick={deleteClickHandler}
+         codeNameList={data.codeNameList}
+         onCreateClick={createClickHandler}
+         onModifyClick={modifyClickHandler}
+         onDeleteClick={deleteClickHandler}
       />
     </>
   );

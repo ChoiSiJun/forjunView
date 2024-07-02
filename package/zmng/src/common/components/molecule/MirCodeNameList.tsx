@@ -1,6 +1,6 @@
-
 import * as React from 'react';
 import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
@@ -14,21 +14,27 @@ import MirButton, {
 } from '@common/components/atoms/button/MirButton';
 
 interface MirCodeNameListItem {
-  key : number;
-  name: string;
+  // key : number;
   code: string;
+  name: string;
 }
 
-export interface CodeNameListProps {
+export interface CodeNameListState {
   codeNameList: MirCodeNameListItem[];
+}
+
+export interface CodeNameListProps extends CodeNameListState {
+  onCreateClic?: () => void;
   onModifyClick?: () => void;
   onDeleteClick?: () => void;
 }
 
 const MirList = ({
   codeNameList,
+  onCreateClick,
   onModifyClick,
-  onDeleteClick}:CodeNameListProps) => {
+  onDeleteClick
+}:CodeNameListProps) => {
 
     const [selectedIndex, setSelectedIndex] = React.useState(1);
 
@@ -39,33 +45,36 @@ const MirList = ({
           setSelectedIndex(index);
     };
 
-    const createClickHandler = () => {
-      alert('생성!!');
-    };
-
   return (
     <>
-      <MirButton
-        ButtonType={'create'}
-        buttonName={'생성'}
-        onClick={createClickHandler}
-      />
-      <List component="nav" aria-label="main mailbox folders">
-        {codeNameList.map((codeName) =>
-          <ListItemButton
-            selected={selectedIndex === codeName.key}
-            onClick={(event) => handleListItemClick(event, codeName.key)}
-          >
-            <ListItemText primary={codeName.name} secondary={codeName.code} />
-            <IconButton aria-label="modify" size="small"  onClick={onModifyClick}>   
-              <EditIcon fontSize="small"/>
-            </IconButton>
-            <IconButton aria-label="delete" size="small"  onClick={onDeleteClick}>   
-              <DeleteIcon fontSize="small"/>
-            </IconButton>
-          </ListItemButton>
-        )}
-      </List>
+    <Paper elevation={7} sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', borderRadius: '16px' }}>
+      {/* <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', borderRadius: '16px' }}> */}
+        
+        <MirButton
+          ButtonType={'create'}
+          buttonName={'신규입력'}
+          onClick={onCreateClick}
+        />
+        <List component="nav" aria-label="main mailbox folders">
+          {codeNameList.map((codeName, index) =>
+            <ListItemButton
+              selected={selectedIndex === index}
+              onClick={(event) => handleListItemClick(event, index)}
+              key={codeName.code}
+            >
+              <ListItemText primary={codeName.name} secondary={codeName.code} />
+              <IconButton aria-label="modify" size="small"  onClick={onModifyClick}>   
+                <EditIcon fontSize="small"/>
+              </IconButton>
+              <IconButton aria-label="delete" size="small"  onClick={onDeleteClick}>   
+                <DeleteIcon fontSize="small"/>
+              </IconButton>
+            </ListItemButton>
+          )}
+        </List>
+        
+      {/* </Box> */}
+      </Paper>
     </>
   );
 };
