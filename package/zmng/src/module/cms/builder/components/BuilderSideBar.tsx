@@ -1,6 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { fields } from '@module/cms/builder/components/BuilderSideBarItem';
 import { useDraggable } from '@dnd-kit/core';
+import { useRef } from 'react';
 
 //실제 사이드바에 출력될 Item
 interface SideBarItemFieldProps {
@@ -29,7 +30,7 @@ const DraggableSideBarItem = props => {
   const { field, ...rest } = props;
 
   //드래그 제어할 고유 ID
-  const id = field.id;
+  const id = useRef(field.id);
 
   const { attributes, listeners, setNodeRef } = useDraggable({
     id: id.current,
@@ -52,7 +53,10 @@ const DraggableSideBarItem = props => {
 };
 
 const BuilderSidebar = props => {
-  const { fieldsRegKey: string } = props;
+  const { fieldsRegKey } = props;
+
+  console.log('data start');
+  console.log(fieldsRegKey);
 
   return (
     <Box sx={{}}>

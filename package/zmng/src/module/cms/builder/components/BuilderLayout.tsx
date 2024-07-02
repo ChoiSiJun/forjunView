@@ -4,15 +4,16 @@ import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import BuilderCanvas, { Field } from './BuilderCanvas';
 import BuilderSidebar, { SideBarItem } from './BuilderSideBar';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
+import { useImmer } from 'use-immer';
 import {
   arrayMove,
   SortableContext,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { fields } from '@module/cms/builder/components/BuilderSideBarItem';
 
 import BuilderSettingBar from './BuilderSettingBar';
 import BuilderDndMonitor from './BuilderDndMonitor';
+import Sidebar from './Sidebar';
 
 const SidebarWidth = 340;
 const AppBarHeight = 64;
@@ -298,7 +299,3 @@ const BuilderLayout = () => {
 };
 
 export default BuilderLayout;
-
-function useImmer(arg0: { fields: never[] }): [any, any] {
-  throw new Error('Function not implemented.');
-}
