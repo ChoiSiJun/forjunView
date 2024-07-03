@@ -1,17 +1,15 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import MirButton from '@common/components/atoms/button/MirButton';
+import { getLocationInfo } from '@module/system/slice/LocationSlice';
 
-import MirButton, {
-  MirButtonGuide,
-} from '@common/components/atoms/button/MirButton';
+import { useAppSelector, useAppDispatch } from '@config/ReduxHooks';
 
 interface MirCodeNameListItem {
   // key : number;
@@ -24,7 +22,7 @@ export interface CodeNameListState {
 }
 
 export interface CodeNameListProps extends CodeNameListState {
-  onCreateClic?: () => void;
+  onCreateClick?: () => void;
   onModifyClick?: () => void;
   onDeleteClick?: () => void;
 }
@@ -36,6 +34,7 @@ const MirList = ({
   onDeleteClick
 }:CodeNameListProps) => {
 
+    const dispatch = useAppDispatch();
     const [selectedIndex, setSelectedIndex] = React.useState(1);
 
     const handleListItemClick = (

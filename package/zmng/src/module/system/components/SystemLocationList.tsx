@@ -1,9 +1,11 @@
 //import ModuleSettingUtill from '@common/utill/ModuleSettingUtill';
-import { useAppSelector, useAppDispatch } from '@config/ReduxHooks';
-import MirList from '@common/components/molecule/MirCodeNameList';
-import { getLocationList } from '@module/system/slice/SystemLocationSlice';
-
 import { useEffect, useRef } from 'react';
+import { useAppSelector, useAppDispatch } from '@config/ReduxHooks';
+import Grid from '@mui/material/Grid';
+import MirList from '@common/components/molecule/MirCodeNameList';
+import MirCard from '@common/components/molecule/MirCard';
+import SystemLocationInfo from '@module/system/components/SystemLocationInfo';
+import { getLocationList } from '@module/system/slice/LocationListSilce';
 
 const SystemLocationList = () => {
   
@@ -26,17 +28,23 @@ const SystemLocationList = () => {
     dispatch(getLocationList());
   }, []);
 
-
   return (
-    <>
-      {/* <ModuleSettingUtill /> */}
-      <MirList
-         codeNameList={data.codeNameList}
-         onCreateClick={createClickHandler}
-         onModifyClick={modifyClickHandler}
-         onDeleteClick={deleteClickHandler}
-      />
-    </>
+    <Grid container spacing={2} >
+      <Grid item xs={4} sx={{bgcolor:'#EEF2F6'}}>
+        <MirList
+          codeNameList={data.codeNameList}
+          onCreateClick={createClickHandler}
+          onModifyClick={modifyClickHandler}
+          onDeleteClick={deleteClickHandler}
+        />
+      </Grid>
+      <Grid item xs={8} sx={{bgcolor:'#EEF2F6'}}>
+        <MirCard 
+          title="기관정보"
+          component=<SystemLocationInfo/>
+        />
+      </Grid>
+    </Grid>
   );
 };
 

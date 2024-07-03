@@ -8,6 +8,9 @@ const initialState: CodeNameListState = {
     codeNameList: [],
 };
 
+/**
+ * 기관리스트 가져오기
+ */
 export const getLocationList = createAsyncThunk(
     "getLocationList",
     async (payload, thunkAPI) => {
@@ -32,9 +35,9 @@ export const getLocationList = createAsyncThunk(
 )
 
 /**
- * 기관코드 리스트 가져오기
+ * 기관코드 리스트 Slice
  */
-export const LocationListSlice = createSlice({
+export const LocationListSilce = createSlice({
     name: "LocationList",
     initialState,
     reducers: {},
@@ -42,7 +45,7 @@ export const LocationListSlice = createSlice({
         builder.addCase(getLocationList.fulfilled, (state, { payload }) => {
             const tempList:MirCodeNameListItem[]=[];
             
-            payload.forEach((data, index) => {
+            payload.forEach((data: { mloc: any; name_ko: any; }, index: any) => {
                 const temp:MirCodeNameListItem={};
 
                 temp.code = data.mloc;
@@ -56,4 +59,4 @@ export const LocationListSlice = createSlice({
     },
 });
 
-export default LocationListSlice.reducer;
+export default LocationListSilce.reducer;

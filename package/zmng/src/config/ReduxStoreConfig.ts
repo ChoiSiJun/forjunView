@@ -1,7 +1,8 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import MemberSlice from '@module/member/slice/MemberSlice';
 import MemberListSlice from '@module/member/slice/MemberListSlice';
-import SystemLocationSlice from '@module/system/slice/SystemLocationSlice';
+import LocationListSlice from '@module/system/slice/LocationListSilce'
+import LocationSlice from '@module/system/slice/LocationSlice';
 import MenuSlice from '@common/slice/MenuSlice';
 import { persistReducer } from 'redux-persist';
 import sessionStorage from 'redux-persist/lib/storage/session';
@@ -9,7 +10,8 @@ const reducers = combineReducers({
   Menu: MenuSlice,
   Member: MemberSlice,
   MemberList: MemberListSlice,
-  LocationList: SystemLocationSlice,
+  LocationList: LocationListSlice,
+  Location:LocationSlice,
 });
 
 const persistConfig = {
