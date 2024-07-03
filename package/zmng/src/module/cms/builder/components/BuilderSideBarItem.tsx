@@ -1,12 +1,12 @@
 export type FieldType = 'input' | 'textarea' | 'select' | 'text' | 'button';
 
-interface Field {
+export interface BuilderSideBarItemsProps {
   id: number;
   type: FieldType;
   title: string;
 }
 
-export const fields: Field[] = [
+export const BuilderSideBarItems: BuilderSideBarItemsProps[] = [
   {
     id: 1,
     type: 'input',

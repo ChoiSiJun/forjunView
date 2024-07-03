@@ -16,7 +16,7 @@ function ItemRender(type: FieldType | 'spacer') {
   return renderers[type] || (() => <div>No renderer found for {type}</div>);
 }
 
-export function Field(props: any) {
+export function CanvasItemRender(props: any) {
   const { field, overlay, ...rest } = props;
   const { type } = field;
 

@@ -1,41 +1,53 @@
 import { Box, Typography } from '@mui/material';
-import { fields } from '@module/cms/builder/components/BuilderSideBarItem';
+import {
+  BuilderSideBarItems,
+  BuilderSideBarItemsProps,
+} from '@module/cms/builder/components/BuilderSideBarItem';
 import { useDraggable } from '@dnd-kit/core';
 import { useRef } from 'react';
 
-//실제 사이드바에 출력될 Item
-interface SideBarItemFieldProps {
-  title: string;
+//사이드바 컨테이너 속성
+interface BuilderSidebarProps {
+  fieldsRegKey: number;
 }
 
-interface SideBarItemProps {
-  field: SideBarItemFieldProps;
-  overlay: boolean;
+//사이드바 Item 속성
+interface DraggableSideBarItemProps {
+  item: BuilderSideBarItemsProps;
 }
-export const SideBarItem = (props: SideBarItemProps) => {
-  const { field, overlay } = props;
-  const { title } = field;
 
-  let className = 'sideBar-item';
+//사이드바 Item 렌더링
+interface SideBarItemRenderProps {
+  item: BuilderSideBarItemsProps;
+  overlay?: boolean;
+}
 
-  if (overlay) {
-    className += ' overlay';
-  }
+// 1. 사이드바 컨테이너
+const BuilderSidebar = ({ fieldsRegKey }: BuilderSidebarProps) => {
+  return (
+    <Box sx={{}}>
+      <Typography variant="h6">Sidebar Content</Typography>
 
-  return <div className={className}>{title}</div>;
+      <div key={fieldsRegKey} className="sidebar">
+        {BuilderSideBarItems.map(item => (
+          <DraggableSideBarItem key={item.type} item={item} />
+        ))}
+      </div>
+
+      {/* 사이드바에 원하는 콘텐츠를 추가하세요 */}
+    </Box>
+  );
 };
 
-//드래그 가능하도록 사이드바 item에 관련 속성부여
-const DraggableSideBarItem = props => {
-  const { field, ...rest } = props;
-
+//2. 드래그 가능하도록 사이드바 item에 관련 속성부여
+const DraggableSideBarItem = ({ item }: DraggableSideBarItemProps) => {
   //드래그 제어할 고유 ID
-  const id = useRef(field.id);
+  const id = useRef(item.id);
 
   const { attributes, listeners, setNodeRef } = useDraggable({
     id: id.current,
     data: {
-      field,
+      item,
       fromSidebar: true,
     },
   });
@@ -47,30 +59,22 @@ const DraggableSideBarItem = props => {
       {...listeners}
       {...attributes}
     >
-      <SideBarItem field={field} {...rest} />
+      <SideBarItemRender item={item} />
     </div>
   );
 };
 
-const BuilderSidebar = props => {
-  const { fieldsRegKey } = props;
+//3. 사이드바 아이템 렌더링
+export const SideBarItemRender = ({
+  item,
+  overlay = false,
+}: SideBarItemRenderProps) => {
+  let className = 'sidebar-field';
+  if (overlay) {
+    className += ' overlay';
+  }
 
-  console.log('data start');
-  console.log(fieldsRegKey);
-
-  return (
-    <Box sx={{}}>
-      <Typography variant="h6">Sidebar Content</Typography>
-
-      <div key={fieldsRegKey} className="sidebar">
-        {fields.map(f => (
-          <DraggableSideBarItem key={f.type} field={f} />
-        ))}
-      </div>
-
-      {/* 사이드바에 원하는 콘텐츠를 추가하세요 */}
-    </Box>
-  );
+  return <div className={className}>{item.title}</div>;
 };
 
 export default BuilderSidebar;
