@@ -17,7 +17,7 @@ interface DraggableSideBarItemProps {
 }
 
 //사이드바 Item 렌더링
-interface SideBarItemRenderProps {
+interface SideBarItemProps {
   item: BuilderSideBarItemsProps;
   overlay?: boolean;
 }
@@ -39,7 +39,7 @@ const BuilderSidebar = ({ fieldsRegKey }: BuilderSidebarProps) => {
   );
 };
 
-//2. 드래그 가능하도록 사이드바 item에 관련 속성부여
+//2. 사이드바 item에 관련 속성부여
 const DraggableSideBarItem = ({ item }: DraggableSideBarItemProps) => {
   //드래그 제어할 고유 ID
   const id = useRef(item.id);
@@ -59,16 +59,13 @@ const DraggableSideBarItem = ({ item }: DraggableSideBarItemProps) => {
       {...listeners}
       {...attributes}
     >
-      <SideBarItemRender item={item} />
+      <SideBarItem item={item} />
     </div>
   );
 };
 
 //3. 사이드바 아이템 렌더링
-export const SideBarItemRender = ({
-  item,
-  overlay = false,
-}: SideBarItemRenderProps) => {
+export const SideBarItem = ({ item, overlay = false }: SideBarItemProps) => {
   let className = 'sidebar-field';
   if (overlay) {
     className += ' overlay';

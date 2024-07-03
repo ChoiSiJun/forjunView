@@ -1,7 +1,13 @@
-export type FieldType = 'input' | 'textarea' | 'select' | 'text' | 'button';
+export type FieldType =
+  | 'input'
+  | 'textarea'
+  | 'select'
+  | 'text'
+  | 'button'
+  | 'spacer';
 
 export interface BuilderSideBarItemsProps {
-  id: number;
+  id: number | string;
   type: FieldType;
   title: string;
 }
@@ -60,4 +66,5 @@ export const renderers: Record<FieldType, () => JSX.Element> = {
     </p>
   ),
   button: () => <button>Button</button>,
+  spacer: () => <div>sdfd</div>,
 };

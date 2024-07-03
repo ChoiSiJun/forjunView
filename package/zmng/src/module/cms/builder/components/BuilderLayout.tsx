@@ -1,8 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { CssBaseline, Box, IconButton, Drawer } from '@mui/material';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
-import BuilderCanvas, { CanvasItemRender } from './BuilderCanvas';
-import BuilderSidebar, { SideBarItemRender } from './BuilderSideBar';
+import BuilderCanvas, { CanvasItem } from './BuilderCanvas';
+import BuilderSidebar, { SideBarItem } from './BuilderSideBar';
+import { BuilderSideBarItemsProps } from '@module/cms/builder/components/BuilderSideBarItem';
 import {
   DndContext,
   DragOverlay,
@@ -24,42 +25,37 @@ import BuilderDndMonitor from './BuilderDndMonitor';
 const SidebarWidth = 340;
 const AppBarHeight = 64;
 
-function createSpacer({ id }: any) {
-  return {
-    id,
-    type: 'spacer',
-    title: 'spacer',
-  };
-}
-
 const BuilderLayout = () => {
   //Dnd 관련 상태관리
+
+  function createSpacer({
+    id,
+  }: {
+    id: UniqueIdentifier;
+  }): BuilderSideBarItemsProps {
+    return {
+      id,
+      type: 'spacer',
+      title: 'spacer',
+    };
+  }
 
   //캔버스에 스페이서가 들어갔는지 참조
   const spacerInsertedRef = useRef(false);
 
-  //현재 드래그중인 필드를 참조
-
-  interface DragField {
-    id: UniqueIdentifier;
-    type: string;
-    name: string;
-    parent: string | null;
-  }
-
   //현재 드래그중인 아이템
-  const currentDragItemRef = useRef<DragField | null>(null);
+  const currentDragItemRef = useRef<BuilderSideBarItemsProps | null>(null);
 
-  //사이드바에서 드래그중인 활성화된 필드
+  //사이드바에서 드래그 시작한 활성화된 아이템
   const [activeSidebarItem, setActiveSidebarItem] = useState(null); // only for fields from the sidebar
 
-  //캔버스에서 드래그중인 필드
+  //캔버스에서 드래그 시작한 활성화된 아이템
   const [activeCanvesItem, setActiveCanverItem] = useState(null); // only for fields that are in the form.
 
   //드래그앤 드롭을 통해 변경될 필드 목록을 저장하는 필드
-  const [currentItem, setCurrentItem] = useImmer({
-    items: [],
-  });
+  const [currentItem, setCurrentItem] = useImmer<BuilderSideBarItemsProps[]>(
+    [],
+  );
 
   //초기화 해주는 함수
   const cleanUp = () => {
@@ -72,52 +68,42 @@ const BuilderLayout = () => {
   //드래그 시작
   const handleDragStart = (e: DragStartEvent) => {
     const { active } = e;
-    const activeItem = active?.data?.current ?? {};
+    const activeData = active?.data?.current ?? {};
+    console.log(activeData);
+    //드래그중인 아이템에 참조를 설정
+    //복사 완료는 onDragEnd 핸들러에서
 
-    // This is where the cloning starts.
-    // This Long time COns
-    // We set up a ref to the field we're dragging
-    // from the sidebar so that we can finish the clone
-    // in the onDragEnd handler.
-    if (activeItem.fromSidebar) {
-      const { item } = activeItem;
-      const { type } = item;
+    //사이드바의 아이템일 경우 복사시작.
+    if (activeData.fromSidebar) {
+      console.log('사이드!!');
+      const { item } = activeData;
       setActiveSidebarItem(item);
-      // Create a new field that'll be added to the fields array
-      // if we drag it over the canvas.
-
-      currentDragItemRef.current = {
-        id: active.id,
-        type,
-        name: `${type}${items.length + 1}`,
-        parent: null,
-      };
+      currentDragItemRef.current = item;
       return;
+    } else {
+      console.log('No!!사이드!!');
     }
 
-    // We aren't creating a new element so go ahead and just insert the spacer
-    // since this field already belongs to the canvas.
-    const { item, index } = activeItem;
-
+    //캔버스의 아이템일 경우 실제 아이템 복사대신 공백만 생성해서 삽입
+    const { item, index } = activeData;
     setActiveCanverItem(item);
     currentDragItemRef.current = item;
 
+    //드래그앤 드롭을 통해 세팅되있는 필드값 변경 ( 해당 인덱스를 스페이서 객체로 교체)
     setCurrentItem(draft => {
-      draft.items.splice(index, 1, createSpacer({ id: active.id }));
+      draft.splice(index, 1, createSpacer({ id: active.id }));
     });
   };
 
+  //드래그중일때.
   const handleDragOver = (e: DragOverEvent) => {
     const { active, over } = e;
     const activeData = active?.data?.current ?? {};
 
-    // Once we detect that a sidebar field is being moved over the canvas
-    // we create the spacer using the sidebar fields id with a spacer suffix and add into the
-    // fields array so that it'll be rendered on the canvas.
+    //사이드바 아이템이 캔버스위로 이동하는것을 감지할경우
+    //스페이서 접미사가 있는 사이드바 아이템 id를 이용해서 스페이서를 생성후 캔버스에 렌더링될수있도록 배열에 값을 저장.
 
-    // 🐑 CLONING 🐑
-    // This is where the clone occurs. We're taking the id that was assigned to
-    // sidebar field and reusing it for the spacer that we insert to the canvas.
+    //배열에 객체 생성시작.
     if (activeData.fromSidebar) {
       const overData = over?.data?.current ?? {};
 
@@ -127,13 +113,14 @@ const BuilderLayout = () => {
         });
 
         setCurrentItem(draft => {
-          if (!draft.items.length) {
-            draft.items.push(spacer);
+          if (!draft.length) {
+            //필드목록이 없을경우 관리 배열에 스페이스 객체 삽입
+            draft.push(spacer);
           } else {
             const nextIndex =
-              overData.index > -1 ? overData.index : draft.items.length;
+              overData.index > -1 ? overData.index : draft.length;
 
-            draft.items.splice(nextIndex, 0, spacer);
+            draft.splice(nextIndex, 0, spacer);
           }
           spacerInsertedRef.current = true;
         });
@@ -141,7 +128,7 @@ const BuilderLayout = () => {
         // This solves the issue where you could have a spacer handing out in the canvas if you drug
         // a sidebar item on and then off
         setCurrentItem(draft => {
-          draft.items = draft.items.filter(f => f.type !== 'spacer');
+          draft.filter(f => f.type !== 'spacer');
         });
         spacerInsertedRef.current = false;
       } else {
@@ -149,18 +136,18 @@ const BuilderLayout = () => {
         // we need to make sure we're updating the spacer position to reflect where our drop will occur.
         // We find the spacer and then swap it with the over skipping the op if the two indexes are the same
         setCurrentItem(draft => {
-          const spacerIndex = draft.items.findIndex(
+          const spacerIndex = draft.findIndex(
             f => f.id === active.id + '-spacer',
           );
 
           const nextIndex =
-            overData.index > -1 ? overData.index : draft.items.length - 1;
+            overData.index > -1 ? overData.index : draft.length - 1;
 
           if (nextIndex === spacerIndex) {
             return;
           }
 
-          draft.items = arrayMove(draft.items, spacerIndex, overData.index);
+          draft = arrayMove(draft, spacerIndex, overData.index);
         });
       }
     }
@@ -173,25 +160,22 @@ const BuilderLayout = () => {
     if (!over) {
       cleanUp();
       setCurrentItem(draft => {
-        draft.items = draft.items.filter(f => f.type !== 'spacer');
+        draft.filter(f => f.type !== 'spacer');
       });
       return;
     }
 
-    // This is where we commit the clone.
-    // We take the field from the this ref and replace the spacer we inserted.
-    // Since the ref just holds a reference to a field that the context is aware of
-    // we just swap out the spacer with the referenced field.
-    const nextField = currentDragFieldRef.current;
+    // 스페이스 객체를 실제 아이템으로 교체해서 적용
+    const nextField = currentDragItemRef.current;
 
     if (nextField) {
       const overData = over?.data?.current ?? {};
 
       setCurrentItem(draft => {
-        const spacerIndex = draft.items.findIndex(f => f.type === 'spacer');
-        draft.items.splice(spacerIndex, 1, nextField);
+        const spacerIndex = draft.findIndex(f => f.type === 'spacer');
+        draft.splice(spacerIndex, 1, nextField);
 
-        draft.items = arrayMove(draft.items, spacerIndex, overData.index || 0);
+        draft = arrayMove(draft, spacerIndex, overData.index || 0);
       });
     }
 
@@ -199,7 +183,7 @@ const BuilderLayout = () => {
     cleanUp();
   };
 
-  const { items } = currentItem;
+  const items = currentItem;
 
   //사이드바 필드리스트를 생성하기위한 키 ( 현재 사이드바의 상태키 )
   const [sidebarFieldsRegenKey, setSidebarFieldsRegenKey] = useState(
@@ -243,7 +227,7 @@ const BuilderLayout = () => {
             strategy={verticalListSortingStrategy}
             items={items.map(f => f.id)}
           >
-            <BuilderCanvas fields={items} />
+            <BuilderCanvas items={items} />
           </SortableContext>
         </Box>
 
@@ -291,10 +275,10 @@ const BuilderLayout = () => {
         }
         <DragOverlay dropAnimation={null}>
           {activeSidebarItem ? (
-            <SideBarItemRender overlay item={activeSidebarItem} />
+            <SideBarItem overlay item={activeSidebarItem} />
           ) : null}
           {activeCanvesItem ? (
-            <CanvasItemRender overlay field={activeCanvesItem} />
+            <CanvasItem overlay item={activeCanvesItem} />
           ) : null}
         </DragOverlay>
       </DndContext>
