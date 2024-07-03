@@ -22,6 +22,7 @@ export interface CodeNameListState {
 }
 
 export interface CodeNameListProps extends CodeNameListState {
+  onSelect?:() => void;
   onCreateClick?: () => void;
   onModifyClick?: () => void;
   onDeleteClick?: () => void;
@@ -29,6 +30,7 @@ export interface CodeNameListProps extends CodeNameListState {
 
 const MirList = ({
   codeNameList,
+  onSelect,
   onCreateClick,
   onModifyClick,
   onDeleteClick
@@ -38,7 +40,7 @@ const MirList = ({
     const [selectedIndex, setSelectedIndex] = React.useState(1);
 
     const handleListItemClick = (
-          event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+          // event: React.MouseEvent<HTMLDivElement, MouseEvent>,
           index: number,
         ) => {
           setSelectedIndex(index);
@@ -58,7 +60,7 @@ const MirList = ({
           {codeNameList.map((codeName, index) =>
             <ListItemButton
               selected={selectedIndex === index}
-              onClick={(event) => handleListItemClick(event, index)}
+              onClick={() => handleListItemClick(index)}
               key={codeName.code}
             >
               <ListItemText primary={codeName.name} secondary={codeName.code} />

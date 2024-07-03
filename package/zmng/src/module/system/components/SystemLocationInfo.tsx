@@ -3,7 +3,6 @@ import { useAppSelector, useAppDispatch } from '@config/ReduxHooks';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import { LocationInfoAction } from '@module/system/slice/LocationSlice';
 
 const SystemLocationInfo = () => {
   

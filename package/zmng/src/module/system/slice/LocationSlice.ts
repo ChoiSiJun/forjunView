@@ -5,17 +5,17 @@ const api_url = import.meta.env.VITE_SYSTEM_API;
 
 // Location Info
 export interface LocationInfoState {
-  mloc:String
-  name_ko:String
-  name_en?:String
-  name_jp?:String
-  name_cn?:String
-  zipcode?:String
-  address?:String
-  address_detail?:String
-  email?:String
-  tel?:String
-  fax?:String
+  mloc:string
+  name_ko:string
+  name_en?:string
+  name_jp?:string
+  name_cn?:string
+  zipcode?:string
+  address?:string
+  address_detail?:string
+  email?:string
+  tel?:string
+  fax?:string
 }
 
 // Location Info 초기값
