@@ -3,6 +3,20 @@ import Box from '@mui/material/Box';
 import { Card, CardActions, CardContent, CardHeader } from '@mui/material';
 import { ReactNode } from 'react';
 
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import MirCard from '@common/components/molecule/MirCard';
+import SystemLocationInfo from '@module/system/components/SystemLocationInfo';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import { styled } from '@mui/material/styles';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 export const MirModalGuide = {
   title: '기본모달',
   code: ` 
@@ -28,7 +42,7 @@ export const MirModalGuide = {
   optionNote: [
     'subTitle: 모달창 부제목',
     'modalType : 모달호출타입 (기본값 : mainModal)',
-    'modalSize : 모달창 사이즈(s,m,l,f) (기본값 : m)',
+    'modalSize : 모달창 사이즈(sm,md,lg,xl) (기본값 : md)',
     'buttonList : 모달창 버튼 리스트',
     'children: 내용',
   ],
@@ -39,87 +53,71 @@ export interface MirModalProps {
   subTitle?: string;
   modalType?: string;
   modalOpen: boolean;
-  modalSize?: 's' | 'm' | 'l' | 'f';
+  modalSize?: 'sm' | 'md' | 'lg' | 'xl';
   buttonList?: ReactNode[];
   closeModalEvent: (modal: boolean) => void;
   children?: React.ReactNode;
 }
 
-const MirModalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
-  border: '1px solid #000',
-  boxShadow: 24,
-};
-
 const MirModal = ({
   title,
   subTitle,
   modalType = 'mainModal',
-  modalSize = 'm',
+  modalSize = 'md',
   modalOpen,
   closeModalEvent,
   children,
   buttonList,
 }: MirModalProps) => {
-  //모달닫기 핸들러
-  const handelCloseModal = () => {
-    closeModalEvent(false);
-  };
+    //const [open, setOpen] = React.useState(false);
 
-  let modalWidth = '0%';
-  let modalHeight = '0%';
+    //모달닫기 핸들러
+    const handelCloseModal = () => {
+      closeModalEvent(false);
+    };
 
-  if (modalSize == 's') {
-    modalWidth = '25%';
-    modalHeight = '25%';
-  }
-
-  if (modalSize == 'm') {
-    modalWidth = '50%';
-    modalHeight = '50%';
-  }
-
-  if (modalSize == 'l') {
-    modalWidth = '75%';
-    modalHeight = '75%';
-  }
-
-  if (modalSize == 'f') {
-    modalWidth = '100%';
-    modalHeight = '100%';
-  }
+  const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+    '& .MuiDialogContent-root': {
+      padding: theme.spacing(2),
+    },
+    '& .MuiDialogActions-root': {
+      padding: theme.spacing(1),
+    },
+  }));
 
   if (modalType == 'mainModal') {
     return (
-      <Modal
-        open={modalOpen}
-        onClose={handelCloseModal}
-        aria-labelledby="parent-modal-title"
-        aria-describedby="parent-modal-description"
-      >
-        <Box sx={MirModalStyle} width={modalWidth} height={modalHeight}>
-          <Card
+      <React.Fragment>
+        <BootstrapDialog
+          fullWidth
+          maxWidth={modalSize}
+          open={modalOpen}
+          //onClose={handelCloseModal}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle sx={{ m: 0, p: 2 }} id="alert-dialog-title">
+            {title}
+            {subTitle}
+          </DialogTitle>
+          <IconButton
+            aria-label="close"
+            onClick={handelCloseModal}
             sx={{
-              minWidth: 300,
-              minHeight: 400,
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              flexDirection: 'column',
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
             }}
-          >
-            <CardHeader title={title} subheader={subTitle} />
-            <CardContent sx={{ flex: 1, overflow: 'auto' }}>
-              {children}
-            </CardContent>
-            <CardActions>{buttonList}</CardActions>
-          </Card>
-        </Box>
-      </Modal>
+          ><CloseIcon/></IconButton>
+          <DialogContent dividers>
+            {children}
+          </DialogContent>
+          <DialogActions>
+            {buttonList}
+          </DialogActions>
+        </BootstrapDialog>
+      </React.Fragment>
     );
   }
 };

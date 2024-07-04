@@ -11,7 +11,7 @@ const SystemLocationInfo = () => {
   return (
     <Box sx={{ width: 200 }}>
       <Stack spacing={2}>
-       <Typography variant="body3">
+      <Typography variant="body3">
           기관코드: {locationState.locationInfo.mloc}
         </Typography>
         <Typography variant="body3">

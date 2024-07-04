@@ -21,20 +21,26 @@ const SystemLocationList = () => {
   const dispatch = useAppDispatch();
   const data = useAppSelector(state => state.LocationList);
 
+  // 리스트 클릭 이벤트 핸들러
+  const listClickHandler = (
+    code: any,
+  ) => {
+    dispatch(getLocationInfo(code));
+  };
+
+  // 생성 클릭 이벤트 핸들러
   const createClickHandler = () => {
     alert('생성!!');
   };
 
+  // 삭제 클릭 이벤트 핸들러
   const deleteClickHandler = () => {
     alert('삭제!!');
   };
 
+  // 수정 클릭 이벤트 핸들러
   const modifyClickHandler = () => {
     alert('수정!!');
-  };
-
-  const listSelectHandler = () => {
-    dispatch(getLocationInfo("MIRL"));
   };
 
   useEffect(() => {
@@ -46,7 +52,7 @@ const SystemLocationList = () => {
       <Grid item xs={4} sx={{bgcolor:'#EEF2F6'}}>
         <MirList
           codeNameList={data.codeNameList}
-          onSelect={listSelectHandler}
+          onListClick={listClickHandler}
           onCreateClick={createClickHandler}
           onModifyClick={modifyClickHandler}
           onDeleteClick={deleteClickHandler}
@@ -67,11 +73,17 @@ const SystemLocationList = () => {
 
       <div>
         <MirModal
-        title={'테스트모달'}
-        modalOpen={openModal}
-        buttonList={[]}
-        closeModalEvent={handleModalClose}
-        ></MirModal>
+          title={'기관정보'}
+          modalOpen={openModal}
+          buttonList={[
+            <MirButton ButtonType={'create'} buttonName={'저장'} />,
+            <MirButton ButtonType={'etc'} buttonName={'닫기'} onClick={handleModalClose}/>,
+          ]}
+          closeModalEvent={handleModalClose}
+          modalSize="md"
+        >
+          {/* <MirDataTable rows={rowsData} columns={columnsData} /> */}
+        </MirModal>
       </div>
     </Grid>
     
