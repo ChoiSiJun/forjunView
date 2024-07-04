@@ -29,12 +29,12 @@ const BuilderLayout = () => {
   //Dnd 관련 상태관리
 
   function createSpacer({
-    id,
+    dragId,
   }: {
-    id: UniqueIdentifier;
+    dragId: UniqueIdentifier;
   }): BuilderSideBarItemsProps {
     return {
-      id,
+      dragId: dragId,
       type: 'spacer',
       title: 'spacer',
     };
@@ -69,19 +69,16 @@ const BuilderLayout = () => {
   const handleDragStart = (e: DragStartEvent) => {
     const { active } = e;
     const activeData = active?.data?.current ?? {};
-    console.log(activeData);
+
     //드래그중인 아이템에 참조를 설정
     //복사 완료는 onDragEnd 핸들러에서
 
     //사이드바의 아이템일 경우 복사시작.
     if (activeData.fromSidebar) {
-      console.log('사이드!!');
       const { item } = activeData;
       setActiveSidebarItem(item);
       currentDragItemRef.current = item;
       return;
-    } else {
-      console.log('No!!사이드!!');
     }
 
     //캔버스의 아이템일 경우 실제 아이템 복사대신 공백만 생성해서 삽입
@@ -91,7 +88,8 @@ const BuilderLayout = () => {
 
     //드래그앤 드롭을 통해 세팅되있는 필드값 변경 ( 해당 인덱스를 스페이서 객체로 교체)
     setCurrentItem(draft => {
-      draft.splice(index, 1, createSpacer({ id: active.id }));
+      draft.splice(index, 1, createSpacer({ dragId: active.id }));
+      return draft;
     });
   };
 
@@ -109,7 +107,7 @@ const BuilderLayout = () => {
 
       if (!spacerInsertedRef.current) {
         const spacer = createSpacer({
-          id: active.id + '-spacer',
+          dragId: active.id + '-spacer',
         });
 
         setCurrentItem(draft => {
@@ -123,12 +121,14 @@ const BuilderLayout = () => {
             draft.splice(nextIndex, 0, spacer);
           }
           spacerInsertedRef.current = true;
+          return draft;
         });
       } else if (!over) {
         // This solves the issue where you could have a spacer handing out in the canvas if you drug
         // a sidebar item on and then off
         setCurrentItem(draft => {
-          draft.filter(f => f.type !== 'spacer');
+          draft = draft.filter(d => d.type !== 'spacer');
+          return draft;
         });
         spacerInsertedRef.current = false;
       } else {
@@ -137,7 +137,7 @@ const BuilderLayout = () => {
         // We find the spacer and then swap it with the over skipping the op if the two indexes are the same
         setCurrentItem(draft => {
           const spacerIndex = draft.findIndex(
-            f => f.id === active.id + '-spacer',
+            d => d.dragId === active.id + '-spacer',
           );
 
           const nextIndex =
@@ -148,6 +148,7 @@ const BuilderLayout = () => {
           }
 
           draft = arrayMove(draft, spacerIndex, overData.index);
+          return draft;
         });
       }
     }
@@ -160,7 +161,8 @@ const BuilderLayout = () => {
     if (!over) {
       cleanUp();
       setCurrentItem(draft => {
-        draft.filter(f => f.type !== 'spacer');
+        draft = draft.filter(f => f.type !== 'spacer');
+        return draft;
       });
       return;
     }
@@ -170,22 +172,17 @@ const BuilderLayout = () => {
 
     if (nextField) {
       const overData = over?.data?.current ?? {};
-
       setCurrentItem(draft => {
         const spacerIndex = draft.findIndex(f => f.type === 'spacer');
         draft.splice(spacerIndex, 1, nextField);
-
         draft = arrayMove(draft, spacerIndex, overData.index || 0);
       });
     }
-
     setSidebarFieldsRegenKey(Date.now());
     cleanUp();
   };
 
-  const items = currentItem;
-
-  //사이드바 필드리스트를 생성하기위한 키 ( 현재 사이드바의 상태키 )
+  //사이드바 필드리스트를 생성하기위한 키 ( 현재 사이드바의 상태키 -> 컴포넌트 사용후 고유 ID 리셋하기 위해 제어 )
   const [sidebarFieldsRegenKey, setSidebarFieldsRegenKey] = useState(
     Date.now(),
   );
@@ -208,7 +205,7 @@ const BuilderLayout = () => {
         onDragEnd={handleDragEnd}
         autoScroll
       >
-        <BuilderDndMonitor />
+        {/* <BuilderDndMonitor /> */}
         <Box
           component="main"
           sx={{
@@ -225,9 +222,9 @@ const BuilderLayout = () => {
         >
           <SortableContext
             strategy={verticalListSortingStrategy}
-            items={items.map(f => f.id)}
+            items={currentItem.map(d => d.dragId)}
           >
-            <BuilderCanvas items={items} />
+            <BuilderCanvas items={currentItem} />
           </SortableContext>
         </Box>
 
@@ -270,9 +267,6 @@ const BuilderLayout = () => {
           <BuilderSidebar fieldsRegKey={sidebarFieldsRegenKey} />
         </Drawer>
 
-        {
-          // 드래그 OverRay 설정
-        }
         <DragOverlay dropAnimation={null}>
           {activeSidebarItem ? (
             <SideBarItem overlay item={activeSidebarItem} />

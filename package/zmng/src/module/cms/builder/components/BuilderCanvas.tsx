@@ -29,7 +29,7 @@ const BuilderCanvas = ({ items }: { items: BuilderSideBarItemsProps[] }) => {
     <Box ref={setNodeRef} className="canvas" border={3} height={1000}>
       <div className="canvas-fields">
         {items?.map((item, i) => (
-          <SortableItem key={item.id} item={item} index={i} />
+          <SortableItem key={item.dragId} item={item} index={i} />
         ))}
       </div>
     </Box>
@@ -43,14 +43,11 @@ function SortableItem({
   item: BuilderSideBarItemsProps;
   index: number;
 }) {
-  const id = item.id;
-
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
-      id,
+      id: item.dragId,
       data: {
         index,
-        id,
         item,
       },
     });
@@ -88,7 +85,9 @@ export function CanvasItem({ item, overlay = false }: CanvasItemProps) {
 function CanvasItemRender(type: FieldType | 'spacer') {
   if (type === 'spacer') {
     return () => {
-      return <div className="spacer">112131</div>;
+      return (
+        <Box border={1} height={100} bgcolor={'gray'} className="spacer"></Box>
+      );
     };
   }
 

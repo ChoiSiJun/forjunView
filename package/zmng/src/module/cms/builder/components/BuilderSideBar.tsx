@@ -5,6 +5,7 @@ import {
 } from '@module/cms/builder/components/BuilderSideBarItem';
 import { useDraggable } from '@dnd-kit/core';
 import { useRef } from 'react';
+import { nanoid } from '@reduxjs/toolkit';
 
 //사이드바 컨테이너 속성
 interface BuilderSidebarProps {
@@ -42,12 +43,13 @@ const BuilderSidebar = ({ fieldsRegKey }: BuilderSidebarProps) => {
 //2. 사이드바 item에 관련 속성부여
 const DraggableSideBarItem = ({ item }: DraggableSideBarItemProps) => {
   //드래그 제어할 고유 ID
-  const id = useRef(item.id);
+  const dragId = useRef(nanoid());
+  const draggableItem = { ...item, dragId: dragId.current };
 
   const { attributes, listeners, setNodeRef } = useDraggable({
-    id: id.current,
+    id: draggableItem.dragId,
     data: {
-      item,
+      item: draggableItem,
       fromSidebar: true,
     },
   });
@@ -59,7 +61,7 @@ const DraggableSideBarItem = ({ item }: DraggableSideBarItemProps) => {
       {...listeners}
       {...attributes}
     >
-      <SideBarItem item={item} />
+      <SideBarItem item={draggableItem} />
     </div>
   );
 };

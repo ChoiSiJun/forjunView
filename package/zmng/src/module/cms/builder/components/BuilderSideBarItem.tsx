@@ -1,3 +1,5 @@
+import { UniqueIdentifier } from '@dnd-kit/core/dist/types';
+
 export type FieldType =
   | 'input'
   | 'textarea'
@@ -7,34 +9,34 @@ export type FieldType =
   | 'spacer';
 
 export interface BuilderSideBarItemsProps {
-  id: number | string;
+  dragId: UniqueIdentifier;
   type: FieldType;
   title: string;
 }
 
 export const BuilderSideBarItems: BuilderSideBarItemsProps[] = [
   {
-    id: 1,
+    dragId: 1,
     type: 'input',
     title: 'Text Input',
   },
   {
-    id: 2,
+    dragId: 2,
     type: 'select',
     title: 'Select',
   },
   {
-    id: 3,
+    dragId: 3,
     type: 'text',
     title: 'Text',
   },
   {
-    id: 4,
+    dragId: 4,
     type: 'button',
     title: 'Button',
   },
   {
-    id: 5,
+    dragId: 5,
     type: 'textarea',
     title: 'Text Area',
   },
