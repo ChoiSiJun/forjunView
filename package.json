@@ -27,8 +27,8 @@
     "typescript-eslint": "^7.2.0"
   },
   "scripts": {
-    "core": "yarn workspace @packages/core",
-    "zmng": "yarn workspace @packages/zmng"
+    "core": "yarn workspace @package/core",
+    "zmng": "yarn workspace @package/zmng"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",

@@ -1164,9 +1164,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@packages/core@workspace:package/core":
+"@package/core@npm:0.0.0, @package/core@workspace:package/core":
   version: 0.0.0-use.local
-  resolution: "@packages/core@workspace:package/core"
+  resolution: "@package/core@workspace:package/core"
   dependencies:
     "@types/react": "npm:^18.2.64"
     "@types/react-dom": "npm:^18.2.21"
@@ -1178,13 +1178,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@packages/zmng@workspace:package/zmng":
+"@package/zmng@workspace:package/zmng":
   version: 0.0.0-use.local
-  resolution: "@packages/zmng@workspace:package/zmng"
+  resolution: "@package/zmng@workspace:package/zmng"
   dependencies:
     "@dnd-kit/core": "npm:^6.1.0"
     "@dnd-kit/modifiers": "npm:^7.0.0"
     "@dnd-kit/sortable": "npm:^8.0.0"
+    "@package/core": "npm:0.0.0"
     "@reduxjs/toolkit": "npm:^2.2.1"
     "@types/react": "npm:^18.2.64"
     "@types/react-dom": "npm:^18.2.21"

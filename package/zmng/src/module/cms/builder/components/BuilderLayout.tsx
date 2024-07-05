@@ -24,7 +24,7 @@ import {
 } from '@dnd-kit/sortable';
 
 import BuilderSettingBar from '@module/cms/builder/components/BuilderSettingBar';
-import BuilderDndMonitor from './BuilderDndMonitor';
+import BuilderDndMonitor from '@module/cms/builder/components/BuilderDndMonitor';
 
 const SidebarWidth = 340;
 const AppBarHeight = 64;
@@ -214,7 +214,7 @@ const BuilderLayout = () => {
         onDragEnd={handleDragEnd}
         autoScroll
       >
-        {/* <BuilderDndMonitor /> */}
+        <BuilderDndMonitor />
         <Box
           component="main"
           sx={{

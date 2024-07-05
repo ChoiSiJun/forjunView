@@ -1,5 +1,5 @@
 {
-  "name": "@packages/core",
+  "name": "@package/core",
   "private": true,
   "version": "0.0.0",
   "type": "module",
