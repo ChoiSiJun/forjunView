@@ -24,8 +24,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "prettier": "^3.2.5",
     "typescript": "*",
-    "typescript-eslint": "^7.2.0",
-    "vite-tsconfig-paths": "^4.3.2"
+    "typescript-eslint": "^7.2.0"
   },
   "scripts": {
     "core": "yarn workspace @packages/core",

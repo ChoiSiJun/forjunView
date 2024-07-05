@@ -7,12 +7,12 @@ import { useDraggable } from '@dnd-kit/core';
 import { useRef } from 'react';
 import { nanoid } from '@reduxjs/toolkit';
 
-//사이드바 컨테이너 속성
+// 사이드바 컨테이너 속성
 interface BuilderSidebarProps {
   fieldsRegKey: number;
 }
 
-//사이드바 Item 렌더링
+// 사이드바 Item 렌더링
 interface SideBarItemProps {
   item: BuilderSideBarItemsProps;
   overlay?: boolean;

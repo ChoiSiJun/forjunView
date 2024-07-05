@@ -1,8 +1,12 @@
 import React, { useRef, useState } from 'react';
 import { CssBaseline, Box, IconButton, Drawer } from '@mui/material';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
-import BuilderCanvas, { CanvasItem } from './BuilderCanvas';
-import BuilderSidebar, { SideBarItem } from './BuilderSideBar';
+import BuilderCanvas, {
+  CanvasItem,
+} from '@module/cms/builder/components/BuilderCanvas';
+import BuilderSidebar, {
+  SideBarItem,
+} from '@module/cms/builder/components/BuilderSideBar';
 import { BuilderSideBarItemsProps } from '@module/cms/builder/components/BuilderSideBarItem';
 import {
   DndContext,
@@ -19,14 +23,14 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 
-import BuilderSettingBar from './BuilderSettingBar';
+import BuilderSettingBar from '@module/cms/builder/components/BuilderSettingBar';
 import BuilderDndMonitor from './BuilderDndMonitor';
 
 const SidebarWidth = 340;
 const AppBarHeight = 64;
 
 const BuilderLayout = () => {
-  //Dnd 관련 상태관리
+  // Dnd 관련 상태관리
 
   function createSpacer({
     dragId,
@@ -34,7 +38,7 @@ const BuilderLayout = () => {
     dragId: UniqueIdentifier;
   }): BuilderSideBarItemsProps {
     return {
-      dragId: dragId,
+      dragId,
       dragType: 'spacer',
       component: {
         type: 'spacer',
@@ -43,19 +47,19 @@ const BuilderLayout = () => {
     };
   }
 
-  //캔버스에 스페이서가 들어갔는지 참조
+  // 캔버스에 스페이서가 들어갔는지 참조
   const spacerInsertedRef = useRef(false);
 
-  //현재 드래그중인 아이템
+  // 현재 드래그중인 아이템
   const currentDragItemRef = useRef<BuilderSideBarItemsProps | null>(null);
 
-  //사이드바에서 드래그 시작한 활성화된 아이템
+  // 사이드바에서 드래그 시작한 활성화된 아이템
   const [activeSidebarItem, setActiveSidebarItem] = useState(null); // only for fields from the sidebar
 
-  //캔버스에서 드래그 시작한 활성화된 아이템
+  // 캔버스에서 드래그 시작한 활성화된 아이템
   const [activeCanvesItem, setActiveCanverItem] = useState(null); // only for fields that are in the form.
 
-  //드래그앤 드롭을 통해 변경될 필드 목록을 저장하는 필드
+  // 드래그앤 드롭을 통해 변경될 필드 목록을 저장하는 필드
   interface CurrentItemProps {
     items: BuilderSideBarItemsProps[];
   }
@@ -63,7 +67,12 @@ const BuilderLayout = () => {
     items: [],
   });
 
-  //초기화 해주는 함수
+  // 사이드바 필드리스트를 생성하기위한 키 ( 현재 사이드바의 상태키 -> 컴포넌트 사용후 고유 ID 리셋하기 위해 제어 )
+  const [sidebarFieldsRegenKey, setSidebarFieldsRegenKey] = useState(
+    Date.now(),
+  );
+
+  // 초기화 해주는 함수
   const cleanUp = () => {
     setActiveSidebarItem(null);
     setActiveCanverItem(null);
@@ -71,15 +80,15 @@ const BuilderLayout = () => {
     spacerInsertedRef.current = false;
   };
 
-  //드래그 시작
+  // 드래그 시작
   const handleDragStart = (e: DragStartEvent) => {
     const { active } = e;
     const activeData = active?.data?.current ?? {};
 
-    //드래그중인 아이템에 참조를 설정
-    //복사 완료는 onDragEnd 핸들러에서
+    // 드래그중인 아이템에 참조를 설정
+    // 복사 완료는 onDragEnd 핸들러에서
 
-    //사이드바의 아이템일 경우 복사시작.
+    // 사이드바의 아이템일 경우 복사시작.
     if (activeData.fromSidebar) {
       const { item } = activeData;
       setActiveSidebarItem(item);
@@ -87,38 +96,38 @@ const BuilderLayout = () => {
       return;
     }
 
-    //캔버스의 아이템일 경우 실제 아이템 복사대신 공백만 생성해서 삽입
+    // 캔버스의 아이템일 경우 실제 아이템 복사대신 공백만 생성해서 삽입
     const { item, index } = activeData;
     setActiveCanverItem(item);
     currentDragItemRef.current = item;
 
-    //드래그앤 드롭을 통해 세팅되있는 필드값 변경 ( 해당 인덱스를 스페이서 객체로 교체)
+    // 드래그앤 드롭을 통해 세팅되있는 필드값 변경 ( 해당 인덱스를 스페이서 객체로 교체)
     setCurrentItem(draft => {
       draft.items.splice(index, 1, createSpacer({ dragId: active.id }));
       return draft;
     });
   };
 
-  //드래그중일때.
+  // 드래그중일때.
   const handleDragOver = (e: DragOverEvent) => {
     const { active, over } = e;
     const activeData = active?.data?.current ?? {};
 
-    //사이드바 아이템이 캔버스위로 이동하는것을 감지할경우
-    //스페이서 접미사가 있는 사이드바 아이템 id를 이용해서 스페이서를 생성후 캔버스에 렌더링될수있도록 배열에 값을 저장.
+    // 사이드바 아이템이 캔버스위로 이동하는것을 감지할경우
+    // 스페이서 접미사가 있는 사이드바 아이템 id를 이용해서 스페이서를 생성후 캔버스에 렌더링될수있도록 배열에 값을 저장.
 
-    //배열에 객체 생성시작.
+    // 배열에 객체 생성시작.
     if (activeData.fromSidebar) {
       const overData = over?.data?.current ?? {};
 
       if (!spacerInsertedRef.current) {
         const spacer = createSpacer({
-          dragId: active.id + '-spacer',
+          dragId: `${active.id}-spacer`,
         });
 
         setCurrentItem(draft => {
           if (!draft.items.length) {
-            //필드목록이 없을경우 관리 배열에 스페이스 객체 삽입
+            // 필드목록이 없을경우 관리 배열에 스페이스 객체 삽입
             draft.items.push(spacer);
           } else {
             const nextIndex =
@@ -143,7 +152,7 @@ const BuilderLayout = () => {
         // We find the spacer and then swap it with the over skipping the op if the two indexes are the same
         setCurrentItem(draft => {
           const spacerIndex = draft.items.findIndex(
-            d => d.dragId === active.id + '-spacer',
+            d => d.dragId === `${active.id}-spacer`,
           );
 
           const nextIndex =
@@ -152,9 +161,7 @@ const BuilderLayout = () => {
           if (nextIndex === spacerIndex) {
             return;
           }
-
           draft.items = arrayMove(draft.items, spacerIndex, overData.index);
-          return draft;
         });
       }
     }
@@ -188,11 +195,6 @@ const BuilderLayout = () => {
     setSidebarFieldsRegenKey(Date.now());
     cleanUp();
   };
-
-  //사이드바 필드리스트를 생성하기위한 키 ( 현재 사이드바의 상태키 -> 컴포넌트 사용후 고유 ID 리셋하기 위해 제어 )
-  const [sidebarFieldsRegenKey, setSidebarFieldsRegenKey] = useState(
-    Date.now(),
-  );
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -236,7 +238,7 @@ const BuilderLayout = () => {
         </Box>
 
         {
-          //////사이드바 활성화 버튼
+          // 사이드바 활성화 버튼
         }
         <IconButton
           color="inherit"
@@ -255,7 +257,7 @@ const BuilderLayout = () => {
         </IconButton>
 
         {
-          //////사이드바 영역
+          // 사이드바 영역
         }
         <Drawer
           variant="persistent"

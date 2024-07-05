@@ -1202,6 +1202,7 @@ __metadata:
     react-router-dom: "npm:^6.22.3"
     typescript: "npm:^5.2.2"
     vite: "npm:^5.1.6"
+    vite-tsconfig-paths: "npm:^4.3.2"
   languageName: unknown
   linkType: soft
 
@@ -4289,7 +4290,6 @@ __metadata:
     typescript: "npm:*"
     typescript-eslint: "npm:^7.2.0"
     use-immer: "npm:^0.10.0"
-    vite-tsconfig-paths: "npm:^4.3.2"
   languageName: unknown
   linkType: soft
 
