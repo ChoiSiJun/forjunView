@@ -44,8 +44,8 @@ const MirList = ({
 
     const handleListItemClick = (
           index: number,
-          code: any,
-          propClickEvent:() => void
+          code: string|number,
+          propClickEvent:(code:string|number) => void
         ) => {
           setSelectedIndex(index);
 

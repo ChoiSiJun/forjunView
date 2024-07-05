@@ -1,21 +1,12 @@
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
-import { Card, CardActions, CardContent, CardHeader } from '@mui/material';
-import { ReactNode } from 'react';
-
 import * as React from 'react';
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import MirCard from '@common/components/molecule/MirCard';
-import SystemLocationInfo from '@module/system/components/SystemLocationInfo';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material/styles';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Portal } from '@mui/base/Portal';
 
 export const MirModalGuide = {
   title: '기본모달',
@@ -51,30 +42,24 @@ export const MirModalGuide = {
 export interface MirModalProps {
   title: string;
   subTitle?: string;
-  modalType?: string;
-  modalOpen: boolean;
-  modalSize?: 'sm' | 'md' | 'lg' | 'xl';
-  buttonList?: ReactNode[];
-  closeModalEvent: (modal: boolean) => void;
+  //modalType?: string;
+  isOpen: boolean;
+  //modalSize?: 'sm' | 'md' | 'lg' | 'xl';
+  //buttonList?: ReactNode[];
+  closeModal?: () => void;
   children?: React.ReactNode;
 }
 
 const MirModal = ({
   title,
   subTitle,
-  modalType = 'mainModal',
-  modalSize = 'md',
-  modalOpen,
-  closeModalEvent,
+  //modalSize = 'md',
+  isOpen,
+  closeModal,
   children,
-  buttonList,
+  //buttonList,
 }: MirModalProps) => {
     //const [open, setOpen] = React.useState(false);
-
-    //모달닫기 핸들러
-    const handelCloseModal = () => {
-      closeModalEvent(false);
-    };
 
   const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -85,13 +70,13 @@ const MirModal = ({
     },
   }));
 
-  if (modalType == 'mainModal') {
-    return (
+  return (
+    <Portal container={() => document.getElementById('modal-root')!}>
       <React.Fragment>
         <BootstrapDialog
           fullWidth
-          maxWidth={modalSize}
-          open={modalOpen}
+          maxWidth='md' //{modalSize}
+          open={isOpen}
           //onClose={handelCloseModal}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
@@ -102,7 +87,7 @@ const MirModal = ({
           </DialogTitle>
           <IconButton
             aria-label="close"
-            onClick={handelCloseModal}
+            onClick={closeModal}
             sx={{
               position: 'absolute',
               right: 8,
@@ -114,12 +99,12 @@ const MirModal = ({
             {children}
           </DialogContent>
           <DialogActions>
-            {buttonList}
+            {/* {buttonList} */}
           </DialogActions>
         </BootstrapDialog>
       </React.Fragment>
-    );
-  }
+    </Portal>
+  );
 };
 
 export default MirModal;
