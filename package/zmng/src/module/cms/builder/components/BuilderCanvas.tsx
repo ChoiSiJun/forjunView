@@ -1,7 +1,4 @@
-import {
-  renderers,
-  FieldType,
-} from '@module/cms/builder/components/BuilderSideBarItem';
+import { renderers } from '@module/cms/builder/components/BuilderSideBarItem';
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
 import { useDroppable } from '@dnd-kit/core';
@@ -65,9 +62,7 @@ function SortableItem({
 }
 
 export function CanvasItem({ item, overlay = false }: CanvasItemProps) {
-  const { type } = item;
-
-  const Component = CanvasItemRender(type);
+  const Component = CanvasItemRender(item.dragType);
 
   let className = 'canvas-field';
   if (overlay) {
@@ -82,7 +77,7 @@ export function CanvasItem({ item, overlay = false }: CanvasItemProps) {
 }
 
 //Item 실제 렌더링 데이터 가져오기
-function CanvasItemRender(type: FieldType | 'spacer') {
+function CanvasItemRender(type: string) {
   if (type === 'spacer') {
     return () => {
       return (
@@ -91,7 +86,7 @@ function CanvasItemRender(type: FieldType | 'spacer') {
     };
   }
 
-  return renderers[type] || (() => <div>No renderer found for {type}</div>);
+  return renderers[type];
 }
 
 export default BuilderCanvas;

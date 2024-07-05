@@ -35,8 +35,11 @@ const BuilderLayout = () => {
   }): BuilderSideBarItemsProps {
     return {
       dragId: dragId,
-      type: 'spacer',
-      title: 'spacer',
+      dragType: 'spacer',
+      component: {
+        type: 'spacer',
+        title: 'spacer',
+      },
     };
   }
 
@@ -53,9 +56,12 @@ const BuilderLayout = () => {
   const [activeCanvesItem, setActiveCanverItem] = useState(null); // only for fields that are in the form.
 
   //드래그앤 드롭을 통해 변경될 필드 목록을 저장하는 필드
-  const [currentItem, setCurrentItem] = useImmer<BuilderSideBarItemsProps[]>(
-    [],
-  );
+  interface CurrentItemProps {
+    items: BuilderSideBarItemsProps[];
+  }
+  const [currentItem, setCurrentItem] = useImmer<CurrentItemProps>({
+    items: [],
+  });
 
   //초기화 해주는 함수
   const cleanUp = () => {
@@ -88,7 +94,7 @@ const BuilderLayout = () => {
 
     //드래그앤 드롭을 통해 세팅되있는 필드값 변경 ( 해당 인덱스를 스페이서 객체로 교체)
     setCurrentItem(draft => {
-      draft.splice(index, 1, createSpacer({ dragId: active.id }));
+      draft.items.splice(index, 1, createSpacer({ dragId: active.id }));
       return draft;
     });
   };
@@ -111,14 +117,14 @@ const BuilderLayout = () => {
         });
 
         setCurrentItem(draft => {
-          if (!draft.length) {
+          if (!draft.items.length) {
             //필드목록이 없을경우 관리 배열에 스페이스 객체 삽입
-            draft.push(spacer);
+            draft.items.push(spacer);
           } else {
             const nextIndex =
-              overData.index > -1 ? overData.index : draft.length;
+              overData.index > -1 ? overData.index : draft.items.length;
 
-            draft.splice(nextIndex, 0, spacer);
+            draft.items.splice(nextIndex, 0, spacer);
           }
           spacerInsertedRef.current = true;
           return draft;
@@ -127,7 +133,7 @@ const BuilderLayout = () => {
         // This solves the issue where you could have a spacer handing out in the canvas if you drug
         // a sidebar item on and then off
         setCurrentItem(draft => {
-          draft = draft.filter(d => d.type !== 'spacer');
+          draft.items = draft.items.filter(d => d.dragType !== 'spacer');
           return draft;
         });
         spacerInsertedRef.current = false;
@@ -136,18 +142,18 @@ const BuilderLayout = () => {
         // we need to make sure we're updating the spacer position to reflect where our drop will occur.
         // We find the spacer and then swap it with the over skipping the op if the two indexes are the same
         setCurrentItem(draft => {
-          const spacerIndex = draft.findIndex(
+          const spacerIndex = draft.items.findIndex(
             d => d.dragId === active.id + '-spacer',
           );
 
           const nextIndex =
-            overData.index > -1 ? overData.index : draft.length - 1;
+            overData.index > -1 ? overData.index : draft.items.length - 1;
 
           if (nextIndex === spacerIndex) {
             return;
           }
 
-          draft = arrayMove(draft, spacerIndex, overData.index);
+          draft.items = arrayMove(draft.items, spacerIndex, overData.index);
           return draft;
         });
       }
@@ -161,7 +167,7 @@ const BuilderLayout = () => {
     if (!over) {
       cleanUp();
       setCurrentItem(draft => {
-        draft = draft.filter(f => f.type !== 'spacer');
+        draft.items = draft.items.filter(f => f.dragType !== 'spacer');
         return draft;
       });
       return;
@@ -173,9 +179,10 @@ const BuilderLayout = () => {
     if (nextField) {
       const overData = over?.data?.current ?? {};
       setCurrentItem(draft => {
-        const spacerIndex = draft.findIndex(f => f.type === 'spacer');
-        draft.splice(spacerIndex, 1, nextField);
-        draft = arrayMove(draft, spacerIndex, overData.index || 0);
+        const spacerIndex = draft.items.findIndex(d => d.dragType === 'spacer');
+        draft.items.splice(spacerIndex, 1, nextField);
+        draft.items = arrayMove(draft.items, spacerIndex, overData.index || 0);
+        return draft;
       });
     }
     setSidebarFieldsRegenKey(Date.now());
@@ -222,9 +229,9 @@ const BuilderLayout = () => {
         >
           <SortableContext
             strategy={verticalListSortingStrategy}
-            items={currentItem.map(d => d.dragId)}
+            items={currentItem.items.map(d => d.dragId)}
           >
-            <BuilderCanvas items={currentItem} />
+            <BuilderCanvas items={currentItem.items} />
           </SortableContext>
         </Box>
 

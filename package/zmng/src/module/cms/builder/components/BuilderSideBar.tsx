@@ -12,11 +12,6 @@ interface BuilderSidebarProps {
   fieldsRegKey: number;
 }
 
-//사이드바 Item 속성
-interface DraggableSideBarItemProps {
-  item: BuilderSideBarItemsProps;
-}
-
 //사이드바 Item 렌더링
 interface SideBarItemProps {
   item: BuilderSideBarItemsProps;
@@ -31,7 +26,7 @@ const BuilderSidebar = ({ fieldsRegKey }: BuilderSidebarProps) => {
 
       <div key={fieldsRegKey} className="sidebar">
         {BuilderSideBarItems.map(item => (
-          <DraggableSideBarItem key={item.type} item={item} />
+          <DraggableSideBarItem key={item.dragType} item={item} />
         ))}
       </div>
 
@@ -41,7 +36,7 @@ const BuilderSidebar = ({ fieldsRegKey }: BuilderSidebarProps) => {
 };
 
 //2. 사이드바 item에 관련 속성부여
-const DraggableSideBarItem = ({ item }: DraggableSideBarItemProps) => {
+const DraggableSideBarItem = ({ item }: SideBarItemProps) => {
   //드래그 제어할 고유 ID
   const dragId = useRef(nanoid());
   const draggableItem = { ...item, dragId: dragId.current };
@@ -53,7 +48,6 @@ const DraggableSideBarItem = ({ item }: DraggableSideBarItemProps) => {
       fromSidebar: true,
     },
   });
-
   return (
     <div
       ref={setNodeRef}
@@ -73,7 +67,7 @@ export const SideBarItem = ({ item, overlay = false }: SideBarItemProps) => {
     className += ' overlay';
   }
 
-  return <div className={className}>{item.title}</div>;
+  return <div className={className}>{item.component.title}</div>;
 };
 
 export default BuilderSidebar;

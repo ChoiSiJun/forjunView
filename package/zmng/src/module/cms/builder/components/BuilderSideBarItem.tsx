@@ -8,43 +8,63 @@ export type FieldType =
   | 'button'
   | 'spacer';
 
-export interface BuilderSideBarItemsProps {
-  dragId: UniqueIdentifier;
+export interface ComponentProps {
   type: FieldType;
   title: string;
+}
+
+export interface BuilderSideBarItemsProps {
+  dragId: UniqueIdentifier;
+  dragType: string;
+  component: ComponentProps;
 }
 
 export const BuilderSideBarItems: BuilderSideBarItemsProps[] = [
   {
     dragId: 1,
-    type: 'input',
-    title: 'Text Input',
+    dragType: 'input',
+    component: {
+      type: 'input',
+      title: 'Text Input',
+    },
   },
   {
     dragId: 2,
-    type: 'select',
-    title: 'Select',
+    dragType: 'select',
+    component: {
+      type: 'select',
+      title: 'Select',
+    },
   },
   {
     dragId: 3,
-    type: 'text',
-    title: 'Text',
+    dragType: 'text',
+    component: {
+      type: 'text',
+      title: 'Text',
+    },
   },
   {
     dragId: 4,
-    type: 'button',
-    title: 'Button',
+    dragType: 'button',
+    component: {
+      type: 'button',
+      title: 'Button',
+    },
   },
   {
     dragId: 5,
-    type: 'textarea',
-    title: 'Text Area',
+    dragType: 'textarea',
+    component: {
+      type: 'textarea',
+      title: 'Text Area',
+    },
   },
 ];
 
 // These define how we render the field
 
-export const renderers: Record<FieldType, () => JSX.Element> = {
+export const renderers: Record<string, () => JSX.Element> = {
   input: () => <input type="text" placeholder="This is a text input" />,
   textarea: () => <textarea rows={5} />,
   select: () => (
