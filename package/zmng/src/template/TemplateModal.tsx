@@ -1,36 +1,36 @@
 import React from 'react';
 
-import MirModal, {
-  MirModalGuide,
-} from '@common/components/atoms/modal/MirModal';
-import MirButton from '@common/components/atoms/button/MirButton';
-import { Grid } from '@mui/material';
-import CardLayout from './CardLayout';
-import MirDataTable from '@common/components/atoms/table/MirDataTable';
+// import MirModal, {
+//   MirModalGuide,
+// } from '@common/components/atoms/modal/MirModal';
+// import MirButton from '@common/components/atoms/button/MirButton';
+// import { Grid } from '@mui/material';
+// import CardLayout from './CardLayout';
+// import MirDataTable from '@common/components/atoms/table/MirDataTable';
 
 export default function TemplateModal() {
-  const [openModal, setopenModal] = React.useState(false);
-  const handleModalOpen = () => setopenModal(true);
-  const handleModalClose = () => setopenModal(false);
+  // const [openModal, setopenModal] = React.useState(false);
+  // const handleModalOpen = () => setopenModal(true);
+  // const handleModalClose = () => setopenModal(false);
 
-  const [openModal2, setopenModal2] = React.useState(false);
-  const handleModalOpen2 = () => setopenModal2(true);
-  const handleModalClose2 = () => setopenModal2(false);
+  // const [openModal2, setopenModal2] = React.useState(false);
+  // const handleModalOpen2 = () => setopenModal2(true);
+  // const handleModalClose2 = () => setopenModal2(false);
 
-  const columnsData = [
-    { field: 'memberId', headerName: '아이디', width: 100 },
-    { field: 'memberName', headerName: '이름', width: 130 },
-  ];
+  // const columnsData = [
+  //   { field: 'memberId', headerName: '아이디', width: 100 },
+  //   { field: 'memberName', headerName: '이름', width: 130 },
+  // ];
 
-  const rowsData = [
-    { id: 1, memberId: 'mirtech', memberName: '미르테크' },
-    { id: 2, memberId: 'slima', memberName: '슬리마' },
-    { id: 3, memberId: 'guest', memberName: 'GUEST' },
-  ];
+  // const rowsData = [
+  //   { id: 1, memberId: 'mirtech', memberName: '미르테크' },
+  //   { id: 2, memberId: 'slima', memberName: '슬리마' },
+  //   { id: 3, memberId: 'guest', memberName: 'GUEST' },
+  // ];
 
   return (
     <>
-      <Grid container spacing={3}>
+      {/* <Grid container spacing={3}>
         <Grid item xs={6} minWidth={400}>
           <CardLayout
             component={[
@@ -79,7 +79,7 @@ export default function TemplateModal() {
         closeModalEvent={handleModalClose2}
       >
         <MirDataTable rows={rowsData} columns={columnsData} />
-      </MirModal>
+      </MirModal> */}
     </>
   );
 }
