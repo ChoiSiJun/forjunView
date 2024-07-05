@@ -11,7 +11,7 @@ import { getLocationList } from '@module/system/slice/LocationListSilce';
 import { getLocationInfo } from '@module/system/slice/LocationSlice';
 import LocationUpdateModal from '@module/system/components/LocationUpdateModal';
 import { UseModal } from '@hooks/UseModal'; 
-import MirModal from '@common/components/molecule/modal/MirModal';
+import MirModal from '@common/components/molecule/MirModal';
 import MirButton from '@common/components/atoms/button/MirButton';
 
 const SystemLocationList = () => {
@@ -23,7 +23,7 @@ const SystemLocationList = () => {
   const { MirModal, isOpen, openModal, closeModal } = UseModal();
   
   const dispatch = useAppDispatch();
-  const data = useAppSelector(state => state.LocationList);
+  const codeNameList = useAppSelector(state => state.LocationList.codeNameList);
 
   // 리스트 클릭 이벤트 핸들러
   const listClickHandler = (
@@ -56,7 +56,7 @@ const SystemLocationList = () => {
     <Grid container spacing={2} >
       <Grid item xs={4} sx={{bgcolor:'#EEF2F6'}}>
         <MirList
-          codeNameList={data.codeNameList}
+          codeNameList={codeNameList}
           onListClick={listClickHandler}
           onCreateClick={createClickHandler}
           onModifyClick={modifyClickHandler}

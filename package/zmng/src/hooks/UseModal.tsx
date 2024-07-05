@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import MirModal from '@common/components/molecule/modal/MirModal';
+import MirModal from '@common/components/molecule/MirModal';
 
 export const UseModal = () => {
   const [isOpen, setIsOpen] = useState(false);
