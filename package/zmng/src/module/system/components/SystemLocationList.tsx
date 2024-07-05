@@ -15,6 +15,7 @@ import MirModal from '@common/components/molecule/MirModal';
 import MirButton from '@common/components/atoms/button/MirButton';
 
 const SystemLocationList = () => {
+  let modalType;
 
   // const [openModal, setopenModal] = React.useState(false);
   // const handleModalOpen = () => setopenModal(true);
@@ -34,17 +35,21 @@ const SystemLocationList = () => {
 
   // 생성 클릭 이벤트 핸들러
   const createClickHandler = () => {
+    modalType = "create"
     alert('생성!!');
+    openModal();
   };
 
   // 삭제 클릭 이벤트 핸들러
   const deleteClickHandler = () => {
     alert('삭제!!');
+    openModal();
   };
 
   // 수정 클릭 이벤트 핸들러
   const modifyClickHandler = () => {
     alert('수정!!');
+    openModal();
     //handleModalOpen();
   };
 
@@ -75,21 +80,6 @@ const SystemLocationList = () => {
       <MirModal title="추가" isOpen={isOpen} closeModal={closeModal}>
         <LocationUpdateModal />
       </MirModal>
-
-      {/* <div>
-        <MirModal
-          title={'기관정보'}
-          modalOpen={openModal}
-          buttonList={[
-            <MirButton ButtonType={'create'} buttonName={'저장'} />,
-            <MirButton ButtonType={'etc'} buttonName={'닫기'} onClick={handleModalClose}/>,
-          ]}
-          closeModalEvent={handleModalClose}
-          modalSize="md"
-        >
-          
-        </MirModal>
-      </div> */}
     </Grid>
     
   );
