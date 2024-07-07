@@ -7,7 +7,7 @@ import BuilderCanvas, {
 import BuilderSidebar, {
   SideBarItem,
 } from '@module/cms/builder/components/BuilderSideBar';
-import { BuilderSideBarItemsProps } from '@module/cms/builder/components/BuilderSideBarItem';
+import { BuilderItemsProps } from '@module/cms/builder/components/BuilderSideBarItem';
 import {
   DndContext,
   DragOverlay,
@@ -36,14 +36,11 @@ const BuilderLayout = () => {
     dragId,
   }: {
     dragId: UniqueIdentifier;
-  }): BuilderSideBarItemsProps {
+  }): BuilderItemsProps {
     return {
       dragId,
       dragType: 'spacer',
-      component: {
-        type: 'spacer',
-        title: 'spacer',
-      },
+      displayTitle: 'spacer',
     };
   }
 
@@ -51,7 +48,7 @@ const BuilderLayout = () => {
   const spacerInsertedRef = useRef(false);
 
   // 현재 드래그중인 아이템
-  const currentDragItemRef = useRef<BuilderSideBarItemsProps | null>(null);
+  const currentDragItemRef = useRef<BuilderItemsProps | null>(null);
 
   // 사이드바에서 드래그 시작한 활성화된 아이템
   const [activeSidebarItem, setActiveSidebarItem] = useState(null); // only for fields from the sidebar
@@ -61,7 +58,7 @@ const BuilderLayout = () => {
 
   // 드래그앤 드롭을 통해 변경될 필드 목록을 저장하는 필드
   interface CurrentItemProps {
-    items: BuilderSideBarItemsProps[];
+    items: BuilderItemsProps[];
   }
   const [currentItem, setCurrentItem] = useImmer<CurrentItemProps>({
     items: [],

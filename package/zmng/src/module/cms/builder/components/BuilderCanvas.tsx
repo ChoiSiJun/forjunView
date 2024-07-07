@@ -1,6 +1,6 @@
 import {
-  renderers,
-  BuilderSideBarItemsProps,
+  BuilderItemsProps,
+  RenderComponent,
 } from '@module/cms/builder/components/BuilderSideBarItem';
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
@@ -9,19 +9,17 @@ import { useDroppable } from '@dnd-kit/core';
 import { Box } from '@mui/material';
 
 interface CanvasItemProps {
-  item: BuilderSideBarItemsProps;
+  item: BuilderItemsProps;
   overlay?: boolean;
 }
 
 // Item 실제 렌더링 데이터 가져오기
 function CanvasItemRender(type: string) {
   if (type === 'spacer') {
-    return () => {
-      return <Box border={1} height={100} bgcolor="gray" className="spacer" />;
-    };
+    return <Box border={1} height={100} bgcolor="gray" className="spacer" />;
   }
 
-  return renderers[type];
+  return <RenderComponent type={type} />;
 }
 
 export function CanvasItem({ item, overlay = false }: CanvasItemProps) {
@@ -32,18 +30,14 @@ export function CanvasItem({ item, overlay = false }: CanvasItemProps) {
     className += ' overlay';
   }
 
-  return (
-    <div className={className}>
-      <Component />
-    </div>
-  );
+  return <div className={className}>{Component}</div>;
 }
 
 function SortableItem({
   item,
   index,
 }: {
-  item: BuilderSideBarItemsProps;
+  item: BuilderItemsProps;
   index: number;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -67,7 +61,7 @@ function SortableItem({
   );
 }
 
-const BuilderCanvas = ({ items }: { items: BuilderSideBarItemsProps[] }) => {
+const BuilderCanvas = ({ items }: { items: BuilderItemsProps[] }) => {
   // Dnd 관련설정.
 
   const { setNodeRef } = useDroppable({
