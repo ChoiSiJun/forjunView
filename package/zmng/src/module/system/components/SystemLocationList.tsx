@@ -88,6 +88,7 @@ const SystemLocationList = () => {
       <MirModal title={modalTitle} isOpen={isOpen} closeModal={closeModal} modalSize={modalSize} buttonList={modalButtonList}>
         {children}
       </MirModal>
+
     </Grid>
     
   );

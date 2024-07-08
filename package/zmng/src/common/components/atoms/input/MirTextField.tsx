@@ -25,16 +25,7 @@ const MirTextField = ({
   textFieldType = 'outlined-basic',
 }: MirTextFieldProps) => {
   return (
-    <Box
-      component="form"
-      sx={{
-        '& > :not(style)': { m: 1, width: '25ch' },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      <MuiTextField ref={InputRef} id={textFieldType} label={label} />
-    </Box>
+    <MuiTextField ref={InputRef} id={textFieldType} label={label} size="small" />
   );
 };
 
