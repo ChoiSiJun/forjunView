@@ -1,46 +1,43 @@
 import {
-  renderers,
-  FieldType,
+  BuilderItemsProps,
+  RenderComponent,
 } from '@module/cms/builder/components/BuilderSideBarItem';
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
 import { useDroppable } from '@dnd-kit/core';
 
-import { BuilderSideBarItemsProps } from '@module/cms/builder/components/BuilderSideBarItem';
 import { Box } from '@mui/material';
 
 interface CanvasItemProps {
-  item: BuilderSideBarItemsProps;
+  item: BuilderItemsProps;
   overlay?: boolean;
 }
 
-const BuilderCanvas = ({ items }: { items: BuilderSideBarItemsProps[] }) => {
-  //Dnd 관련설정.
+// Item 실제 렌더링 데이터 가져오기
+function CanvasItemRender(type: string) {
+  if (type === 'spacer') {
+    return <Box border={1} height={100} bgcolor="gray" className="spacer" />;
+  }
 
-  const { setNodeRef } = useDroppable({
-    id: 'canvas_droppable',
-    data: {
-      parent: null,
-      isContainer: true,
-    },
-  });
+  return <RenderComponent type={type} />;
+}
 
-  return (
-    <Box ref={setNodeRef} className="canvas" border={3} height={1000}>
-      <div className="canvas-fields">
-        {items?.map((item, i) => (
-          <SortableItem key={item.dragId} item={item} index={i} />
-        ))}
-      </div>
-    </Box>
-  );
-};
+export function CanvasItem({ item, overlay = false }: CanvasItemProps) {
+  const Component = CanvasItemRender(item.dragType);
+
+  let className = 'canvas-field';
+  if (overlay) {
+    className += ' overlay';
+  }
+
+  return <div className={className}>{Component}</div>;
+}
 
 function SortableItem({
   item,
   index,
 }: {
-  item: BuilderSideBarItemsProps;
+  item: BuilderItemsProps;
   index: number;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -64,34 +61,26 @@ function SortableItem({
   );
 }
 
-export function CanvasItem({ item, overlay = false }: CanvasItemProps) {
-  const { type } = item;
+const BuilderCanvas = ({ items }: { items: BuilderItemsProps[] }) => {
+  // Dnd 관련설정.
 
-  const Component = CanvasItemRender(type);
-
-  let className = 'canvas-field';
-  if (overlay) {
-    className += ' overlay';
-  }
+  const { setNodeRef } = useDroppable({
+    id: 'canvas_droppable',
+    data: {
+      parent: null,
+      isContainer: true,
+    },
+  });
 
   return (
-    <div className={className}>
-      <Component />
-    </div>
+    <Box ref={setNodeRef} className="canvas" border={3} height={1000}>
+      <div className="canvas-fields">
+        {items?.map((item, i) => (
+          <SortableItem key={item.dragId} item={item} index={i} />
+        ))}
+      </div>
+    </Box>
   );
-}
-
-//Item 실제 렌더링 데이터 가져오기
-function CanvasItemRender(type: FieldType | 'spacer') {
-  if (type === 'spacer') {
-    return () => {
-      return (
-        <Box border={1} height={100} bgcolor={'gray'} className="spacer"></Box>
-      );
-    };
-  }
-
-  return renderers[type] || (() => <div>No renderer found for {type}</div>);
-}
+};
 
 export default BuilderCanvas;

@@ -22,14 +22,15 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.34.0",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
     "prettier": "^3.2.5",
     "typescript": "*",
-    "typescript-eslint": "^7.2.0",
-    "vite-tsconfig-paths": "^4.3.2"
+    "typescript-eslint": "^7.2.0"
   },
   "scripts": {
-    "core": "yarn workspace @packages/core",
-    "zmng": "yarn workspace @packages/zmng"
+    "core": "yarn workspace @package/core",
+    "zmng": "yarn workspace @package/zmng",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",

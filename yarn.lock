@@ -1164,9 +1164,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@packages/core@workspace:package/core":
+"@package/core@npm:0.0.0, @package/core@workspace:package/core":
   version: 0.0.0-use.local
-  resolution: "@packages/core@workspace:package/core"
+  resolution: "@package/core@workspace:package/core"
   dependencies:
     "@types/react": "npm:^18.2.64"
     "@types/react-dom": "npm:^18.2.21"
@@ -1175,26 +1175,23 @@ __metadata:
     react-dom: "npm:^18.2.0"
     typescript: "npm:^5.2.2"
     vite: "npm:^5.1.6"
+    vite-tsconfig-paths: "npm:^4.3.2"
   languageName: unknown
   linkType: soft
 
-"@packages/zmng@workspace:package/zmng":
+"@package/zmng@workspace:package/zmng":
   version: 0.0.0-use.local
-  resolution: "@packages/zmng@workspace:package/zmng"
+  resolution: "@package/zmng@workspace:package/zmng"
   dependencies:
     "@dnd-kit/core": "npm:^6.1.0"
     "@dnd-kit/modifiers": "npm:^7.0.0"
     "@dnd-kit/sortable": "npm:^8.0.0"
+    "@package/core": "npm:0.0.0"
     "@reduxjs/toolkit": "npm:^2.2.1"
     "@types/react": "npm:^18.2.64"
     "@types/react-dom": "npm:^18.2.21"
-    "@typescript-eslint/eslint-plugin": "npm:^7.1.1"
-    "@typescript-eslint/parser": "npm:^7.1.1"
     "@vitejs/plugin-react": "npm:^4.2.1"
     bootstrap: "npm:^5.3.3"
-    eslint: "npm:^8.57.0"
-    eslint-plugin-react-hooks: "npm:^4.6.0"
-    eslint-plugin-react-refresh: "npm:^0.4.5"
     react: "npm:^18.2.0"
     react-bootstrap: "npm:^2.10.1"
     react-dom: "npm:^18.2.0"
@@ -1202,6 +1199,7 @@ __metadata:
     react-router-dom: "npm:^6.22.3"
     typescript: "npm:^5.2.2"
     vite: "npm:^5.1.6"
+    vite-tsconfig-paths: "npm:^4.3.2"
   languageName: unknown
   linkType: soft
 
@@ -1636,7 +1634,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:7.2.0, @typescript-eslint/eslint-plugin@npm:^7.1.1, @typescript-eslint/eslint-plugin@npm:^7.2.0":
+"@typescript-eslint/eslint-plugin@npm:7.2.0, @typescript-eslint/eslint-plugin@npm:^7.2.0":
   version: 7.2.0
   resolution: "@typescript-eslint/eslint-plugin@npm:7.2.0"
   dependencies:
@@ -1661,7 +1659,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:7.2.0, @typescript-eslint/parser@npm:^7.1.1, @typescript-eslint/parser@npm:^7.2.0":
+"@typescript-eslint/parser@npm:7.2.0, @typescript-eslint/parser@npm:^7.2.0":
   version: 7.2.0
   resolution: "@typescript-eslint/parser@npm:7.2.0"
   dependencies:
@@ -3158,7 +3156,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.0.1, eslint@npm:^8.57.0":
+"eslint@npm:^8.0.1":
   version: 8.57.0
   resolution: "eslint@npm:8.57.0"
   dependencies:
@@ -4280,6 +4278,7 @@ __metadata:
     eslint-plugin-promise: "npm:^6.0.0"
     eslint-plugin-react: "npm:^7.34.0"
     eslint-plugin-react-hooks: "npm:^4.6.0"
+    eslint-plugin-react-refresh: "npm:^0.4.5"
     immer: "npm:^10.1.1"
     prettier: "npm:^3.2.5"
     react-bootstrap: "npm:^2.10.1"
@@ -4289,7 +4288,6 @@ __metadata:
     typescript: "npm:*"
     typescript-eslint: "npm:^7.2.0"
     use-immer: "npm:^0.10.0"
-    vite-tsconfig-paths: "npm:^4.3.2"
   languageName: unknown
   linkType: soft
 
