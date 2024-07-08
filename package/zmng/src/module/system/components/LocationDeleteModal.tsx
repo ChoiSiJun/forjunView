@@ -1,10 +1,9 @@
 import SystemLocationInfo from '@module/system/components/SystemLocationInfo';
 
 const LocationUpdateModal = () => {
-
   return (
     <>
-      <SystemLocationInfo />
+      삭제합니다.
     </>
   );
 };

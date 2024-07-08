@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { ReactNode } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -7,6 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material/styles';
 import { Portal } from '@mui/base/Portal';
+import MirButton from '@common/components/atoms/button/MirButton';
 
 export const MirModalGuide = {
   title: '기본모달',
@@ -44,8 +46,8 @@ export interface MirModalProps {
   subTitle?: string;
   //modalType?: string;
   isOpen: boolean;
-  //modalSize?: 'sm' | 'md' | 'lg' | 'xl';
-  //buttonList?: ReactNode[];
+  modalSize?: 'sm' | 'md' | 'lg' | 'xl';
+  buttonList?: ReactNode[];
   closeModal?: () => void;
   children?: React.ReactNode;
 }
@@ -53,11 +55,11 @@ export interface MirModalProps {
 const MirModal = ({
   title,
   subTitle,
-  //modalSize = 'md',
+  modalSize,
   isOpen,
   closeModal,
   children,
-  //buttonList,
+  buttonList,
 }: MirModalProps) => {
     //const [open, setOpen] = React.useState(false);
 
@@ -75,7 +77,7 @@ const MirModal = ({
       <React.Fragment>
         <BootstrapDialog
           fullWidth
-          maxWidth='md' //{modalSize}
+          maxWidth={modalSize}
           open={isOpen}
           //onClose={handelCloseModal}
           aria-labelledby="alert-dialog-title"
@@ -99,7 +101,8 @@ const MirModal = ({
             {children}
           </DialogContent>
           <DialogActions>
-            {/* {buttonList} */}
+            {buttonList}
+            <MirButton ButtonType={'default'} buttonName={'닫기'} onClick={closeModal} />
           </DialogActions>
         </BootstrapDialog>
       </React.Fragment>
