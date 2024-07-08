@@ -1,5 +1,5 @@
-import MirSearchField from '@components/main/MirSearchField';
-import MirToolbarContent from '@components/main/MirToolbarContent';
+import MirSearchField from '@components/home/MirSearchField';
+import MirToolbarContent from '@components/home/MirToolbarContent';
 
 const MainExport = {
   MirSearchField,

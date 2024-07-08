@@ -48,7 +48,7 @@ export const RenderComponent = ({
     useState<Record<string, any>>(initialProps);
 
   useEffect(() => {
-    setComponentProps(initialProps);
+    // setComponentProps(initialProps);
   }, [initialProps]);
 
   if (renderers[type]) {
