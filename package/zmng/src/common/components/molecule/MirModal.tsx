@@ -44,7 +44,6 @@ export const MirModalGuide = {
 export interface MirModalProps {
   title: string;
   subTitle?: string;
-  //modalType?: string;
   isOpen: boolean;
   modalSize?: 'sm' | 'md' | 'lg' | 'xl';
   buttonList?: ReactNode[];
@@ -61,8 +60,6 @@ const MirModal = ({
   children,
   buttonList,
 }: MirModalProps) => {
-    //const [open, setOpen] = React.useState(false);
-
   const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),
@@ -73,13 +70,12 @@ const MirModal = ({
   }));
 
   return (
+    
     <Portal container={() => document.getElementById('modal-root')!}>
-      <React.Fragment>
         <BootstrapDialog
           fullWidth
           maxWidth={modalSize}
           open={isOpen}
-          //onClose={handelCloseModal}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
@@ -102,10 +98,9 @@ const MirModal = ({
           </DialogContent>
           <DialogActions>
             {buttonList}
-            <MirButton ButtonType={'default'} buttonName={'닫기'} onClick={closeModal} />
+            <MirButton ButtonType="default" buttonName="닫기" onClick={closeModal} />
           </DialogActions>
         </BootstrapDialog>
-      </React.Fragment>
     </Portal>
   );
 };

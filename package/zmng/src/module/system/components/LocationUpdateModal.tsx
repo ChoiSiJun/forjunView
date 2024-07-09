@@ -1,34 +1,59 @@
-import SystemLocationInfo from '@module/system/components/SystemLocationInfo';
-import MirTextField, {
-  MirTextFieldGuide,
-} from '@common/components/atoms/input/MirTextField';
-import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import FormControl from '@mui/material/FormControl';
+import MirValidTextField from '@common/components/atoms/input/MirValidTextField';
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
+
+type FormValues = {
+  "mloc": string;
+  "name_ko": string;
+};
 
 const LocationUpdateModal = () => {
 
-  return (
-    
+  const { handleSubmit, formState, control } = useForm<FormValues> ({
+    defaultValues: {
+      mloc: "",
+      name_ko: "",
+    }
+  });
+  const { errors } = formState;
 
-    <>
+  const onSubmit = (data: FormValues) => {
+    alert(JSON.stringify(data));
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={2}>
-        <Grid item xs={4}>
-          <MirTextField
-            textFieldType={'outlined-basic'}
-            label={'기관코드'}
-            // InputRef={inputRef}
+        <Grid item xs={8}>
+          <MirValidTextField 
+            name="mloc"
+            control={control}
+            rules={{ required: "기관코드를 입력하세요." }}
+            textFieldProps={{
+              label: "기관코드",
+              id: "mloc",
+              placeholder: "기관코드를 입력하세요." 
+            }}
           />
         </Grid>
         <Grid item xs={4}>
-          <MirTextField
-            textFieldType={'outlined-basic'}
-            label={'기관명칭'}
-            // InputRef={inputRef}
+          
+          <MirValidTextField 
+            name="name"
+            control={control}
+            rules={{ required: "기관코드를 입력하세요." }}
+            textFieldProps={{
+              label: "기관코드",
+              id: "name",
+              placeholder: "기관코드를 입력하세요." 
+            }}
           />
         </Grid>
       </Grid>
-    </>
+      <Grid item xs={8}>
+        <input type="submit" />
+      </Grid>
+    </form>
   );
 };
 
