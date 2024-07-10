@@ -1,7 +1,8 @@
 import { UniqueIdentifier } from '@dnd-kit/core/dist/types';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode } from 'react';
 import MainExport from '@package/core/src/components/MainExport';
 
+// ---------------------------인터페이스 정의
 export interface BuilderItemsProps {
   dragId: UniqueIdentifier;
   dragType: string;
@@ -9,6 +10,18 @@ export interface BuilderItemsProps {
   component?: ReactNode;
 }
 
+interface RenderComponentProps {
+  type: string;
+  ComponentProps?: Record<string, any>;
+}
+
+interface RenderersProps {
+  (props: Record<string, any>): JSX.Element;
+}
+
+// ---------------------------컴포넌트 정의
+
+// Builder 할수있는 Item
 export const BuilderItems: BuilderItemsProps[] = [
   {
     dragId: 1,
@@ -24,35 +37,19 @@ export const BuilderItems: BuilderItemsProps[] = [
   },
 ];
 
-// These define how we render the field
-
-interface RenderersProps {
-  (props: Record<string, any>): JSX.Element;
-}
-
+// Builder Item 연결된 실제 컴포넌트 호출
 export const renderers: Record<string, RenderersProps> = {
   SearchBar: props => <MainExport.MirSearchField {...props} />,
   Toolbar: props => <MainExport.MirToolbarContent {...props} />,
 };
 
-interface RenderComponentProps {
-  type: string;
-  initialProps?: Record<string, any>;
-}
-
+// Builder Item 컴포넌트 렌더링
 export const RenderComponent = ({
   type,
-  initialProps = {},
+  ComponentProps = {},
 }: RenderComponentProps) => {
-  const [componentProps, setComponentProps] =
-    useState<Record<string, any>>(initialProps);
-
-  useEffect(() => {
-    // setComponentProps(initialProps);
-  }, [initialProps]);
-
   if (renderers[type]) {
-    return renderers[type](componentProps);
+    return renderers[type](ComponentProps);
   }
 
   return <div>Unknown component type: {type}</div>;

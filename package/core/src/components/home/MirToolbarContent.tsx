@@ -4,7 +4,7 @@ export interface MirToolbarContentProps {
   title: string;
 }
 
-const MirToolbarContent = ({ title }: MirToolbarContentProps) => {
+const MirToolbarContent = ({ title = 'test' }: MirToolbarContentProps) => {
   return (
     <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
       <Typography variant="h5" fontWeight="bold">

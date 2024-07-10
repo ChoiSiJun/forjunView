@@ -164,6 +164,7 @@ const BuilderLayout = () => {
     }
   };
 
+  // 드래그 종료시
   const handleDragEnd = (e: DragEndEvent) => {
     const { over } = e;
 
@@ -230,7 +231,14 @@ const BuilderLayout = () => {
             strategy={verticalListSortingStrategy}
             items={currentItem.items.map(d => d.dragId)}
           >
-            <BuilderCanvas items={currentItem.items} />
+            <BuilderCanvas
+              items={currentItem.items}
+              onDelete={id =>
+                setCurrentItem(draft => {
+                  draft.items = draft.items.filter(item => item.dragId !== id);
+                })
+              }
+            />
           </SortableContext>
         </Box>
 
