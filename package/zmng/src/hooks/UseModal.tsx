@@ -13,16 +13,16 @@ export const UseModal = () => {
 
 
   const openModal = (
-    size:string,
-    title:string,
-    contents:React.ReactNode,
-    buttonList?: React.ReactNode,
+    size:'sm' | 'md' | 'lg' | 'xl',
+    // title:string,
+    // contents:React.ReactNode,
+    // buttonList?: React.ReactNode,
   ) => { 
 
     setModalSize(size)
-    setModalTitle(title);
-    setContents(contents);
-    setModalButtonList(buttonList);
+    // setModalTitle(title);
+    // setContents(contents);
+    // setModalButtonList(buttonList);
     setIsOpen(true);
   };
   const closeModal = () => setIsOpen(false);

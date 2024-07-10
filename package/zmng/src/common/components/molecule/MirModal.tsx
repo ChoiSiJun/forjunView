@@ -9,6 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material/styles';
 import { Portal } from '@mui/base/Portal';
 import MirButton from '@common/components/atoms/button/MirButton';
+import MirModalPortal from '@common/components/atoms/modal/MirModalPortal';
 
 export const MirModalGuide = {
   title: '기본모달',
@@ -60,7 +61,7 @@ const MirModal = ({
   children,
   buttonList,
 }: MirModalProps) => {
-  const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  const MirDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),
     },
@@ -71,8 +72,8 @@ const MirModal = ({
 
   return (
     
-    <Portal container={() => document.getElementById('modal-root')!}>
-        <BootstrapDialog
+    <MirModalPortal>
+        <MirDialog
           fullWidth
           maxWidth={modalSize}
           open={isOpen}
@@ -96,12 +97,12 @@ const MirModal = ({
           <DialogContent dividers>
             {children}
           </DialogContent>
-          <DialogActions>
+          {/* <DialogActions>
             {buttonList}
             <MirButton ButtonType="default" buttonName="닫기" onClick={closeModal} />
-          </DialogActions>
-        </BootstrapDialog>
-    </Portal>
+          </DialogActions> */}
+        </MirDialog>
+    </MirModalPortal>
   );
 };
 
