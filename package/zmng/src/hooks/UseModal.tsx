@@ -3,14 +3,10 @@ import React from 'react';
 import MirModal from '@common/components/molecule/MirModal';
 import LocationCreateModal from '@module/system/components/LocationCreateModal';
 
-export const UseModal = () => {
+const UseModal = () => {
+
   const [isOpen, setIsOpen] = useState(false);
-
   const [modalSize, setModalSize] = useState("sm");
-  const [modalTitle, setModalTitle] = useState("제목입니다.");
-  const [contents, setContents] = useState(React.ReactNode);
-  const [modalButtonList, setModalButtonList] = useState(React.ReactNode);
-
 
   const openModal = (
     size:'sm' | 'md' | 'lg' | 'xl',
@@ -25,6 +21,7 @@ export const UseModal = () => {
     // setModalButtonList(buttonList);
     setIsOpen(true);
   };
+
   const closeModal = () => setIsOpen(false);
 
 
@@ -35,8 +32,7 @@ export const UseModal = () => {
     openModal,
     closeModal,
     modalSize,
-    modalTitle,
-    contents,
-    modalButtonList,
   };
 };
+
+export default UseModal;
