@@ -41,6 +41,7 @@ const MirButton = ({
       <ButtonStyled
         variant="contained"
         color="primary"
+        size="small"
         sx={{
           ml: 'auto',
           minWidth: '80px',
@@ -58,6 +59,7 @@ const MirButton = ({
       <ButtonStyled
         variant="contained"
         color="primary"
+        size="small"
         sx={{
           ml: 'auto',
           minWidth: '80px',
@@ -75,6 +77,7 @@ const MirButton = ({
       <ButtonStyled
         variant="contained"
         color="primary"
+        size="small"
         sx={{
           ml: 'auto',
           minWidth: '80px',
@@ -92,6 +95,7 @@ const MirButton = ({
       <ButtonStyled
         variant="contained"
         color="primary"
+        size="small"
         sx={{
           ml: 'auto',
           minWidth: '80px',
@@ -109,6 +113,7 @@ const MirButton = ({
       <ButtonStyled
         variant="contained"
         color="primary"
+        size="small"
         sx={{
           ml: 'auto',
           minWidth: '80px',
@@ -126,6 +131,7 @@ const MirButton = ({
       <ButtonStyled
         variant="contained"
         color="primary"
+        size="small"
         sx={{
           ml: 'auto',
           minWidth: '80px',
@@ -143,6 +149,7 @@ const MirButton = ({
       <ButtonStyled
         variant="contained"
         color="primary"
+        size="small"
         sx={{
           ml: 'auto',
           minWidth: '80px',

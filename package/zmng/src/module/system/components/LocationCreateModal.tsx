@@ -10,62 +10,55 @@ import MirModalContents from '@common/components/atoms/modal/MirModalContents';
 import MirModalAction from '@common/components/atoms/modal/MirModalAction';
 
 import { createLocation } from '@module/system/slice/LocationSlice';
-import { modalOpened, modalClosed } from '@common/slice/ModalSlice';
+import { modalClosed } from '@common/slice/ModalSlice';
 import { useSelector } from 'react-redux';
 
 export interface FormValues {
   "mloc": string;
   "name_ko": string;
+  "zipcode": string;
+  "address": string;
 };
 
 export interface MirModalProps {
   title: string;
   subTitle?: string;
-  isOpen: boolean;
   modalSize?: 'sm' | 'md' | 'lg' | 'xl';
-  closeModal?: () => void;
-}
-
-const testFunction = () =>  {
-  alert("test")
 }
 
 const LocationCreateModal = ({
   title,
   subTitle,
   modalSize,
-  isOpen,
-  closeModal,
 }:MirModalProps) => {
 
   const { handleSubmit, control } = useForm<FormValues> ({
     defaultValues: {
       mloc: "",
       name_ko: "",
+      zipcode: "",
+      address: "",
     }
   });
 
-
   const dispatch = useAppDispatch();
-
   const modalOpen = useAppSelector((state) => state.Modal)
 
   const onSubmit = (data: FormValues) => {
-    dispatch(createLocation({locationInfo: data, isOpened: false}));
-    closeModal?.();
+    dispatch(createLocation({locationInfo: data, isOpen: false}))
+      .then(() => {
+        dispatch(modalClosed());
+      })
   };
 
-
-
   return (
-    
-    <MirModalContainer modalSize={modalSize} isOpen={modalOpen.isOpened}>
+    <MirModalContainer modalSize={modalSize} isOpen={modalOpen.isOpen}>
       <MirModalTitle title={title} subTitle={subTitle} closeModal={() => dispatch(modalClosed())} />
 
       <MirModalContents>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
-            <Grid item xs={8}>
+            <Grid item xs={6}>
               <MirValidTextField 
                 name="mloc"
                 control={control}
@@ -77,7 +70,7 @@ const LocationCreateModal = ({
                 }}
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={6}>
               <MirValidTextField 
                 name="name_ko"
                 control={control}
@@ -86,6 +79,30 @@ const LocationCreateModal = ({
                   label: "기관명칭",
                   id: "name_ko",
                   placeholder: "기관명칭을 입력하세요." 
+                }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <MirValidTextField 
+                name="zipcode"
+                control={control}
+                // rules={{ required: "우편변호를 입력하세요." }}
+                textFieldProps={{
+                  label: "우편변호",
+                  id: "zipcode",
+                  placeholder: "우편변호를 입력하세요." 
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <MirValidTextField 
+                name="address"
+                control={control}
+                // rules={{ required: "주소를 입력하세요." }}
+                textFieldProps={{
+                  label: "주소",
+                  id: "address",
+                  placeholder: "주소를 입력하세요." 
                 }}
               />
             </Grid>

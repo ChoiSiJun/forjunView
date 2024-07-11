@@ -36,11 +36,11 @@ const LocationInfoInit: LocationInfoState = {
 
 export interface LocationProps {
   locationInfo:LocationInfoState;
-  isOpened:boolean;
+  isOpen:boolean;
 }
 const initialState: LocationProps = {
   locationInfo: LocationInfoInit,
-  isOpened: false
+  isOpen: false
 };
 
 /**
@@ -102,8 +102,8 @@ export const LocationSlice = createSlice({
   initialState,
   reducers: {
     //멤버 모달 닫기
-    Modal: state => {
-      state.isOpened = false;
+    closeMemberModal: state => {
+      state.isOpen = false;
       return state;
     },
   },
@@ -116,12 +116,14 @@ export const LocationSlice = createSlice({
         state.locationInfo = action.payload;
       })
       .addCase(createLocation.fulfilled, (state) => {
-        state.isOpened = false;
+        state.isOpen = false;
       })
-      .addCase(createLocation.rejected, (_, { payload }) => {
+      .addCase(createLocation.rejected, (state, { payload }) => {
+        state.isOpen = false;
       })
   }
 })
 
+export const { closeMemberModal } = LocationSlice.actions;
 export const LocationInfoAction = LocationSlice.actions;
 export default LocationSlice.reducer;
