@@ -1,7 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
+import MirModalPortal from '@common/components/atoms/modal/MirModalPortal';
+
+export interface ModalState {
+  isOpen: boolean;
+  //children: React.ReactNode | undefined
+}
 
 const initialState = {
   isOpen: false,
+  //children: undefined 
 };
 
 const ModalsSlice = createSlice({
@@ -10,6 +17,7 @@ const ModalsSlice = createSlice({
   reducers: {
     modalOpened(state) {
       state.isOpen = true;
+      //state.children = "<MirModalPortal />";
     },
     modalClosed(state) {
       state.isOpen = false;

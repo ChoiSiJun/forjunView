@@ -12,6 +12,7 @@ import MirModalAction from '@common/components/atoms/modal/MirModalAction';
 
 import { createLocation } from '@module/system/slice/LocationSlice';
 import { modalClosed } from '@common/slice/ModalSlice';
+import UseModal from '@hooks/UseModal'; 
 
 export interface FormValues {
   "mloc": string;
@@ -26,17 +27,18 @@ export interface FormValues {
 export interface MirModalProps {
   title: string;
   subTitle?: string;
-  modalSize?: 'sm' | 'md' | 'lg' | 'xl';
+  // modalSize?: 'sm' | 'md' | 'lg' | 'xl';
 }
 
 const LocationCreateModal = ({
   title,
   subTitle,
-  modalSize,
+  // modalSize,
 }:MirModalProps) => {
 
   const dispatch = useAppDispatch();
   const modalOpen = useAppSelector((state) => state.Modal)
+  const { closeModal } = UseModal(); 
 
   const { handleSubmit, control, reset } = useForm<FormValues> ({
     defaultValues: {
@@ -59,8 +61,8 @@ const LocationCreateModal = ({
   };
 
   return (
-    <MirModalContainer modalSize={modalSize} isOpen={modalOpen.isOpen}>
-      <MirModalTitle title={title} subTitle={subTitle} closeModal={() => dispatch(modalClosed())} />
+    <MirModalContainer modalSize="sm" isOpen={modalOpen.isOpen}>
+      <MirModalTitle title={title} subTitle={subTitle} closeModal={() => closeModal()} />
 
       <MirModalContents>
         <form onSubmit={handleSubmit(createLocations)}>
@@ -73,7 +75,8 @@ const LocationCreateModal = ({
                 textFieldProps={{
                   label: "기관코드",
                   id: "mloc",
-                  placeholder: "기관코드를 입력하세요." 
+                  placeholder: "기관코드를 입력하세요." ,
+                  required: true
                 }}
               />
             </Grid>
@@ -85,7 +88,8 @@ const LocationCreateModal = ({
                 textFieldProps={{
                   label: "기관명칭",
                   id: "name_ko",
-                  placeholder: "기관명칭을 입력하세요." 
+                  placeholder: "기관명칭을 입력하세요.",
+                  required: true
                 }}
               />
             </Grid>
@@ -109,7 +113,7 @@ const LocationCreateModal = ({
                 textFieldProps={{
                   label: "주소",
                   id: "address",
-                  placeholder: "주소를 입력하세요." 
+                  placeholder: "주소를 입력하세요.", 
                 }}
               />
             </Grid>
@@ -161,7 +165,7 @@ const LocationCreateModal = ({
       
       <MirModalAction>
         <MirButton ButtonType="default" buttonName="저장" onClick={handleSubmit(createLocations)} />
-        <MirButton ButtonType="default" buttonName="닫기" onClick={() => dispatch(modalClosed())} />
+        <MirButton ButtonType="default" buttonName="닫기" onClick={() => closeModal()} />
       </MirModalAction>
       
     </MirModalContainer>

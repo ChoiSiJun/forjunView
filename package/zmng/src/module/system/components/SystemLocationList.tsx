@@ -7,16 +7,15 @@ import MirCard from '@common/components/molecule/MirCard';
 import SystemLocationInfo from '@module/system/components/SystemLocationInfo';
 import { getLocationList } from '@module/system/slice/LocationListSilce';
 import { getLocationInfo } from '@module/system/slice/LocationSlice';
-// import UseModal from '@hooks/UseModal'; 
-import {modalOpened, modalClosed} from '@common/slice/ModalSlice'; 
+import UseModal from '@hooks/UseModal'; 
 import LocationCreateModal from '@module/system/components/LocationCreateModal'
+import MirModal from '@common/components/molecule/MirModal';
 
 const SystemLocationList = () => {
-  // const { LocationCreateModal, isOpen, openModal, closeModal, modalSize } = UseModal();  
+  const { openModal } = UseModal();  
   
   const dispatch = useAppDispatch();
   const codeNameList = useAppSelector(state => state.LocationList.codeNameList);
-
 
   // 리스트 클릭 이벤트 핸들러
   const HandleListClick = (
@@ -32,19 +31,21 @@ const SystemLocationList = () => {
   // 생성 클릭 이벤트 핸들러
   const HandleCreateClick = () => {
     // openModal("lg");
-    dispatch(modalOpened())
+    // dispatch(modalOpened())
+    openModal();
   };
 
   // 삭제 클릭 이벤트 핸들러
   const HandleDeleteClick = () => {
-    alert("삭제") 
-    dispatch(modalOpened())
+    // <SystemLocationInfo />, {"sm"}
+    openModal();
   };
 
   // 수정 클릭 이벤트 핸들러
   const HandlerModifyClick = () => {
     // openModal("sm");
-    dispatch(modalOpened())
+    // openModal();
+    openModal();
   };
 
   return (
@@ -68,9 +69,13 @@ const SystemLocationList = () => {
         <LocationUpdateModal />
       </MirModal> */}
 
-      <LocationCreateModal title="기관 생성" modalSize="sm" />
+      <LocationCreateModal title="기관 생성"/>
+
+
 
     </Grid>
+
+    
     
   );
 };

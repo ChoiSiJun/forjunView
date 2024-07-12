@@ -11,53 +11,26 @@ import { Portal } from '@mui/base/Portal';
 import MirButton from '@common/components/atoms/button/MirButton';
 import MirModalPortal from '@common/components/atoms/modal/MirModalPortal';
 
-export const MirModalGuide = {
-  title: '기본모달',
-  code: ` 
+import { useAppSelector, useAppDispatch } from '@config/ReduxHooks';
 
-  <MirButton
-  ButtonType={'etc'}
-  buttonName={'모달오픈'}
-  onClick={handleModalOpen} />
+import UseModal from '@hooks/UseModal'; 
 
-  <MirModal
-  title={'테스트모달'}
-  modalOpen={openModal}
-  buttonList={[]}
-  closeModalEvent={handleModalClose}>
-  </MirModal>
-  
-  `,
-  requireNote: [
-    'title : 모달창 제목',
-    'modalOpen : 모달상태값',
-    'closeModalEvent : 모달닫기이벤트',
-  ],
-  optionNote: [
-    'subTitle: 모달창 부제목',
-    'modalType : 모달호출타입 (기본값 : mainModal)',
-    'modalSize : 모달창 사이즈(sm,md,lg,xl) (기본값 : md)',
-    'buttonList : 모달창 버튼 리스트',
-    'children: 내용',
-  ],
-};
 
 export interface MirModalProps {
-  title: string;
+  title?: string;
   subTitle?: string;
-  isOpen: boolean;
+  isOpen?: boolean;
   modalSize?: 'sm' | 'md' | 'lg' | 'xl';
   buttonList?: ReactNode[];
-  closeModal?: () => void;
   children?: React.ReactNode;
 }
+
 
 const MirModal = ({
   title,
   subTitle,
   modalSize,
   isOpen,
-  closeModal,
   children,
   buttonList,
 }: MirModalProps) => {
@@ -70,13 +43,23 @@ const MirModal = ({
     },
   }));
 
+  
+  const dispatch = useAppDispatch();
+  const modalOpen = useAppSelector((state) => state.Modal)
+
+  const { modalElement, isModalOpen, closeModal } = UseModal();  
+
+  console.log(modalElement)
+
   return (
+
+    
     
     <MirModalPortal>
         <MirDialog
           fullWidth
           maxWidth={modalSize}
-          open={isOpen}
+          open={modalOpen.isOpen}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
@@ -95,7 +78,9 @@ const MirModal = ({
             }}
           ><CloseIcon/></IconButton>
           <DialogContent dividers>
-            {children}
+            {modalElement}
+            123123
+          
           </DialogContent>
           {/* <DialogActions>
             {buttonList}
