@@ -1,17 +1,29 @@
 import { useAppDispatch } from '@config/ReduxHooks';
-import {modalOpened, modalClosed} from '@common/slice/ModalSlice'; 
+import {openModal, closeModal} from '@common/slice/ModalSlice'; 
+
+export interface Props {
+  type?:string;
+  title?:string;
+  subTitle?:string;
+  size?:'sm' | 'md' | 'lg' | 'xl'
+}
+
+export interface ModalProps {
+  type: string;
+  title?:string;
+  subTitle?:string;
+  size?:string
+}
 
 const UseModal = () => {
   const dispatch = useAppDispatch();
 
-  const openModal = () => dispatch(modalOpened());
+  const handleOpenModal  = ({type, title, subTitle, size}:ModalProps) => dispatch(openModal({type, title, subTitle, size}));
 
-  const closeModal = () => dispatch(modalClosed());
+  const handleCloseModal = () => dispatch(closeModal());
 
   return {
-    // isModalOpen,
-    openModal,
-    closeModal,
+    openModal: handleOpenModal, closeModal: handleCloseModal
   };
 };
 

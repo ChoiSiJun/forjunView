@@ -14,16 +14,16 @@ const MirModalTitle = ({
   subTitle,
   closeModal,}:MirModalTitleProps) => {
 
-  const MirModalTitleStyle = styled(DialogTitle)(({ theme }) => ({
+  const StyledMirModalTitle = styled(DialogTitle)(({ theme }) => ({
     
   }));
 
   return (
     <>
-    <MirModalTitleStyle sx={{ m: 0, p: 2 }} id="alert-dialog-title">
+    <StyledMirModalTitle sx={{ m: 0, p: 2 }} id="alert-dialog-title">
       {title}
       {subTitle}
-    </MirModalTitleStyle>
+    </StyledMirModalTitle>
     <IconButton
       aria-label="close"
       onClick={closeModal}

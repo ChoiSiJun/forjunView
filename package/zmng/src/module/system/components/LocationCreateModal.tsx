@@ -1,18 +1,14 @@
 import Grid from '@mui/material/Grid';
 import MirValidTextField from '@common/components/atoms/input/MirValidTextField';
 import { useForm  } from "react-hook-form";
-import { useEffect } from 'react';
-import { useAppSelector, useAppDispatch } from '@config/ReduxHooks';
+import { useAppDispatch } from '@config/ReduxHooks';
 import MirButton from '@common/components/atoms/button/MirButton';
 
-import MirModalContainer from '@common/components/atoms/modal/MirModalContainer';
-import MirModalTitle from '@common/components/atoms/modal/MirModalTitle';
 import MirModalContents from '@common/components/atoms/modal/MirModalContents';
 import MirModalAction from '@common/components/atoms/modal/MirModalAction';
-
-import { createLocation } from '@module/system/slice/LocationSlice';
-import { modalClosed } from '@common/slice/ModalSlice';
 import UseModal from '@hooks/UseModal'; 
+import { useCreateLocation } from '@module/system/hook/useLocationQuery'
+
 
 export interface FormValues {
   "mloc": string;
@@ -24,20 +20,8 @@ export interface FormValues {
   "tel": string
 };
 
-export interface MirModalProps {
-  title: string;
-  subTitle?: string;
-  // modalSize?: 'sm' | 'md' | 'lg' | 'xl';
-}
+const LocationCreateModal = () => {
 
-const LocationCreateModal = ({
-  title,
-  subTitle,
-  // modalSize,
-}:MirModalProps) => {
-
-  const dispatch = useAppDispatch();
-  const modalOpen = useAppSelector((state) => state.Modal)
   const { closeModal } = UseModal(); 
 
   const { handleSubmit, control, reset } = useForm<FormValues> ({
@@ -52,18 +36,14 @@ const LocationCreateModal = ({
     }
   });
 
+  const { mutate: createLocation } = useCreateLocation();
+
   const createLocations = (data: FormValues) => {
-    dispatch(createLocation({locationInfo: data, isOpen: false}))
-      .then(() => {
-        dispatch(modalClosed());
-        reset();
-      })
+    createLocation(data)
   };
 
   return (
-    <MirModalContainer modalSize="sm" isOpen={modalOpen.isOpen}>
-      <MirModalTitle title={title} subTitle={subTitle} closeModal={() => closeModal()} />
-
+    <>
       <MirModalContents>
         <form onSubmit={handleSubmit(createLocations)}>
           <Grid container spacing={2}>
@@ -167,11 +147,8 @@ const LocationCreateModal = ({
         <MirButton ButtonType="default" buttonName="저장" onClick={handleSubmit(createLocations)} />
         <MirButton ButtonType="default" buttonName="닫기" onClick={() => closeModal()} />
       </MirModalAction>
-      
-    </MirModalContainer>
-     
+    </>     
   );
-  
 }
 
 export default LocationCreateModal;

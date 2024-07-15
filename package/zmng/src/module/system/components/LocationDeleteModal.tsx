@@ -1,39 +1,30 @@
-
-import { useAppSelector, useAppDispatch } from '@config/ReduxHooks';
-import { modalClosed } from '@common/slice/ModalSlice';
-
-import MirModalContainer from '@common/components/atoms/modal/MirModalContainer';
-import MirModalTitle from '@common/components/atoms/modal/MirModalTitle';
 import MirModalContents from '@common/components/atoms/modal/MirModalContents';
 import MirModalAction from '@common/components/atoms/modal/MirModalAction';
+import MirButton from '@common/components/atoms/button/MirButton';
 
 import UseModal from '@hooks/UseModal'; 
 
 export interface MirModalProps {
-  title?: string;
-  subTitle?: string;
-  // modalSize?: 'sm' | 'md' | 'lg' | 'xl';
 }
 
-const LocationDeleteModal = ({
-  title,
-  subTitle,
-  // modalSize,
-}:MirModalProps) => {
+const deleteLocation = () => {
 
-  const dispatch = useAppDispatch();
-  const modalOpen = useAppSelector((state) => state.Modal)
+}
+
+const LocationDeleteModal = () => {
+  const { closeModal } = UseModal(); 
 
   return (
-    <MirModalContainer modalSize="sm" isOpen={modalOpen.isOpen}>
-      <MirModalTitle title="삭제" subTitle={subTitle} closeModal={() => dispatch(modalClosed())} />
-
+    <>
       <MirModalContents>
-        삭제합니다.
+        삭제하시겠습니까?
       </MirModalContents>
-      
-    </MirModalContainer>
-     
+
+      <MirModalAction>
+      {/* <MirButton ButtonType="default" buttonName="저장" onClick={handleSubmit(deleteLocation)} /> */}
+        <MirButton ButtonType="default" buttonName="닫기" onClick={() => closeModal()} />
+      </MirModalAction>
+    </>
   );
   
 }

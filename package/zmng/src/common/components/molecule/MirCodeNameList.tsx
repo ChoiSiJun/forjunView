@@ -17,7 +17,7 @@ import Box from '@mui/material/Box';
 interface MirCodeNameListItem {
   // key : number;
   code: string;
-  name: string;
+  name_ko: string;
 }
 
 export interface CodeNameListState {
@@ -31,46 +31,39 @@ export interface CodeNameListProps extends CodeNameListState {
   onDeleteClick?: () => void;
 }
 
-const MirList = ({
+const MirCodeNameList = ({
   codeNameList,
   onListClick,
   onCreateClick,
   onModifyClick,
   onDeleteClick
 }:CodeNameListProps) => {
+  // const dispatch = useAppDispatch();
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
 
-    const dispatch = useAppDispatch();
-    const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const handleListItemClick = (
+        index: number,
+        code: string|number,
+        propClickEvent:(code:string|number) => void
+      ) => {
+        setSelectedIndex(index);
 
-    const handleListItemClick = (
-          index: number,
-          code: string|number,
-          propClickEvent:(code:string|number) => void
-        ) => {
-          setSelectedIndex(index);
-
-          // 리스트 클릭 callback 이벤트
-          propClickEvent(code);
-    };
-
-    // 처음 Load 될때 첫번째 리스트 클릭
-    // useEffect(() => {
-    //   setSelectedIndex(0);
-    // }, []);
+        // 리스트 클릭 callback 이벤트
+        propClickEvent(code);
+  };
 
   return (
-    <>
     <Paper elevation={7} sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', borderRadius: '8px' }}>
         <Box sx={{ p: 1}}>
           <MirButton
-            ButtonType={'create'}
-            buttonName={'신규입력'}
+            ButtonType="create"
+            buttonName="신규입력"
             onClick={onCreateClick}
           />
         </Box>
         
         <List component="nav" aria-label="main mailbox folders">
-          {codeNameList.map((codeName, index) => {
+          {codeNameList?.map((codeName, index) => {
             return (
               <ListItem
                 key={codeName.code}
@@ -78,14 +71,14 @@ const MirList = ({
                   <>
                     <IconButton 
                       edge="end" 
-                      aria-label="comments"
+                      aria-label="수정"
                       onClick={onModifyClick}
                     >
                       <EditIcon color="primary"/>
                     </IconButton>
                     <IconButton 
                       edge="end" 
-                      aria-label="comments"
+                      aria-label="삭제"
                       onClick={onDeleteClick}
                     >
                       <DeleteIcon sx={{ color: '#E33C2F' }}/>
@@ -99,7 +92,7 @@ const MirList = ({
                   onClick={() => handleListItemClick(index, codeName.code, onListClick)} dense
                   key={codeName.code}
                 >
-                  <ListItemText id={codeName.code} primary={codeName.name} secondary={codeName.code}/>
+                  <ListItemText id={codeName.code} primary={codeName.code} secondary={codeName.name_ko}/>
                 </ListItemButton>
               </ListItem>
              );
@@ -107,8 +100,7 @@ const MirList = ({
          
         </List>
       </Paper>
-    </>
   );
 };
 
-export default MirList;
+export default MirCodeNameList;

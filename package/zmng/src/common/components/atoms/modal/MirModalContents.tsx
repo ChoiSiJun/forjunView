@@ -7,14 +7,14 @@ export interface MirModalContentsProps {
 
 const MirModalContents = ({children}:MirModalContentsProps) => {
 
-  const MirModalContentsStyle = styled(DialogContent)(({ theme }) => ({
+  const StyledMirModalContents = styled(DialogContent)(({ theme }) => ({
     
   }));
 
   return (
-    <MirModalContentsStyle dividers>
+    <StyledMirModalContents dividers>
       {children}
-    </MirModalContentsStyle>
+    </StyledMirModalContents>
   );
 }
 
