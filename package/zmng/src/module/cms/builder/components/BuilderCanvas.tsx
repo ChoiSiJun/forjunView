@@ -45,6 +45,7 @@ function SortableItem({
   onDelete,
 }: {
   item: BuilderItemsProps;
+
   index: number;
   selectedId: UniqueIdentifier;
   setSelectedId: (id: UniqueIdentifier) => void;
@@ -141,23 +142,26 @@ function SortableItem({
 const BuilderCanvas = ({
   items,
   onDelete,
+  canvasId,
 }: {
   items: BuilderItemsProps[];
   onDelete: (id: UniqueIdentifier) => void;
+  canvasId: UniqueIdentifier;
 }) => {
   const [selectedId, setSelectedId] =
     useState<UniqueIdentifier>('NOT_SELECTED');
 
   const { setNodeRef } = useDroppable({
-    id: 'canvas_droppable',
+    id: canvasId,
     data: {
+      canvasId,
       parent: null,
       isContainer: true,
     },
   });
 
   return (
-    <Box ref={setNodeRef} className="canvas" border={3} height={1000}>
+    <Box ref={setNodeRef} className="canvas" border={3} height={300}>
       <div className="canvas-fields">
         {items?.map((item, i) => (
           <SortableItem
