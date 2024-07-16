@@ -1,42 +1,30 @@
-import { useState, ReactNode } from 'react';
-import React from 'react';
-import MirModal from '@common/components/molecule/MirModal';
-import LocationCreateModal from '@module/system/components/LocationCreateModal';
+import { useAppDispatch } from '@config/ReduxHooks';
+import {openModal, closeModal} from '@common/slice/ModalSlice'; 
 
-export const UseModal = () => {
-  const [isOpen, setIsOpen] = useState(false);
+export interface Props {
+  type?:string;
+  title?:string;
+  subTitle?:string;
+  size?:'sm' | 'md' | 'lg' | 'xl'
+}
 
-  const [modalSize, setModalSize] = useState("sm");
-  const [modalTitle, setModalTitle] = useState("제목입니다.");
-  const [contents, setContents] = useState(React.ReactNode);
-  const [modalButtonList, setModalButtonList] = useState(React.ReactNode);
+export interface ModalProps {
+  type: string;
+  title?:string;
+  subTitle?:string;
+  size?:string
+}
 
+const UseModal = () => {
+  const dispatch = useAppDispatch();
 
-  const openModal = (
-    size:string,
-    title:string,
-    contents:React.ReactNode,
-    buttonList?: React.ReactNode,
-  ) => { 
+  const handleOpenModal  = ({type, title, subTitle, size}:ModalProps) => dispatch(openModal({type, title, subTitle, size}));
 
-    setModalSize(size)
-    setModalTitle(title);
-    setContents(contents);
-    setModalButtonList(buttonList);
-    setIsOpen(true);
-  };
-  const closeModal = () => setIsOpen(false);
-
+  const handleCloseModal = () => dispatch(closeModal());
 
   return {
-    LocationCreateModal,
-    MirModal,
-    isOpen,
-    openModal,
-    closeModal,
-    modalSize,
-    modalTitle,
-    contents,
-    modalButtonList,
+    openModal: handleOpenModal, closeModal: handleCloseModal
   };
 };
+
+export default UseModal;

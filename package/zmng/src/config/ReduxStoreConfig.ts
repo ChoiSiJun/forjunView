@@ -4,6 +4,7 @@ import MemberListSlice from '@module/member/slice/MemberListSlice';
 import LocationListSlice from '@module/system/slice/LocationListSilce'
 import LocationSlice from '@module/system/slice/LocationSlice';
 import MenuSlice from '@common/slice/MenuSlice';
+import ModalSlice from '@common/slice/ModalSlice';
 import { persistReducer } from 'redux-persist';
 import sessionStorage from 'redux-persist/lib/storage/session';
 const reducers = combineReducers({
@@ -12,6 +13,7 @@ const reducers = combineReducers({
   MemberList: MemberListSlice,
   LocationList: LocationListSlice,
   Location:LocationSlice,
+  Modal:ModalSlice,
 });
 
 const persistConfig = {

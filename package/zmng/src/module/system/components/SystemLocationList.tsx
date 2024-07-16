@@ -1,98 +1,65 @@
-import { useEffect, useRef, useState } from 'react';
 import React from 'react';
-
 import { useAppSelector, useAppDispatch } from '@config/ReduxHooks';
 import Grid from '@mui/material/Grid';
-import MirList from '@common/components/molecule/MirCodeNameList';
+import MirCodeNameList from '@common/components/molecule/MirCodeNameList';
 import MirCard from '@common/components/molecule/MirCard';
 import SystemLocationInfo from '@module/system/components/SystemLocationInfo';
-import { getLocationList } from '@module/system/slice/LocationListSilce';
 import { getLocationInfo } from '@module/system/slice/LocationSlice';
-import { LocationCreateModal, CreateButtonList } from '@module/system/components/LocationCreateModal';
-import LocationUpdateModal from '@module/system/components/LocationUpdateModal';
-import LocationDeleteModal from '@module/system/components/LocationDeleteModal';
-import { UseModal } from '@hooks/UseModal'; 
-import MirButton from '@common/components/atoms/button/MirButton';
+import UseModal from '@hooks/UseModal'; 
+import { useLocationList, useLocation } from '@module/system/hook/useLocationQuery'
 
 const SystemLocationList = () => {
-  const { LocationCreateModal, MirModal, isOpen, openModal, closeModal, contents, modalTitle, modalSize, modalButtonList } = UseModal();  
-  
+  const { openModal } = UseModal();  
   const dispatch = useAppDispatch();
-  const codeNameList = useAppSelector(state => state.LocationList.codeNameList);
+
+  const { isLoading, isFetching, data, isError, error } = useLocationList();
 
   // 리스트 클릭 이벤트 핸들러
-  const listClickHandler = (
+  const HandleListClick = (
     code: string|number,
   ) => {
     dispatch(getLocationInfo(code as string));
   };
 
-  useEffect(() => {
-    dispatch(getLocationList());
-  }, []);
-
   // 생성 클릭 이벤트 핸들러
-  const createClickHandler = () => {
-    openModal(
-      "lg",
-      "추가입니다.", 
-      <LocationCreateModal />, 
-      [
-        <CreateButtonList />,
-      ]
-    );
+  const HandleCreateClick = () => {
+    openModal({
+      type: "LocationCreateModal", 
+      title:"기관코드 생성",
+      size:"md"
+    });
   };
 
   // 삭제 클릭 이벤트 핸들러
-  const deleteClickHandler = () => {
-    openModal(
-      "lg",
-      "삭제입니다.", 
-      <LocationDeleteModal />, 
-      [
-        <MirButton ButtonType="default" buttonName="삭제" />,
-      ]
-    );
+  const HandleDeleteClick = () => {
+    openModal({
+      type: "LocationDeleteModal", 
+      title:"기관코드 삭제",
+      size:"sm"
+    });
   };
 
   // 수정 클릭 이벤트 핸들러
-  const modifyClickHandler = () => {
-    openModal(
-      "md",
-      "수정입니다.", 
-      <LocationUpdateModal />,
-      [
-        <MirButton ButtonType="default" buttonName="수정" />,
-      ], 
-    );
+  const HandlerModifyClick = () => {
   };
 
   return (
     <Grid container spacing={2} >
       <Grid item xs={4} sx={{bgcolor:'#EEF2F6'}}>
-        <MirList
-          codeNameList={codeNameList}
-          onListClick={listClickHandler}
-          onCreateClick={createClickHandler}
-          onModifyClick={modifyClickHandler}
-          onDeleteClick={deleteClickHandler}
+        <MirCodeNameList
+          codeNameList={data}
+          onListClick={HandleListClick}
+          onCreateClick={HandleCreateClick}
+          onModifyClick={HandlerModifyClick}
+          onDeleteClick={HandleDeleteClick}
         />
       </Grid>
       <Grid item xs={8} sx={{bgcolor:'#EEF2F6'}}>
-        <MirCard 
-          title="기관정보"
-          component=<SystemLocationInfo/>
-        />
+        <MirCard title="기관정보">
+          <SystemLocationInfo/>
+        </MirCard>
       </Grid>
-
-      <MirModal title={modalTitle} isOpen={isOpen} closeModal={closeModal} modalSize={modalSize} buttonList={modalButtonList}>
-        {contents}
-      </MirModal>
-
-      {/* <LocationCreateModal createOpen={isOpen} title={modalTitle} modalSize={modalSize}/> */}
-
     </Grid>
-    
   );
 };
 

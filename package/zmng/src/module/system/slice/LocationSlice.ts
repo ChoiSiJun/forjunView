@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import axios from "axios"
+import axios, { AxiosResponse, AxiosError } from 'axios';
+import { AsyncThunkErrorProps } from '@common_type';
 
 const api_url = import.meta.env.VITE_SYSTEM_API;
 
@@ -35,12 +36,11 @@ const LocationInfoInit: LocationInfoState = {
 
 export interface LocationProps {
   locationInfo:LocationInfoState;
-  modal: boolean;
+  isOpen:boolean;
 }
-
 const initialState: LocationProps = {
   locationInfo: LocationInfoInit,
-  modal: false,
+  isOpen: false
 };
 
 /**
@@ -50,7 +50,6 @@ const initialState: LocationProps = {
   "getLocationInfo",
   async (mloc:string, thunkAPI) => {
       try {
-          
           const responseData = await axios.get(
               `${api_url}/sys-system/locations/${mloc}`,
           );
@@ -70,17 +69,61 @@ const initialState: LocationProps = {
   } 
 )
 
+/**
+ * 기관정보 저장
+ */
+export const createLocation = createAsyncThunk<
+  number,
+  LocationProps,
+  { rejectValue: AsyncThunkErrorProps }
+>('post/locations', async (LocationProps, thunkAPI) => {
+  return axios
+    .post(`${api_url}/sys-system/locations`, JSON.stringify(LocationProps.locationInfo), {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .then((response: AxiosResponse<LocationInfoState>) => {
+      return response.status;
+    })
+    .catch((error: AxiosError<LocationInfoState>) => {
+      return thunkAPI.rejectWithValue({
+        errorMessage: error.message,
+        errorCode: error.response?.status,
+      });
+    });
+});
+
+
+
+// location Slice
 export const LocationSlice = createSlice({
-  name: "LocationInfo",
-  initialState: initialState,
+  name: "location",
+  initialState,
   reducers: {
+    //멤버 모달 닫기
+    closeMemberModal: state => {
+      state.isOpen = false;
+      return state;
+    },
   },
   extraReducers: builder => {
-     builder.addCase(getLocationInfo.fulfilled, (state, action) => {
-      state.locationInfo = action.payload;
-     })
+     builder
+    //  .addCase(createLocation.rejected, (_, { payload }) => {
+    //     console.log(payload?.errorMessage);
+    //   })
+     .addCase(getLocationInfo.fulfilled, (state, action) => {
+        state.locationInfo = action.payload;
+      })
+      .addCase(createLocation.fulfilled, (state) => {
+        state.isOpen = false;
+      })
+      .addCase(createLocation.rejected, (state, { payload }) => {
+        state.isOpen = false;
+      })
   }
 })
 
+export const { closeMemberModal } = LocationSlice.actions;
 export const LocationInfoAction = LocationSlice.actions;
 export default LocationSlice.reducer;
