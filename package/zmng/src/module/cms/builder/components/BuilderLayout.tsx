@@ -15,8 +15,6 @@ import {
   DragOverEvent,
   DragEndEvent,
   UniqueIdentifier,
-  CollisionDetection,
-  closestCenter,
 } from '@dnd-kit/core';
 import { useImmer } from 'use-immer';
 import {
@@ -115,6 +113,9 @@ const BuilderLayout = () => {
     });
     spacerInsertedRef.current = false;
   };
+
+  const [selectedId, setSelectedId] =
+    useState<UniqueIdentifier>('NOT_SELECTED');
 
   // 드래그 시작
   const handleDragStart = (e: DragStartEvent) => {
@@ -261,7 +262,7 @@ const BuilderLayout = () => {
     // 스페이스 객체를 실제 아이템으로 교체해서 적용
 
     const nextField = {
-      ...currentDragItemRef.current,
+      ...currentDragItemRef.current!,
       canvasId: currentOverCanvesIdRef.current,
     };
 
@@ -308,7 +309,7 @@ const BuilderLayout = () => {
         onDragEnd={handleDragEnd}
         autoScroll
       >
-        {/* <BuilderDndMonitor /> */}
+        <BuilderDndMonitor />
         <Box
           component="main"
           sx={{
@@ -351,6 +352,8 @@ const BuilderLayout = () => {
                 <BuilderCanvas
                   items={canvas.items}
                   canvasId={canvas.canvasId}
+                  selectedId={selectedId}
+                  setSelectedId={setSelectedId}
                   onDelete={id =>
                     setCanvases(draft => {
                       const selectedCanvas = draft.find(

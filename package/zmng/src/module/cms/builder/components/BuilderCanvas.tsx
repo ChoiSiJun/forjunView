@@ -11,7 +11,6 @@ import DragIndicatorOutlinedIcon from '@mui/icons-material/DragIndicatorOutlined
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 
 import { Box, ButtonGroup, IconButton, SvgIcon, useTheme } from '@mui/material';
-import { useState } from 'react';
 
 interface CanvasItemProps {
   item: BuilderItemsProps;
@@ -143,14 +142,15 @@ const BuilderCanvas = ({
   items,
   onDelete,
   canvasId,
+  selectedId,
+  setSelectedId,
 }: {
   items: BuilderItemsProps[];
   onDelete: (id: UniqueIdentifier) => void;
   canvasId: UniqueIdentifier;
+  selectedId: UniqueIdentifier;
+  setSelectedId: (id: UniqueIdentifier) => void;
 }) => {
-  const [selectedId, setSelectedId] =
-    useState<UniqueIdentifier>('NOT_SELECTED');
-
   const { setNodeRef } = useDroppable({
     id: canvasId,
     data: {
@@ -161,7 +161,7 @@ const BuilderCanvas = ({
   });
 
   return (
-    <Box ref={setNodeRef} className="canvas" border={3} height={300}>
+    <Box ref={setNodeRef} className="canvas" border={1} height={300}>
       <div className="canvas-fields">
         {items?.map((item, i) => (
           <SortableItem
