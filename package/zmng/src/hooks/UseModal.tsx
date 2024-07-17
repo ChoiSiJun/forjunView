@@ -2,7 +2,7 @@ import { useAppDispatch } from '@config/ReduxHooks';
 import {openModal, closeModal} from '@common/slice/ModalSlice'; 
 
 export interface Props {
-  type?:string;
+  type:string;
   title?:string;
   subTitle?:string;
   size?:'sm' | 'md' | 'lg' | 'xl'

@@ -51,9 +51,8 @@ const fetchLocation = (mloc:string|number) => {
 }
 
 export const useLocation = (mloc:string|number) => {
-  alert(mloc)
-  return useQuery("getLocation", () => fetchLocation(mloc), {
-    enabled: false,
+  return useQuery(["getLocation", mloc], () => fetchLocation(mloc), {
+    enabled: !!mloc,
   })
 }
 
