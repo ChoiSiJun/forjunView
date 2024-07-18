@@ -1,12 +1,14 @@
 import { createTheme } from '@mui/material/styles';
-
+import '../../../../../zmng/public/font/NotoSansKR-Bold.woff2';
+import '../../../../../zmng/public/font/NotoSansKR-Medium.woff2';
+import '../../../../../zmng/public/font/NotoSansKR-Regular.woff2';
 export const appTheme = createTheme({
   direction: 'ltr',
   palette: {
     primary: {
-      main: '#1976d2',
+      main: '#21438f', // '#1976d2'
       light: '#ECF2FF',
-      dark: '#4570EA',
+      dark: '#152548', // '#4570EA'
     },
     secondary: {
       main: '#49BEFF',
@@ -84,24 +86,24 @@ export const appTheme = createTheme({
     '0 0 1px 0 rgba(0,0,0,0.31), 0 24px 36px -8px rgba(0,0,0,0.25)',
   ],
   typography: {
-    fontFamily: "'Roboto', 'Helvetica', 'Arial',sans-serif;",
+    fontFamily: "'Noto Sans KR',sans-serif;",
     h1: {
       fontWeight: 600,
       fontSize: '2.25rem',
       lineHeight: '2.75rem',
-      fontFamily: "'Plus Jakarta Sans', sans-serif;",
+      fontFamily: "'Noto Sans KR', sans-serif;",
     },
     h2: {
       fontWeight: 600,
       fontSize: '1.875rem',
       lineHeight: '2.25rem',
-      fontFamily: "'Plus Jakarta Sans', sans-serif;",
+      fontFamily: "'Noto Sans KR', sans-serif;",
     },
     h3: {
       fontWeight: 600,
       fontSize: '1.5rem',
       lineHeight: '1.75rem',
-      fontFamily: "'Plus Jakarta Sans', sans-serif;",
+      fontFamily: "'Noto Sans KR', sans-serif;",
     },
     h4: {
       fontWeight: 600,

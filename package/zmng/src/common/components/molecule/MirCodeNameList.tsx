@@ -13,7 +13,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import MirButton from '@common/components/atoms/button/MirButton';
 import Box from '@mui/material/Box';
 
-
 interface MirCodeNameListItem {
   // key : number;
   code: string;
@@ -25,10 +24,10 @@ export interface CodeNameListState {
 }
 
 export interface CodeNameListProps extends CodeNameListState {
-  onListClick:() => void;
-  onCreateClick?: () => void;
-  onModifyClick?: () => void;
-  onDeleteClick?: () => void;
+  onListClick: (code: string | number) => void;
+  onCreateClick: () => void;
+  onModifyClick: (code: string | number) => void;
+  onDeleteClick?: (code: string | number) => void;
 }
 
 const MirCodeNameList = ({
@@ -36,70 +35,126 @@ const MirCodeNameList = ({
   onListClick,
   onCreateClick,
   onModifyClick,
-  onDeleteClick
-}:CodeNameListProps) => {
+  onDeleteClick,
+}: CodeNameListProps) => {
   // const dispatch = useAppDispatch();
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
+  // 리스트 클릭 Event Handler
   const handleListItemClick = (
-        index: number,
-        code: string|number,
-        propClickEvent:(code:string|number) => void
-      ) => {
-        setSelectedIndex(index);
+    index: number,
+    code: string | number,
+    propClickEvent: (code: string | number) => void,
+  ) => {
+    setSelectedIndex(index);
 
-        // 리스트 클릭 callback 이벤트
-        propClickEvent(code);
+    // 리스트 클릭 callback 이벤트
+    propClickEvent(code);
+  };
+
+  // 삭제 Event Handler
+  const handleListItemDeleteClick = (
+    index: number,
+    code: string | number,
+    propDeleteClickEvent: (code: string | number) => void,
+  ) => {
+    setSelectedIndex(index);
+
+    onListClick(code);
+
+    propDeleteClickEvent(code);
+  };
+
+  // 수정 Event Handler
+  const handleListItemUpdateClick = (
+    index: number,
+    code: string | number,
+    propUpdateClickEvent: (code: string | number) => void,
+  ) => {
+    setSelectedIndex(index);
+
+    onListClick(code);
+
+    propUpdateClickEvent(code);
   };
 
   return (
-    <Paper elevation={7} sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', borderRadius: '8px' }}>
-        <Box sx={{ p: 1}}>
-          <MirButton
-            ButtonType="create"
-            buttonName="신규입력"
-            onClick={onCreateClick}
-          />
-        </Box>
-        
-        <List component="nav" aria-label="main mailbox folders">
-          {codeNameList?.map((codeName, index) => {
-            return (
-              <ListItem
-                key={codeName.code}
-                secondaryAction={
-                  <>
-                    <IconButton 
-                      edge="end" 
-                      aria-label="수정"
-                      onClick={onModifyClick}
-                    >
-                      <EditIcon color="primary"/>
-                    </IconButton>
-                    <IconButton 
-                      edge="end" 
+    <Paper
+      elevation={7}
+      sx={{
+        width: '100%',
+        maxWidth: 360,
+        bgcolor: 'background.paper',
+        borderRadius: '8px',
+      }}
+    >
+      <Box sx={{ p: 1 }}>
+        <MirButton
+          ButtonType="create"
+          buttonName="신규입력"
+          onClick={onCreateClick}
+        />
+      </Box>
+
+      <List component="nav" aria-label="main mailbox folders">
+        {codeNameList?.map((codeName, index) => {
+          return (
+            <ListItem
+              key={codeName.code}
+              secondaryAction={
+                <>
+                  <IconButton
+                    edge="end"
+                    aria-label="수정"
+                    onClick={() =>
+                      handleListItemUpdateClick(
+                        index,
+                        codeName.code,
+                        onModifyClick,
+                      )
+                    }
+                  >
+                    <EditIcon color="primary" />
+                  </IconButton>
+                  {onDeleteClick && (
+                    <IconButton
+                      edge="end"
                       aria-label="삭제"
-                      onClick={onDeleteClick}
+                      onClick={() =>
+                        handleListItemDeleteClick(
+                          index,
+                          codeName.code,
+                          onDeleteClick,
+                        )
+                      }
                     >
-                      <DeleteIcon sx={{ color: '#E33C2F' }}/>
+                      <DeleteIcon sx={{ color: '#E33C2F' }} />
                     </IconButton>
-                  </>
+                  )}
+                </>
+              }
+              disablePadding
+            >
+              <ListItemButton
+                role={undefined}
+                selected={selectedIndex === index}
+                onClick={() =>
+                  handleListItemClick(index, codeName.code, onListClick)
                 }
-                disablePadding
+                dense
+                key={codeName.code}
               >
-                <ListItemButton role={undefined} 
-                  selected={selectedIndex === index}
-                  onClick={() => handleListItemClick(index, codeName.code, onListClick)} dense
-                  key={codeName.code}
-                >
-                  <ListItemText id={codeName.code} primary={codeName.code} secondary={codeName.name_ko}/>
-                </ListItemButton>
-              </ListItem>
-             );
-          })}
-         
-        </List>
-      </Paper>
+                <ListItemText
+                  id={codeName.code}
+                  primary={codeName.code}
+                  secondary={codeName.name_ko}
+                />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
+      </List>
+    </Paper>
   );
 };
 

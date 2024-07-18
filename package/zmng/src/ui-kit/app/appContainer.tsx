@@ -12,13 +12,13 @@ import Container from '@mui/material/Container';
 
 import { useMediaQuery } from '@mui/material';
 
-//라우터 Import
+// 라우터 Import
 import { Outlet } from 'react-router-dom';
 
-//헤더바 높이
+// 헤더바 높이
 const headerBarHeight: number = 70;
 
-//사이드바 기본 확장 넓이
+// 사이드바 기본 확장 넓이
 const sidebarWidth: number = 270;
 
 export default function AppContainer() {
@@ -30,8 +30,7 @@ export default function AppContainer() {
         <CssBaseline />
 
         <SideBar
-          sidebarWidth={sidebarWidth}
-          isSidebarOpen={isSidebarOpen}
+          sidebarWidth={sidebarWidth} isSidebarOpen={isSidebarOpen}
           onSidebarClose={() => setSidebarOpen(false)}
         />
 
@@ -57,7 +56,7 @@ export default function AppContainer() {
             headerBarHeight={headerBarHeight}
             isSidebarOpen={isSidebarOpen}
             sidebarWidth={sidebarWidth}
-            title={'Liberty Cloud'}
+            title='Liberty Cloud'
           />
 
           <Container

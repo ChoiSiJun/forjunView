@@ -51,9 +51,8 @@ const fetchLocation = (mloc:string|number) => {
 }
 
 export const useLocation = (mloc:string|number) => {
-  alert(mloc)
-  return useQuery("getLocation", () => fetchLocation(mloc), {
-    enabled: false,
+  return useQuery(["getLocation", mloc], () => fetchLocation(mloc), {
+    enabled: !!mloc,
   })
 }
 
@@ -81,21 +80,50 @@ export const useCreateLocation = () => {
   })
 }
 
-const deleteLocation = (mloc:string|number) => {
-  return axios.delete(
-    `${api_url}/sys-system/locations/${mloc}`,
-  )
+/**
+ * 기관 수정
+ * @param location 
+ * @returns 
+ */
+const updateLocation = (location:LocationInfoState) => {
+  return axios.put(
+    `${api_url}/sys-system/locations/${location.mloc}`, location
+  );
 }
 
-export const useDeleteLocation = () => {
+export const useUpdateLocation = () => {
   const queryClient = useQueryClient()
   const { closeModal } = UseModal(); 
 
-  return useMutation(deleteLocation, {
+  return useMutation(updateLocation, {
     onSuccess: () => {
       queryClient.invalidateQueries('getLocationList')
       closeModal();
-      toast.success('삭제되었습니다.');
+      toast.success('수정 되었습니다.');
     },
   })
 }
+
+/**
+ * 기관 삭제
+ * @param mloc 
+ * @returns 
+ */
+// const deleteLocation = (mloc:string|number) => {
+//   return axios.delete(
+//     `${api_url}/sys-system/locations/${mloc}`,
+//   )
+// }
+
+// export const useDeleteLocation = () => {
+//   const queryClient = useQueryClient()
+//   const { closeModal } = UseModal(); 
+
+//   return useMutation(deleteLocation, {
+//     onSuccess: () => {
+//       queryClient.invalidateQueries('getLocationList')
+//       closeModal();
+//       toast.success('삭제되었습니다.');
+//     },
+//   })
+// }
