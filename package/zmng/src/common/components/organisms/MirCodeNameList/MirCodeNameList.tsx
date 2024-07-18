@@ -21,15 +21,15 @@ interface CodeNameListItem {
   name_ko: string;
 }
 
-export interface CodeNameListState {
+export interface CodeNameListItemProps {
   codeNameList: CodeNameListItem[];
 }
 
-export interface CodeNameListProps extends CodeNameListState {
+export interface CodeNameListProps extends CodeNameListItemProps {
   onListClick:() => void;
-  createModalType: () => string;
-  modifyModalType:() => string;
-  deleteModalType:() => string;
+  createModalType: string;
+  modifyModalType: string;
+  deleteModalType: string;
 }
 
 const MirCodeNameList = ({
@@ -54,23 +54,36 @@ const MirCodeNameList = ({
         propClickEvent(code);
   };
 
+  const handleListItemDeleteClick = (
+    index: number,
+    code: string|number,
+    propClickEvent:(code:string|number) => void
+  ) => {
+    setSelectedIndex(index);
+
+    // 리스트 클릭 callback 이벤트
+    propClickEvent(code);
+
+    
+};
+
   const HandleCreateButtonClick = () => {
     openModal({
-      type: {createModalType}, 
-      title:"기관코드 생성",
-      size:"md"
+      type: createModalType, 
     });
   }
 
   const HandleModifyClick = () => {
-
+    openModal({
+      type: modifyModalType, 
+    });
   }
 
   const HandleDeleteClick = () => {
+  //  handleListItemClick();
+
     openModal({
-      type: {deleteModalType}, 
-      title:"기관코드 삭제",
-      size:"sm"
+      type: deleteModalType, 
     });
   }
 
@@ -101,7 +114,7 @@ const MirCodeNameList = ({
                     <IconButton 
                       edge="end" 
                       aria-label="삭제"
-                      onClick={HandleDeleteClick}
+                      onClick={() => handleListItemDeleteClick(index, codeName.code, HandleDeleteClick)}
                     >
                       <DeleteIcon sx={{ color: '#E33C2F' }}/>
                     </IconButton>

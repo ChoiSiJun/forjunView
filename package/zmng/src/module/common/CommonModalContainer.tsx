@@ -1,32 +1,43 @@
 import { useAppSelector, useAppDispatch } from '@config/ReduxHooks';
 
-import LocationDeleteModal from '@module/system/components/LocationDeleteModal'
-import LocationCreateModal from '@module/system/components/LocationCreateModal'
+import LocationDeleteModal from '@module/system/components/LocationDeleteModal';
+import LocationCreateModal from '@module/system/components/LocationCreateModal';
+import LocationUpdateModal from '@module/system/components/LocationUpdateModal';
 import MirModalContainer from '@common/components/atoms/modal/MirModalContainer';
-import MirModalTitle from '@common/components/atoms/modal/MirModalTitle';
-import UseModal from '@hooks/UseModal'; 
+import React from 'react';
+
+export interface ModalComponentProps {
+  Target: React.FC
+  size?:'sm' | 'md' | 'lg' | 'xl';
+}
 
 const MODAL_COMPONENTS = {
-  "LocationDeleteModal": LocationDeleteModal,
-  "LocationCreateModal": LocationCreateModal,
+  LocationCreateModal: {
+    Target: LocationCreateModal,
+    size: 'md',
+  },
+  LocationUpdateModal: {
+    Target: LocationUpdateModal,
+    size: 'md',
+  },
 };
 
 const ModalContainer = () => {
-  const { type, isOpen, title, subTitle, size } =   useAppSelector((state) => state.Modal);
-  const { closeModal } = UseModal(); 
+  const { type, isOpen } = useAppSelector(
+    state => state.Modal,
+  );
 
   if (!type) {
     return null;
   }
 
-  const Modal = MODAL_COMPONENTS[type];
+  const Modal:ModalComponentProps = MODAL_COMPONENTS[type];
 
   return (
-      <MirModalContainer modalSize={size} isOpen={isOpen}>
-        <MirModalTitle title={title} subTitle={subTitle} closeModal={() => closeModal()} />
-        <Modal />
-      </MirModalContainer>
+    <MirModalContainer modalSize={Modal.size} isOpen={isOpen}>
+      <Modal.Target />
+    </MirModalContainer>
   );
-}
+};
 
 export default ModalContainer;

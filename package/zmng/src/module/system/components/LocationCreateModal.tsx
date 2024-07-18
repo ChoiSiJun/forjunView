@@ -4,6 +4,7 @@ import { useForm  } from "react-hook-form";
 import { useAppDispatch } from '@config/ReduxHooks';
 import MirButton from '@common/components/atoms/button/MirButton';
 
+import MirModalTitle from '@common/components/atoms/modal/MirModalTitle';
 import MirModalContents from '@common/components/atoms/modal/MirModalContents';
 import MirModalAction from '@common/components/atoms/modal/MirModalAction';
 import UseModal from '@hooks/UseModal'; 
@@ -21,9 +22,7 @@ export interface FormValues {
 };
 
 const LocationCreateModal = () => {
-
   const { closeModal } = UseModal(); 
-
   const { handleSubmit, control, reset } = useForm<FormValues> ({
     defaultValues: {
       mloc: "",
@@ -38,14 +37,19 @@ const LocationCreateModal = () => {
 
   const { mutate: createLocation } = useCreateLocation();
 
-  const createLocations = (data: FormValues) => {
+  const handleCreateLocations = (data: FormValues) => {
     createLocation(data)
   };
 
   return (
     <>
+      <MirModalTitle
+        title="기관코드 생성"
+        // subTitle={Modal.subTitle}
+        closeModal={() => closeModal()}
+      />
       <MirModalContents>
-        <form onSubmit={handleSubmit(createLocations)}>
+        <form onSubmit={handleSubmit(handleCreateLocations)}>
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <MirValidTextField 
@@ -144,7 +148,7 @@ const LocationCreateModal = () => {
       </MirModalContents>
       
       <MirModalAction>
-        <MirButton ButtonType="default" buttonName="저장" onClick={handleSubmit(createLocations)} />
+        <MirButton ButtonType="default" buttonName="저장" onClick={handleSubmit(handleCreateLocations)} />
         <MirButton ButtonType="default" buttonName="닫기" onClick={() => closeModal()} />
       </MirModalAction>
     </>     

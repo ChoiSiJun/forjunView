@@ -112,7 +112,7 @@ const MirButton = ({
     return (
       <ButtonStyled
         variant="contained"
-        color="primary"
+        color="error"
         size="small"
         sx={{
           ml: 'auto',
@@ -147,7 +147,7 @@ const MirButton = ({
   if (ButtonType == 'etc') {
     return (
       <ButtonStyled
-        variant="contained"
+        variant="outlined"
         color="primary"
         size="small"
         sx={{
