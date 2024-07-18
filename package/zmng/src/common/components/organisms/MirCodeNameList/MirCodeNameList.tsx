@@ -12,32 +12,34 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MirButton from '@common/components/atoms/button/MirButton';
 import Box from '@mui/material/Box';
+import UseModal from '@hooks/UseModal'; 
 
 
-interface MirCodeNameListItem {
+interface CodeNameListItem {
   // key : number;
   code: string;
   name_ko: string;
 }
 
 export interface CodeNameListState {
-  codeNameList: MirCodeNameListItem[];
+  codeNameList: CodeNameListItem[];
 }
 
 export interface CodeNameListProps extends CodeNameListState {
   onListClick:() => void;
-  onCreateClick?: () => void;
-  onModifyClick?: () => void;
-  onDeleteClick?: () => void;
+  createModalType: () => string;
+  modifyModalType:() => string;
+  deleteModalType:() => string;
 }
 
 const MirCodeNameList = ({
   codeNameList,
   onListClick,
-  onCreateClick,
-  onModifyClick,
-  onDeleteClick
+  createModalType,
+  modifyModalType,
+  deleteModalType
 }:CodeNameListProps) => {
+  const { openModal } = UseModal();
   // const dispatch = useAppDispatch();
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
@@ -52,13 +54,33 @@ const MirCodeNameList = ({
         propClickEvent(code);
   };
 
+  const HandleCreateButtonClick = () => {
+    openModal({
+      type: {createModalType}, 
+      title:"기관코드 생성",
+      size:"md"
+    });
+  }
+
+  const HandleModifyClick = () => {
+
+  }
+
+  const HandleDeleteClick = () => {
+    openModal({
+      type: {deleteModalType}, 
+      title:"기관코드 삭제",
+      size:"sm"
+    });
+  }
+
   return (
     <Paper elevation={7} sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', borderRadius: '8px' }}>
         <Box sx={{ p: 1}}>
           <MirButton
             ButtonType="create"
             buttonName="신규입력"
-            onClick={onCreateClick}
+            onClick={HandleCreateButtonClick}
           />
         </Box>
         
@@ -72,14 +94,14 @@ const MirCodeNameList = ({
                     <IconButton 
                       edge="end" 
                       aria-label="수정"
-                      onClick={onModifyClick}
+                      onClick={HandleModifyClick}
                     >
                       <EditIcon color="primary"/>
                     </IconButton>
                     <IconButton 
                       edge="end" 
                       aria-label="삭제"
-                      onClick={onDeleteClick}
+                      onClick={HandleDeleteClick}
                     >
                       <DeleteIcon sx={{ color: '#E33C2F' }}/>
                     </IconButton>

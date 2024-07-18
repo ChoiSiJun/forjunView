@@ -14,7 +14,7 @@ interface MuiProps {
   textFieldProps?: TextFieldProps;
 }
 
-const BootstrapInput = styled(TextField)(({ theme }) => ({
+const StyleValidTextField = styled(TextField)(({ theme }) => ({
 }));
 
 const MirValidTextField = <
@@ -33,8 +33,8 @@ const MirValidTextField = <
     <Box pr={1} sx={{
       maxWidth: '100%',
     }}>
-      <InputLabel error={!!error}>*{textFieldProps?.label}</InputLabel>
-      <BootstrapInput 
+      <InputLabel error={!!error}>{textFieldProps?.required && '* '}{textFieldProps?.label}</InputLabel>
+      <StyleValidTextField 
         {...textFieldProps}
         {...field}
         size="small"

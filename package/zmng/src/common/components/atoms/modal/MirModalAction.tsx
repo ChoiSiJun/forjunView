@@ -7,14 +7,14 @@ export interface MirModalActionProps {
 
 const MirModalAction = ({children}:MirModalActionProps) => {
 
-  const MirModalActionStyle = styled(DialogActions)(({ theme }) => ({
+  const StyledMirModalAction = styled(DialogActions)(({ theme }) => ({
     
   }));
 
   return (
-    <MirModalActionStyle>
+    <StyledMirModalAction>
       {children}
-    </MirModalActionStyle>
+    </StyledMirModalAction>
   );
 }
 

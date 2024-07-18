@@ -12,7 +12,7 @@ const MirModalContainer = ({
   isOpen,
   children}:MirModalContainerProps) => {
 
-  const MirModal = styled(Dialog)(({ theme }) => ({
+  const StyledMirModalContainer = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),
     },
@@ -22,7 +22,7 @@ const MirModalContainer = ({
   }));
 
   return (
-    <MirModal 
+    <StyledMirModalContainer 
       fullWidth
       maxWidth={modalSize}
       open={isOpen}
@@ -30,7 +30,7 @@ const MirModalContainer = ({
       aria-describedby="alert-dialog-description"
     >
       {children}
-    </MirModal>
+    </StyledMirModalContainer>
   );
 }
 

@@ -7,6 +7,7 @@ export interface BuilderItemsProps {
   dragId: UniqueIdentifier;
   dragType: string;
   displayTitle: string;
+  canvasId?: UniqueIdentifier;
   component?: ReactNode;
 }
 
