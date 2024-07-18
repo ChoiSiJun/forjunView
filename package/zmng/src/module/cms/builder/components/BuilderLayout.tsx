@@ -1,9 +1,14 @@
 import React, { useRef, useState } from 'react';
-import { CssBaseline, Box, IconButton, Drawer, Button } from '@mui/material';
+import {
+  CssBaseline,
+  Box,
+  IconButton,
+  Drawer,
+  Button,
+  Container,
+} from '@mui/material';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
-import BuilderCanvas, {
-  CanvasItem,
-} from '@module/cms/builder/components/BuilderCanvas';
+import BuilderCanvas from '@module/cms/builder/components/BuilderCanvas';
 import BuilderSidebar, {
   SideBarItem,
 } from '@module/cms/builder/components/BuilderSideBar';
@@ -25,11 +30,21 @@ import {
 
 import BuilderSettingBar from '@module/cms/builder/components/BuilderSettingBar';
 import BuilderDndMonitor from '@module/cms/builder/components/BuilderDndMonitor';
+import { CanvasItem } from '@module/cms/builder/components/BuilderCanvasItem';
 
 const SidebarWidth = 340;
 const AppBarHeight = 64;
 
 const BuilderLayout = () => {
+  // 기능
+  const handleHeaderSelect = () => {
+    alert('헤더 선택');
+  };
+
+  const handleFooterSelect = () => {
+    alert('푸터 선택');
+  };
+
   // Dnd 관련 상태관리
 
   // 캔버스 관리시작
@@ -324,52 +339,96 @@ const BuilderLayout = () => {
             marginTop: `${AppBarHeight}px`, // 앱바 높이만큼 상단 여백 추가
           }}
         >
-          <Button
-            onClick={addCanvas}
-            variant="contained"
-            color="primary"
-            startIcon={<AddCircleRoundedIcon />}
+          <Box
+            sx={{
+              width: 1200,
+              boxShadow: '0 8px 12px rgba(0, 0, 0, 0.5)', // 쉐도우 효과 추가
+              margin: '30px 20px', // 상하 20px, 좌우 10px
+            }}
           >
-            Add Canvas
-          </Button>
-          {canvases.map(canvas => (
             <Box
-              key={canvas.canvasId}
-              sx={{ position: 'relative', marginTop: 2 }}
+              sx={{
+                border: 1,
+                boxShadow: '0 8px 12px rgba(0, 0, 0, 0.5)', // 쉐도우 효과 추가
+              }}
+              height={50}
+              onClick={handleHeaderSelect}
             >
-              <IconButton
-                color="secondary"
-                aria-label="delete canvas"
-                onClick={() => removeCanvas(canvas.canvasId)}
-                sx={{ position: 'absolute', top: 0, right: 0, zIndex: 1 }}
-              >
-                <Box>삭제</Box>
-              </IconButton>
-              <SortableContext
-                strategy={verticalListSortingStrategy}
-                items={canvas.items.map(d => d.dragId)}
-              >
-                <BuilderCanvas
-                  items={canvas.items}
-                  canvasId={canvas.canvasId}
-                  selectedId={selectedId}
-                  setSelectedId={setSelectedId}
-                  onDelete={id =>
-                    setCanvases(draft => {
-                      const selectedCanvas = draft.find(
-                        c => c.canvasId === canvas.canvasId,
-                      );
-                      if (selectedCanvas) {
-                        selectedCanvas.items = selectedCanvas.items.filter(
-                          item => item.dragId !== id,
-                        );
-                      }
-                    })
-                  }
-                />
-              </SortableContext>
+              헤더 영역
             </Box>
-          ))}
+            <Container
+              sx={{
+                margin: '30px 0px', // 상하 20px, 좌우 10px
+              }}
+            >
+              {canvases.map(canvas => (
+                <Box
+                  key={canvas.canvasId}
+                  sx={{ position: 'relative', marginTop: 2 }}
+                >
+                  <IconButton
+                    color="secondary"
+                    aria-label="delete canvas"
+                    onClick={() => removeCanvas(canvas.canvasId)}
+                    sx={{ position: 'absolute', top: 0, right: 0, zIndex: 1 }}
+                  >
+                    <Box>삭제</Box>
+                  </IconButton>
+                  <SortableContext
+                    strategy={verticalListSortingStrategy}
+                    items={canvas.items.map(d => d.dragId)}
+                  >
+                    <BuilderCanvas
+                      items={canvas.items}
+                      canvasId={canvas.canvasId}
+                      selectedId={selectedId}
+                      setSelectedId={setSelectedId}
+                      onDelete={id =>
+                        setCanvases(draft => {
+                          const selectedCanvas = draft.find(
+                            c => c.canvasId === canvas.canvasId,
+                          );
+                          if (selectedCanvas) {
+                            selectedCanvas.items = selectedCanvas.items.filter(
+                              item => item.dragId !== id,
+                            );
+                          }
+                        })
+                      }
+                    />
+                  </SortableContext>
+                </Box>
+              ))}
+            </Container>
+
+            <Box
+              sx={{
+                height: '20vh', // Viewport height 100%
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Button
+                onClick={addCanvas}
+                variant="contained"
+                color="primary"
+                startIcon={<AddCircleRoundedIcon />}
+              >
+                Add Canvas
+              </Button>
+            </Box>
+            <Box
+              sx={{
+                border: 1,
+                boxShadow: '0 8px 12px rgba(0, 0, 0, 0.5)', // 쉐도우 효과 추가
+              }}
+              height={50}
+              onClick={handleFooterSelect}
+            >
+              푸터 영역
+            </Box>
+          </Box>
         </Box>
 
         {

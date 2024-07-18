@@ -101,6 +101,9 @@ const SideBarHeader = () => {
             borderColor: theme.palette.divider, // 테두리 색상을 검은색으로 설정합니다.
             borderWidth: '2px', // 테두리 두께를 설정합니다.
             borderStyle: 'solid', // 테두리 스타일을 설정합니다.
+            '&:hover': {
+              backgroundColor: '#CDCDCD', // 원하는 색상으로 변경
+            },
           }}
           endIcon={<ArrowDropDownIcon />} // 버튼 오른쪽에 화살표 아이콘을 추가합니다.
         >
