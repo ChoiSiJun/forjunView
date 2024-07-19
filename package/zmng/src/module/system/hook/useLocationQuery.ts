@@ -47,7 +47,7 @@ export const useLocationList = () => {
 const fetchLocation = (mloc:string|number) => {
   return axios.get(
     `${api_url}/sys-system/locations/${mloc}`,
-  )
+  ).then(({data}) => data);
 }
 
 export const useLocation = (mloc:string|number) => {
