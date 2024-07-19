@@ -6,6 +6,7 @@ import {
   Drawer,
   Button,
   Container,
+  Grid,
 } from '@mui/material';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import BuilderCanvas from '@module/cms/builder/components/BuilderCanvas';
@@ -35,19 +36,17 @@ import { CanvasItem } from '@module/cms/builder/components/BuilderCanvasItem';
 const SidebarWidth = 340;
 const AppBarHeight = 64;
 
+// 기능
+const handleHeaderSelect = () => {
+  alert('헤더 선택');
+};
+
+const handleFooterSelect = () => {
+  alert('푸터 선택');
+};
+
 const BuilderLayout = () => {
-  // 기능
-  const handleHeaderSelect = () => {
-    alert('헤더 선택');
-  };
-
-  const handleFooterSelect = () => {
-    alert('푸터 선택');
-  };
-
-  // Dnd 관련 상태관리
-
-  // 캔버스 관리시작
+  // ---------------------------------------------------------------------캔버스 관리시작
   interface CanvasesProps {
     canvasId: UniqueIdentifier;
     items: BuilderItemsProps[];
@@ -68,22 +67,7 @@ const BuilderLayout = () => {
       return draft.filter(canvas => canvas.canvasId !== canvasId);
     });
   };
-
-  // 스페이서 객체 생성
-  function createSpacer({
-    dragId,
-    canvasId,
-  }: {
-    dragId: UniqueIdentifier;
-    canvasId: UniqueIdentifier | undefined;
-  }): BuilderItemsProps {
-    return {
-      dragId,
-      dragType: 'spacer',
-      displayTitle: 'spacer',
-      canvasId,
-    };
-  }
+  // --------------------------------------------------------------------캔버스 관리 끝
 
   // 캔버스에 스페이서가 들어갔는지 참조
   const spacerInsertedRef = useRef(false);
@@ -110,7 +94,19 @@ const BuilderLayout = () => {
     Date.now(),
   );
 
-  // 초기화 해주는 함수
+  // 사이드바 관리
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // 사이드바 오픈
+  const handleSideBar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  // 클릭한 아이템 제어
+  const [selectedId, setSelectedId] =
+    useState<UniqueIdentifier>('NOT_SELECTED');
+
+  // 상태 초기화
   const cleanUp = () => {
     setActiveSidebarItem(null);
     setActiveCanverItem(null);
@@ -118,6 +114,23 @@ const BuilderLayout = () => {
     spacerInsertedRef.current = false;
     currentOverCanvesIdRef.current = undefined;
   };
+
+  // -------------------------------------------------------------------스페이스 컴포넌트 관리
+  // 스페이서 객체 생성
+  function createSpacer({
+    dragId,
+    canvasId,
+  }: {
+    dragId: UniqueIdentifier;
+    canvasId: UniqueIdentifier | undefined;
+  }): BuilderItemsProps {
+    return {
+      dragId,
+      dragType: 'spacer',
+      displayTitle: 'spacer',
+      canvasId,
+    };
+  }
 
   const cleanSpacer = () => {
     // 스페이서 객체 삭제 및 초기화
@@ -128,10 +141,9 @@ const BuilderLayout = () => {
     });
     spacerInsertedRef.current = false;
   };
+  // -----------------------------------------------------------------스페이스 컴포넌트 관리 끝
 
-  const [selectedId, setSelectedId] =
-    useState<UniqueIdentifier>('NOT_SELECTED');
-
+  // ----------------------------------------------------------------- 드래그 관리 시작
   // 드래그 시작
   const handleDragStart = (e: DragStartEvent) => {
     const { active } = e;
@@ -306,11 +318,7 @@ const BuilderLayout = () => {
     cleanUp();
   };
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const handleSideBar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
+  // -----------------------------------------------------------------드래그 관리 끝
 
   return (
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
@@ -339,28 +347,21 @@ const BuilderLayout = () => {
             marginTop: `${AppBarHeight}px`, // 앱바 높이만큼 상단 여백 추가
           }}
         >
-          <Box
-            sx={{
-              width: 1200,
-              boxShadow: '0 8px 12px rgba(0, 0, 0, 0.5)', // 쉐도우 효과 추가
-              margin: '30px 20px', // 상하 20px, 좌우 10px
-            }}
-          >
-            <Box
-              sx={{
-                border: 1,
-                boxShadow: '0 8px 12px rgba(0, 0, 0, 0.5)', // 쉐도우 효과 추가
-              }}
-              height={50}
-              onClick={handleHeaderSelect}
-            >
-              헤더 영역
-            </Box>
-            <Container
-              sx={{
-                margin: '30px 0px', // 상하 20px, 좌우 10px
-              }}
-            >
+          <Grid container spacing={1} border={3}>
+            <Grid item lg={12} xs={12} sm={12}>
+              <Box
+                sx={{
+                  border: 1,
+                  boxShadow: '0 8px 12px rgba(0, 0, 0, 0.5)', // 쉐도우 효과 추가
+                }}
+                height={50}
+                onClick={handleHeaderSelect}
+              >
+                헤더 영역
+              </Box>
+            </Grid>
+
+            <Grid item lg={12} xs={12} sm={12}>
               {canvases.map(canvas => (
                 <Box
                   key={canvas.canvasId}
@@ -399,35 +400,38 @@ const BuilderLayout = () => {
                   </SortableContext>
                 </Box>
               ))}
-            </Container>
+            </Grid>
 
-            <Box
-              sx={{
-                height: '20vh', // Viewport height 100%
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Button
-                onClick={addCanvas}
-                variant="contained"
-                color="primary"
-                startIcon={<AddCircleRoundedIcon />}
+            <Grid item lg={12} xs={12} sm={12}>
+              <Box
+                sx={{
+                  border: 1,
+                  boxShadow: '0 8px 12px rgba(0, 0, 0, 0.5)', // 쉐도우 효과 추가
+                }}
+                height={50}
+                onClick={handleFooterSelect}
               >
-                Add Canvas
-              </Button>
-            </Box>
-            <Box
-              sx={{
-                border: 1,
-                boxShadow: '0 8px 12px rgba(0, 0, 0, 0.5)', // 쉐도우 효과 추가
-              }}
-              height={50}
-              onClick={handleFooterSelect}
+                푸터 영역
+              </Box>
+            </Grid>
+          </Grid>
+
+          <Box
+            sx={{
+              height: '20vh', // Viewport height 100%
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Button
+              onClick={addCanvas}
+              variant="contained"
+              color="primary"
+              startIcon={<AddCircleRoundedIcon />}
             >
-              푸터 영역
-            </Box>
+              Add Canvas
+            </Button>
           </Box>
         </Box>
 

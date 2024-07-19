@@ -4,7 +4,7 @@ import { UniqueIdentifier, useDroppable } from '@dnd-kit/core';
 
 import 'react-resizable/css/styles.css';
 
-import { Box, Container, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import SortableItem from '@module/cms/builder/components/BuilderCanvasItem';
 import { ResizableBox } from 'react-resizable';
 
@@ -38,25 +38,27 @@ const BuilderCanvas = ({
       minConstraints={[300, 300]} // 최소 제약 조건 설정
       maxConstraints={[1150, 300]} // 최대 제약 조건 설정
     >
-      <Grid
-        container
-        spacing={1}
-        ref={setNodeRef}
-        className="canvas"
-        border={1}
-        height={300}
-      >
-        <Grid item lg={12} xs={12} sm={12}>
-          {items?.map((item, i) => (
-            <SortableItem
-              key={item.dragId}
-              item={item}
-              index={i}
-              selectedId={selectedId}
-              setSelectedId={setSelectedId}
-              onDelete={onDelete}
-            />
-          ))}
+      <Grid item lg={12} xs={12} sm={12}>
+        <Grid
+          container
+          spacing={1}
+          ref={setNodeRef}
+          className="canvas"
+          border={1}
+          height={300}
+        >
+          <Grid item lg={12} xs={12} sm={12}>
+            {items?.map((item, i) => (
+              <SortableItem
+                key={item.dragId}
+                item={item}
+                index={i}
+                selectedId={selectedId}
+                setSelectedId={setSelectedId}
+                onDelete={onDelete}
+              />
+            ))}
+          </Grid>
         </Grid>
       </Grid>
     </ResizableBox>

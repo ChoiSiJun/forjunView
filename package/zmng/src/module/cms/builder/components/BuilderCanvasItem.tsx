@@ -2,7 +2,6 @@ import { UniqueIdentifier } from '@dnd-kit/core';
 
 import { useSortable } from '@dnd-kit/sortable';
 import { Box, ButtonGroup, IconButton, SvgIcon, useTheme } from '@mui/material';
-import { ResizableBox } from 'react-resizable';
 import { CSS } from '@dnd-kit/utilities';
 
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
