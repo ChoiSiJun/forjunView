@@ -69,6 +69,9 @@ const BuilderLayout = () => {
   };
   // --------------------------------------------------------------------캔버스 관리 끝
 
+  // 캔버스 컨테이너 참조
+  const canvesMainContainerRef = useRef<HTMLDivElement | null>(null);
+
   // 캔버스에 스페이서가 들어갔는지 참조
   const spacerInsertedRef = useRef(false);
 
@@ -361,7 +364,7 @@ const BuilderLayout = () => {
               </Box>
             </Grid>
 
-            <Grid item lg={12} xs={12} sm={12}>
+            <Grid item lg={12} xs={12} sm={12} ref={canvesMainContainerRef}>
               {canvases.map(canvas => (
                 <SortableContext
                   strategy={verticalListSortingStrategy}
@@ -372,6 +375,7 @@ const BuilderLayout = () => {
                     canvasId={canvas.canvasId}
                     selectedId={selectedId}
                     setSelectedId={setSelectedId}
+                    canvesMainContainerRef={canvesMainContainerRef}
                     onDelete={id =>
                       setCanvases(draft => {
                         const selectedCanvas = draft.find(
