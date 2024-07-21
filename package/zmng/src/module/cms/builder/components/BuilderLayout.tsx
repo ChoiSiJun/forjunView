@@ -348,7 +348,7 @@ const BuilderLayout = () => {
           }}
         >
           <Grid container spacing={1} border={3}>
-            <Grid item lg={12} xs={12} sm={12}>
+            <Grid item lg={12} xs={12} sm={12} marginBottom={10}>
               <Box
                 sx={{
                   border: 1,
@@ -363,46 +363,33 @@ const BuilderLayout = () => {
 
             <Grid item lg={12} xs={12} sm={12}>
               {canvases.map(canvas => (
-                <Box
-                  key={canvas.canvasId}
-                  sx={{ position: 'relative', marginTop: 2 }}
+                <SortableContext
+                  strategy={verticalListSortingStrategy}
+                  items={canvas.items.map(d => d.dragId)}
                 >
-                  <IconButton
-                    color="secondary"
-                    aria-label="delete canvas"
-                    onClick={() => removeCanvas(canvas.canvasId)}
-                    sx={{ position: 'absolute', top: 0, right: 0, zIndex: 1 }}
-                  >
-                    <Box>삭제</Box>
-                  </IconButton>
-                  <SortableContext
-                    strategy={verticalListSortingStrategy}
-                    items={canvas.items.map(d => d.dragId)}
-                  >
-                    <BuilderCanvas
-                      items={canvas.items}
-                      canvasId={canvas.canvasId}
-                      selectedId={selectedId}
-                      setSelectedId={setSelectedId}
-                      onDelete={id =>
-                        setCanvases(draft => {
-                          const selectedCanvas = draft.find(
-                            c => c.canvasId === canvas.canvasId,
+                  <BuilderCanvas
+                    items={canvas.items}
+                    canvasId={canvas.canvasId}
+                    selectedId={selectedId}
+                    setSelectedId={setSelectedId}
+                    onDelete={id =>
+                      setCanvases(draft => {
+                        const selectedCanvas = draft.find(
+                          c => c.canvasId === canvas.canvasId,
+                        );
+                        if (selectedCanvas) {
+                          selectedCanvas.items = selectedCanvas.items.filter(
+                            item => item.dragId !== id,
                           );
-                          if (selectedCanvas) {
-                            selectedCanvas.items = selectedCanvas.items.filter(
-                              item => item.dragId !== id,
-                            );
-                          }
-                        })
-                      }
-                    />
-                  </SortableContext>
-                </Box>
+                        }
+                      })
+                    }
+                  />
+                </SortableContext>
               ))}
             </Grid>
 
-            <Grid item lg={12} xs={12} sm={12}>
+            <Grid item lg={12} xs={12} sm={12} marginTop={10}>
               <Box
                 sx={{
                   border: 1,
