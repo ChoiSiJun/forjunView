@@ -96,7 +96,7 @@ const BuilderCanvas = ({
     >
       <ResizableBox
         width={canverWidth} // 너비 설정
-        height={canverHeight} // 높이 설정
+        height={canverHeight + 5} // 높이 설정
         minConstraints={[100, canverHeight]} // 최소 제약 조건 설정
         maxConstraints={[canvesMainContainerWidth, canverHeight]} // 최대 제약 조건 설정
         onResizeStop={handleResizeStop}
@@ -111,7 +111,7 @@ const BuilderCanvas = ({
               alignItems: 'flex-start',
             }}
             ref={canverHeightRef}
-            border={1}
+            border={2}
           >
             {items?.map((item, i) => (
               <Grid item lg={12} xs={12} sm={12} border={1}>
