@@ -57,6 +57,11 @@ const LocationUpdateModal = () => {
   
   setValue("mloc", locationData?.data.mloc);
   setValue("name_ko", locationData?.data.name_ko);
+  setValue("zipcode", locationData?.data.zipcode);
+  setValue("address", locationData?.data.address);
+  setValue("address_detail", locationData?.data.address_detail);
+  setValue("email", locationData?.data.email);
+  setValue("tel", locationData?.data.tel);
 
   return (
     <>
@@ -123,7 +128,7 @@ const LocationUpdateModal = () => {
               <MirValidTextField 
                 name="address_detail"
                 control={control}
-                // rules={{ required: "주소를 입력하세요." }}
+                // rules={{ required: "상세주소를 입력하세요." }}
                 textFieldProps={{
                   label: "상세주소",
                   id: "address_detail",
@@ -153,7 +158,7 @@ const LocationUpdateModal = () => {
               <MirValidTextField 
                 name="tel"
                 control={control}
-                // rules={{ required: "주소를 입력하세요." }}
+                // rules={{ required: "전화번호를 입력하세요." }}
                 textFieldProps={{
                   label: "전화번호",
                   id: "tel",

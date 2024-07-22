@@ -44,12 +44,12 @@ const MirCodeNameList = ({
   const handleListItemClick = (
     index: number,
     code: string | number,
-    propClickEvent: (code: string | number) => void,
+    HandleListClick: (code: string | number) => void,
   ) => {
     setSelectedIndex(index);
 
     // 리스트 클릭 callback 이벤트
-    propClickEvent(code);
+    HandleListClick(code);
   };
 
   // 삭제 Event Handler

@@ -31,6 +31,7 @@ const fetchLocationList = () => {
 
 export const useLocationList = () => {
   return useQuery("getLocationList", fetchLocationList, {
+    refetchOnWindowFocus: false,
     select: data => {
       const codeNameList = data.data?.map(item  => ({code: item.mloc, name_ko: item.name_ko}))
 
@@ -47,12 +48,14 @@ export const useLocationList = () => {
 const fetchLocation = (mloc:string|number) => {
   return axios.get(
     `${api_url}/sys-system/locations/${mloc}`,
-  ).then(({data}) => data);
+  )
+
 }
 
 export const useLocation = (mloc:string|number) => {
   return useQuery(["getLocation", mloc], () => fetchLocation(mloc), {
     enabled: !!mloc,
+    refetchOnWindowFocus: false,
   })
 }
 
