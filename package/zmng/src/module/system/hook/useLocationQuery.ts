@@ -31,7 +31,6 @@ const fetchLocationList = () => {
 
 export const useLocationList = () => {
   return useQuery("getLocationList", fetchLocationList, {
-    refetchOnWindowFocus: false,
     select: data => {
       const codeNameList = data.data?.map(item  => ({code: item.mloc, name_ko: item.name_ko}))
 
@@ -55,7 +54,6 @@ const fetchLocation = (mloc:string|number) => {
 export const useLocation = (mloc:string|number) => {
   return useQuery(["getLocation", mloc], () => fetchLocation(mloc), {
     enabled: !!mloc,
-    refetchOnWindowFocus: false,
   })
 }
 

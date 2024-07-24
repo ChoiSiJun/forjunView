@@ -16,7 +16,7 @@ export interface FormValues {
   "name_ko": string;
   "zipcode": string;
   "address": string;
-  "address_detail": string,
+  "addressDetail": string,
   "email": string,
   "tel": string
 };
@@ -29,7 +29,7 @@ const LocationCreateModal = () => {
       name_ko: "",
       zipcode: "",
       address: "",
-      address_detail: "",
+      addressDetail: "",
       email: "",
       tel: ""
     }
@@ -103,12 +103,12 @@ const LocationCreateModal = () => {
             </Grid>
             <Grid item xs={12}>
               <MirValidTextField 
-                name="address_detail"
+                name="addressDetail"
                 control={control}
                 // rules={{ required: "주소를 입력하세요." }}
                 textFieldProps={{
                   label: "상세주소",
-                  id: "address_detail",
+                  id: "addressDetail",
                   placeholder: "상세주소를 입력하세요." 
                 }}
               />

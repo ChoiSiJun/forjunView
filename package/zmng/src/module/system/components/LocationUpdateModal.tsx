@@ -18,7 +18,7 @@ export interface FormValues {
   "name_ko": string;
   "zipcode": string;
   "address": string;
-  "address_detail": string,
+  "addressDetail": string,
   "email": string,
   "tel": string
 };
@@ -33,10 +33,10 @@ const LocationUpdateModal = () => {
   const { handleSubmit, control, setValue } = useForm<FormValues> ({
     defaultValues: {
       mloc: "",
-      name_ko: "123123",
+      name_ko: "",
       zipcode: "",
       address: "",
-      address_detail: "",
+      addressDetail: "",
       email: "",
       tel: ""
     }
@@ -46,7 +46,6 @@ const LocationUpdateModal = () => {
     isLoading,
     isFetching,
     data: locationData,
-    refetch: locationRefetch,
   } = useLocation(mloc!);
 
   const { mutate: updateLocation } = useUpdateLocation();
@@ -59,7 +58,7 @@ const LocationUpdateModal = () => {
   setValue("name_ko", locationData?.data.name_ko);
   setValue("zipcode", locationData?.data.zipcode);
   setValue("address", locationData?.data.address);
-  setValue("address_detail", locationData?.data.address_detail);
+  setValue("addressDetail", locationData?.data.addressDetail);
   setValue("email", locationData?.data.email);
   setValue("tel", locationData?.data.tel);
 
@@ -126,12 +125,12 @@ const LocationUpdateModal = () => {
             </Grid>
             <Grid item xs={12}>
               <MirValidTextField 
-                name="address_detail"
+                name="addressDetail"
                 control={control}
                 // rules={{ required: "상세주소를 입력하세요." }}
                 textFieldProps={{
                   label: "상세주소",
-                  id: "address_detail",
+                  id: "addressDetail",
                   placeholder: "상세주소를 입력하세요." 
                 }}
               />

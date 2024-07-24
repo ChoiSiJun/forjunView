@@ -14,7 +14,15 @@ import { Portal } from '@mui/base/Portal';
 import { QueryClientProvider, QueryClient } from "react-query";
 
 const persistor = persistStore(store);
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnMount: 'always',
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false
+    }
+  }
+})
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
