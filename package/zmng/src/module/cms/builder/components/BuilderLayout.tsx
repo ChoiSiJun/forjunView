@@ -351,7 +351,14 @@ const BuilderLayout = () => {
           }}
         >
           <Grid container spacing={1} border={3}>
-            <Grid item lg={12} xs={12} sm={12} marginBottom={10}>
+            <Grid
+              key="mainCanvas"
+              item
+              lg={12}
+              xs={12}
+              sm={12}
+              marginBottom={10}
+            >
               <Box
                 sx={{
                   border: 1,
@@ -367,10 +374,12 @@ const BuilderLayout = () => {
             <Grid item lg={12} xs={12} sm={12} ref={canvesMainContainerRef}>
               {canvases.map(canvas => (
                 <SortableContext
+                  key={canvas.canvasId}
                   strategy={verticalListSortingStrategy}
                   items={canvas.items.map(d => d.dragId)}
                 >
                   <BuilderCanvas
+                    key={canvas.canvasId}
                     items={canvas.items}
                     canvasId={canvas.canvasId}
                     selectedId={selectedId}
@@ -462,6 +471,7 @@ const BuilderLayout = () => {
             },
           }}
         >
+          <Button onClick={handleSideBar}>Close</Button>
           <BuilderSidebar fieldsRegKey={sidebarFieldsRegenKey} />
         </Drawer>
 
