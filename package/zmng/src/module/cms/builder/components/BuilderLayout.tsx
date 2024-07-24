@@ -69,9 +69,6 @@ const BuilderLayout = () => {
   };
   // --------------------------------------------------------------------캔버스 관리 끝
 
-  // 캔버스 컨테이너 참조
-  const canvesMainContainerRef = useRef<HTMLDivElement | null>(null);
-
   // 캔버스에 스페이서가 들어갔는지 참조
   const spacerInsertedRef = useRef(false);
 
@@ -105,8 +102,12 @@ const BuilderLayout = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  // 클릭한 캔버스 제어
+  const [selectedCanvasId, setSelectedCanvasId] =
+    useState<UniqueIdentifier>('NOT_SELECTED');
+
   // 클릭한 아이템 제어
-  const [selectedId, setSelectedId] =
+  const [selectedItemId, setSelectedItemId] =
     useState<UniqueIdentifier>('NOT_SELECTED');
 
   // 상태 초기화
@@ -371,7 +372,7 @@ const BuilderLayout = () => {
               </Box>
             </Grid>
 
-            <Grid item lg={12} xs={12} sm={12} ref={canvesMainContainerRef}>
+            <Grid item lg={12} xs={12} sm={12}>
               {canvases.map(canvas => (
                 <SortableContext
                   key={canvas.canvasId}
@@ -382,9 +383,10 @@ const BuilderLayout = () => {
                     key={canvas.canvasId}
                     items={canvas.items}
                     canvasId={canvas.canvasId}
-                    selectedId={selectedId}
-                    setSelectedId={setSelectedId}
-                    canvesMainContainerRef={canvesMainContainerRef}
+                    selectedItemId={selectedItemId}
+                    setSelectedItemId={setSelectedItemId}
+                    selectedCanvasId={selectedCanvasId}
+                    setSelectedCanvasId={setSelectedCanvasId}
                     onDelete={id =>
                       setCanvases(draft => {
                         const selectedCanvas = draft.find(

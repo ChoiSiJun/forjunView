@@ -4,27 +4,31 @@ import { UniqueIdentifier, useDroppable } from '@dnd-kit/core';
 
 import 'react-resizable/css/styles.css';
 
-import { Grid } from '@mui/material';
+import { ButtonGroup, Grid, IconButton, SvgIcon } from '@mui/material';
 import SortableItem from '@module/cms/builder/components/BuilderCanvasItem';
-import { ResizableBox, ResizableBoxProps } from 'react-resizable';
-import Item from '@ui-kit/app/components/SideBar/Item';
-import { useEffect, useRef, useState } from 'react';
+
+import { useState } from 'react';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 
 // Builder Cavas에 Dnd Drop 설정
 const BuilderCanvas = ({
   items,
   onDelete,
   canvasId,
-  selectedId,
-  setSelectedId,
-  canvesMainContainerRef,
+  selectedItemId,
+  setSelectedItemId,
+  selectedCanvasId,
+  setSelectedCanvasId,
 }: {
   items: BuilderItemsProps[];
   onDelete: (id: UniqueIdentifier) => void;
   canvasId: UniqueIdentifier;
-  selectedId: UniqueIdentifier;
-  setSelectedId: (id: UniqueIdentifier) => void;
-  canvesMainContainerRef: React.RefObject<HTMLDivElement>;
+  selectedItemId: UniqueIdentifier;
+  setSelectedItemId: (id: UniqueIdentifier) => void;
+  selectedCanvasId: UniqueIdentifier | undefined;
+  setSelectedCanvasId: (id: UniqueIdentifier | undefined) => void;
 }) => {
   const { setNodeRef } = useDroppable({
     id: canvasId,
@@ -35,99 +39,92 @@ const BuilderCanvas = ({
     },
   });
 
-  const canvesMainContainerWidth =
-    canvesMainContainerRef.current?.offsetWidth || 0;
-  const canverWidthRef = useRef<HTMLDivElement | null>(null);
-  const canverHeightRef = useRef<HTMLDivElement | null>(null);
   const [canverGridValue, setCanverGridValue] = useState(12);
+  const isSelected = selectedCanvasId === canvasId;
 
-  const [canverWidth, setCanverWidth] = useState(100); // 기본 너비 설정
-  const [canverHeight, setCanverHeight] = useState(0); // 기본 높이 설정
-
-  useEffect(() => {
-    // 현재 ref 값을 복사
-    const currentWidthRef = canverWidthRef.current;
-    const currentHeightRef = canverHeightRef.current;
-
-    if (currentWidthRef) {
-      setCanverWidth(currentWidthRef.offsetWidth);
+  const continerSizeDown = () => {
+    console.log('asd');
+    if (canverGridValue > 1) {
+      setCanverGridValue(canverGridValue - 1);
+    } else {
+      return false;
     }
 
-    const updateHeight = () => {
-      if (currentHeightRef) {
-        setCanverHeight(currentHeightRef.offsetHeight);
-      }
-    };
-
-    updateHeight();
-
-    const observer = new ResizeObserver(updateHeight);
-    if (currentHeightRef) {
-      observer.observe(currentHeightRef);
-    }
-
-    return () => {
-      if (currentHeightRef) {
-        observer.unobserve(currentHeightRef);
-      }
-    };
-  }, [items]);
-
-  const handleResizeStop: ResizableBoxProps['onResizeStop'] = (e, data) => {
-    const newColumns = Math.max(
-      1,
-      Math.min(
-        12,
-        Math.round(
-          (data.size.width / canvesMainContainerRef.current!.offsetWidth) * 12,
-        ),
-      ),
-    );
-    setCanverGridValue(newColumns);
+    return true;
   };
 
+  const continerSizeUp = () => {
+    if (canverGridValue < 12) {
+      setCanverGridValue(canverGridValue + 1);
+    } else {
+      return false;
+    }
+
+    return true;
+  };
   return (
     <Grid
       item
       lg={canverGridValue}
       md={canverGridValue}
       sm={12}
-      ref={canverWidthRef}
+      style={{ position: 'relative' }}
     >
-      <ResizableBox
-        width={canverWidth} // 너비 설정
-        height={canverHeight + 5} // 높이 설정
-        minConstraints={[100, canverHeight]} // 최소 제약 조건 설정
-        maxConstraints={[canvesMainContainerWidth, canverHeight]} // 최대 제약 조건 설정
-        onResizeStop={handleResizeStop}
-      >
-        <Grid container spacing={1} ref={setNodeRef} className="canvas">
-          <Grid
-            container
-            style={{
-              height: 'auto',
-              width: '100%',
-              minHeight: 100,
-              alignItems: 'flex-start',
-            }}
-            ref={canverHeightRef}
-            border={2}
-          >
-            {items?.map((item, i) => (
-              <Grid item lg={12} xs={12} sm={12} border={1}>
-                <SortableItem
-                  key={item.dragId}
-                  item={item}
-                  index={i}
-                  selectedId={selectedId}
-                  setSelectedId={setSelectedId}
-                  onDelete={onDelete}
-                />
-              </Grid>
-            ))}
-          </Grid>
+      <Grid container spacing={1} ref={setNodeRef} className="canvas">
+        <Grid
+          container
+          style={{
+            height: 'auto',
+            width: '100%',
+            minHeight: 100,
+            alignItems: 'flex-start',
+          }}
+          border={2}
+        >
+          {items?.map((item, i) => (
+            <Grid item lg={12} xs={12} sm={12} border={1}>
+              <SortableItem
+                key={item.dragId}
+                item={item}
+                index={i}
+                selectedItemId={selectedItemId}
+                setSelectedItemId={setSelectedItemId}
+                setSelectedCanvasId={setSelectedCanvasId}
+                onDelete={onDelete}
+              />
+            </Grid>
+          ))}
         </Grid>
-      </ResizableBox>
+
+        {/* 좌우 화살표 아이콘 추가 */}
+        {/* 좌우 화살표 아이콘 그룹 추가 */}
+        {isSelected && (
+          <ButtonGroup
+            variant="contained"
+            color="primary"
+            style={{
+              position: 'absolute',
+              top: -30, // Adjust as needed for spacing
+              left: '50%',
+              transform: 'translateX(-50%)', // Center horizontally
+              zIndex: 10,
+              gap: '8px', // Space between buttons
+            }}
+          >
+            <IconButton size="small" onClick={continerSizeDown}>
+              <SvgIcon component={ChevronLeftIcon} fontSize="small" />
+            </IconButton>
+
+            <IconButton size="small">
+              <SvgIcon component={SettingsOutlinedIcon} fontSize="small" />
+            </IconButton>
+
+            <IconButton size="small" onClick={continerSizeUp}>
+              <SvgIcon component={ChevronRightIcon} fontSize="small" />
+            </IconButton>
+          </ButtonGroup>
+        )}
+      </Grid>
     </Grid>
   );
 };
