@@ -23,14 +23,14 @@ export interface LocationInfoState {
  * 기관리스트 가져오기
  * @returns 
  */
-const fetchLocationList = () => {
+const getLocationList = () => {
   return axios.get(
     `${api_url}/sys-system/locations`,
   )
 }
 
 export const useLocationList = () => {
-  return useQuery("getLocationList", fetchLocationList, {
+  return useQuery("getLocationList", getLocationList, {
     select: data => {
       const codeNameList = data.data?.map(item  => ({code: item.mloc, name_ko: item.name_ko}))
 

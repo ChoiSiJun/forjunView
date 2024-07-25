@@ -10,9 +10,6 @@ import MirModalAction from '@common/components/atoms/modal/MirModalAction';
 import UseModal from '@hooks/UseModal'; 
 import { useUpdateLocation, useLocation } from '@module/system/hook/useLocationQuery'
 
-import TextField from '@mui/material/TextField';
-
-
 export interface FormValues {
   "mloc": string;
   "name_ko": string;

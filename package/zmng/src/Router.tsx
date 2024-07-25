@@ -2,7 +2,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import AppContainer from '@ui-kit/app/appContainer';
 import Dashboard from '@features/dashboard/components/template/Dashboard';
 import MemberList from '@module/member/components/MemberList';
-import SystemLocationList from '@module/system/components/SystemLocationList';
+import SystemLocationList from '@module/system/components/location/SystemLocationList';
+import SystemManagerList from '@module/system/components/SystemManagerList';
 import TemplateGuide from '@template/index';
 import BuilderLayout from '@module/cms/builder/components/BuilderLayout';
 import Login from '@features/login/Login';
@@ -22,7 +23,10 @@ function LibertyRouter() {
             <Route path="cms/builder" element={<BuilderLayout />} />
             <Route path="dashBoard" element={<Dashboard />} />
             <Route path="member" element={<MemberList />} />
-            <Route path="system" element={<SystemLocationList />} />
+            <Route path="system/*" element={<SystemLocationList />}>
+              <Route path="system/location" element={<SystemLocationList />} />
+              <Route path="system/manager" element={<SystemManagerList />} />
+            </Route>
           </Route>
         </Routes>
       </Router>

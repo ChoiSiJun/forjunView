@@ -1,8 +1,7 @@
 import { useAppSelector, useAppDispatch } from '@config/ReduxHooks';
 
-import LocationDeleteModal from '@module/system/components/LocationDeleteModal';
-import LocationCreateModal from '@module/system/components/LocationCreateModal';
-import LocationUpdateModal from '@module/system/components/LocationUpdateModal';
+import LocationCreateModal from '@module/system/components/location/LocationCreateModal';
+import LocationUpdateModal from '@module/system/components/location/LocationUpdateModal';
 import MirModalContainer from '@common/components/atoms/modal/MirModalContainer';
 import React from 'react';
 

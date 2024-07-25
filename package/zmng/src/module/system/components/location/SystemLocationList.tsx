@@ -3,7 +3,7 @@ import { useAppSelector, useAppDispatch } from '@config/ReduxHooks';
 import Grid from '@mui/material/Grid';
 import MirCodeNameList from '@common/components/molecule/MirCodeNameList';
 import MirCard from '@common/components/molecule/MirCard';
-import SystemLocationInfo from '@module/system/components/SystemLocationInfo';
+import SystemLocationInfo from '@module/system/components/location/SystemLocationInfo';
 import UseModal from '@hooks/UseModal';
 import { updateLocation } from '@module/system/slice/LocationSlice'; 
 
