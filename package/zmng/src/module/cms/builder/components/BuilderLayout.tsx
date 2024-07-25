@@ -103,8 +103,9 @@ const BuilderLayout = () => {
   };
 
   // 클릭한 캔버스 제어
-  const [selectedCanvasId, setSelectedCanvasId] =
-    useState<UniqueIdentifier>('NOT_SELECTED');
+  const [selectedCanvasId, setSelectedCanvasId] = useState<
+    UniqueIdentifier | undefined
+  >('NOT_SELECTED');
 
   // 클릭한 아이템 제어
   const [selectedItemId, setSelectedItemId] =

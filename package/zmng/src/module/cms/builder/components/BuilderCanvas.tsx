@@ -43,7 +43,6 @@ const BuilderCanvas = ({
   const isSelected = selectedCanvasId === canvasId;
 
   const continerSizeDown = () => {
-    console.log('asd');
     if (canverGridValue > 1) {
       setCanverGridValue(canverGridValue - 1);
     } else {
