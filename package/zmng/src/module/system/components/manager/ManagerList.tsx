@@ -2,10 +2,11 @@ import Grid from '@mui/material/Grid';
 import MirCodeNameList from '@common/components/molecule/MirCodeNameList';
 import MirCard from '@common/components/molecule/MirCard';
 
+import UseModal from '@hooks/UseModal';
 import { useManagerCodeNameList } from '@module/system/hook/useManagerQuery';
 
 const ManagerList = () => {
-    const { openModal } = UseModal();
+  const { openModal } = UseModal();
   const { data: managerCodeNameList } = useManagerCodeNameList();
 
   const locationListItem = () => {
