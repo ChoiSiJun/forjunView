@@ -13,12 +13,21 @@ const getManagerList = () => {
       )
 };
 
-export const useManagerList = () => {
-    return useQuery("getManagerList", getManagerList, {
+export const useManagerCodeNameList = () => {
+    return useQuery("getManagerCodeNameList", getManagerList, {
         select: data => {
-          const codeNameList = data.data?.map(item  => ({code: item.userid, name_ko: item.name}))
+          const codeNameList = data.data?.map(item  => ({key: item.id, code: item.userid, name_ko: item.name}))
     
           return codeNameList
         },
       }) 
+}
+
+/**
+ * 관리자 생성
+ */
+const createManager = () => {
+  return axios.post(
+    `${api_url}/sys-system/managers`,
+  )
 }

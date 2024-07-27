@@ -2,22 +2,11 @@ import axios from 'axios'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import UseModal from '@hooks/UseModal'; 
 import { toast } from 'react-toastify';
+import { ILocationInfoState } from '@module/system/components/location/InterfaceLocation';
 
 const api_url = import.meta.env.VITE_SYSTEM_API;
 
-export interface LocationInfoState {
-  mloc:string
-  name_ko:string
-  name_en?:string
-  name_jp?:string
-  name_cn?:string
-  zipcode?:string
-  address?:string
-  address_detail?:string
-  email?:string
-  tel?:string
-  fax?:string
-}
+interface LocationInfoState extends ILocationInfoState {}
 
 /**
  * 기관리스트 가져오기
@@ -29,10 +18,10 @@ const getLocationList = () => {
   )
 }
 
-export const useLocationList = () => {
-  return useQuery("getLocationList", getLocationList, {
+export const useLocationCodeNameList = () => {
+  return useQuery("getLocationCodeNameList", getLocationList, {
     select: data => {
-      const codeNameList = data.data?.map(item  => ({code: item.mloc, name_ko: item.name_ko}))
+      const codeNameList = data.data?.map(item  => ({key: item.mloc, code: item.mloc, name_ko: item.name_ko}))
 
       return codeNameList
     },
@@ -74,7 +63,7 @@ export const useCreateLocation = () => {
 
   return useMutation(createLocation, {
     onSuccess: () => {
-      queryClient.invalidateQueries('getLocationList')
+      queryClient.invalidateQueries('getLocationCodeNameList')
       closeModal();
       toast.success('저장되었습니다.');
     },
@@ -98,7 +87,7 @@ export const useUpdateLocation = () => {
 
   return useMutation(updateLocation, {
     onSuccess: () => {
-      queryClient.invalidateQueries('getLocationList')
+      queryClient.invalidateQueries('getLocationCodeNameList')
       closeModal();
       toast.success('수정 되었습니다.');
     },

@@ -9,17 +9,10 @@ import MirModalContents from '@common/components/atoms/modal/MirModalContents';
 import MirModalAction from '@common/components/atoms/modal/MirModalAction';
 import UseModal from '@hooks/UseModal'; 
 import { useCreateLocation } from '@module/system/hook/useLocationQuery'
+import { ILocation } from '@module/system/components/location/InterfaceLocation';
 
 
-export interface FormValues {
-  "mloc": string;
-  "name_ko": string;
-  "zipcode": string;
-  "address": string;
-  "addressDetail": string,
-  "email": string,
-  "tel": string
-};
+interface FormValues extends ILocation {};
 
 const LocationCreateModal = () => {
   const { closeModal } = UseModal(); 
