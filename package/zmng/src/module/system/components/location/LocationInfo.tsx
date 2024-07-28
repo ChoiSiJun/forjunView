@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import { useAppSelector, useAppDispatch } from '@config/ReduxHooks';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
+import {
+  MirLabelText,
+  MirLabelTextList,
+} from '@common/components/molecule/MirLabelText';
 
 interface MirCodeNameListItem {
   // key : number;
@@ -14,25 +14,19 @@ export interface LocationInfoProps {
   locationInfo: MirCodeNameListItem;
 }
 
-const SystemLocationInfo = ({
-  locationInfo}:LocationInfoProps
-) => {
-  
-  // const locationState = useAppSelector(state => state.Location);
-
+const SystemLocationInfo = ({ locationInfo }: LocationInfoProps) => {
   return (
-    <Box sx={{ width: 200 }}>
-      <Stack spacing={2}>
-      <Typography variant="body3">
-          기관코드: {locationInfo&&locationInfo.mloc}
-        </Typography>
-        <Typography variant="body3">
-          기관명칭: {locationInfo&&locationInfo.name_ko}
-        </Typography>
-      </Stack>
+    <Box>
+      <MirLabelTextList>
+        <MirLabelText label="기관코드">
+          {locationInfo && locationInfo.mloc}
+        </MirLabelText>
+        <MirLabelText label="기관명칭">
+          {locationInfo && locationInfo.name_ko}
+        </MirLabelText>
+      </MirLabelTextList>
     </Box>
   );
 };
 
 export default SystemLocationInfo;
-

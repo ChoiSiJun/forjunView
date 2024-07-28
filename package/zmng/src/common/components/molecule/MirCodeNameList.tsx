@@ -1,7 +1,4 @@
 import * as React from 'react';
-import { useEffect, useRef } from 'react';
-import { useAppSelector, useAppDispatch } from '@config/ReduxHooks';
-
 import Paper from '@mui/material/Paper';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -13,9 +10,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import MirButton from '@common/components/atoms/button/MirButton';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
 
 interface MirCodeNameListItem {
-  key : string | number;
+  key: string | number;
   code: string | number;
   name_ko: string;
 }
@@ -101,6 +99,7 @@ const MirCodeNameList = ({
         {codeNameList?.map((codeName, index) => {
           return (
             <ListItem
+              divider={<Divider />}
               key={codeName.key}
               secondaryAction={
                 <>
@@ -148,11 +147,11 @@ const MirCodeNameList = ({
                 <ListItemText
                   id={codeName.code}
                   primary={
-                    <Typography variant="h6" color="text.primary">
-                      {codeName.code}
-                    </Typography>
+                    <Typography variant="h6">{codeName.code}</Typography>
                   }
-                  secondary={codeName.name_ko}
+                  secondary={
+                    <Typography variant="body2">{codeName.name_ko}</Typography>
+                  }
                 />
               </ListItemButton>
             </ListItem>

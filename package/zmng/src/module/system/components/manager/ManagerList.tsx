@@ -11,20 +11,22 @@ const ManagerList = () => {
 
   const locationListItem = () => {
     openModal({
-        type: 'ManagerCreateModal',
-      });
+      type: 'ManagerCreateModal',
+    });
   };
 
   const HandleListClick = () => {
-    console.log('HandleListClick');
+    alert('HandleListClick');
   };
 
   const HandleCreateClick = () => {
-    console.log('HandleCreateClick');
+    openModal({
+      type: 'ManagerCreateModal',
+    });
   };
 
   const HandlerModifyClick = () => {
-    console.log('HandlerModifyClick');
+    alert('HandlerModifyClick');
   };
 
   return (
