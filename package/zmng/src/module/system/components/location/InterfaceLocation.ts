@@ -16,7 +16,7 @@ export interface ILocationInfoState {
   name_cn?:string
   zipcode?:string
   address?:string
-  address_detail?:string
+  addressDetail?:string
   email?:string
   tel?:string
   fax?:string

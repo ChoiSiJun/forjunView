@@ -9,14 +9,11 @@ import MirModalContents from '@common/components/atoms/modal/MirModalContents';
 import MirModalAction from '@common/components/atoms/modal/MirModalAction';
 import UseModal from '@hooks/UseModal'; 
 import { useCreateLocation } from '@module/system/hook/useLocationQuery'
-import { ILocation } from '@module/system/components/location/InterfaceLocation';
-
-
-interface FormValues extends ILocation {};
+import { IFormValues } from '@module/system/components/location/InterfaceLocation';
 
 const LocationCreateModal = () => {
   const { closeModal } = UseModal(); 
-  const { handleSubmit, control, reset } = useForm<FormValues> ({
+  const { handleSubmit, control, reset } = useForm<IFormValues> ({
     defaultValues: {
       mloc: "",
       name_ko: "",
@@ -30,7 +27,7 @@ const LocationCreateModal = () => {
 
   const { mutate: createLocation } = useCreateLocation();
 
-  const handleCreateLocations = (data: FormValues) => {
+  const handleCreateLocations = (data: IFormValues) => {
     createLocation(data)
   };
 
