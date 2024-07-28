@@ -9,7 +9,7 @@ import MirButton from '@common/components/atoms/button/MirButton';
 import UseModal from '@hooks/UseModal';
 import { useForm  } from "react-hook-form";
 import { IFormValues } from '@module/system/components/manager/InterfaceManager';
-// import { useCreateManager } from '@module/system/hook/useManagerQuery'
+import { useCreateManager } from '@module/system/hook/useManagerQuery'
 
 const ManagerCreateModal = () => {
   const { closeModal } = UseModal();
@@ -23,11 +23,10 @@ const ManagerCreateModal = () => {
     }
   });
 
-  // const { mutate: createManager } = useCreateManager();
+  const { mutate: createManager } = useCreateManager();
 
   const handleCreateManagers = (data: IFormValues) => {
-    // createManager(data)
-    console.log("저장");
+    createManager(data)
   };
 
   return (
@@ -59,7 +58,7 @@ const ManagerCreateModal = () => {
                 control={control}
                 rules={{ required: '이름을 입력하세요.' }}
                 textFieldProps={{
-                  label: '기관명칭',
+                  label: '이름',
                   id: 'name',
                   placeholder: '이름을 입력하세요.',
                   required: true,

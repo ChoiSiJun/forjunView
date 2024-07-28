@@ -4,13 +4,13 @@ import Divider from '@mui/material/Divider';
 
 export interface MirLabelTextProps {
   label: string;
-  children: string;
+  children: React.ReactNode;
 }
 
 const MirLabelText = ({ label, children }: MirLabelTextProps) => {
   return (
     <Stack direction="row" width="100%" p={1} gap={1}>
-      <Typography component="dt">
+      <Typography component="dt" sx={{ gap: 10 }}>
         {label}:
       </Typography>
       <Typography component="dd">

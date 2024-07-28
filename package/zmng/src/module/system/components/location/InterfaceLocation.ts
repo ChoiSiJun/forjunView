@@ -22,3 +22,5 @@ export interface ILocationInfoState {
   fax?:string
 }
 
+export interface IFormValues extends ILocationInfoState {};
+

@@ -1,13 +1,18 @@
+import React, { useState } from 'react';
 import Grid from '@mui/material/Grid';
 import MirCodeNameList from '@common/components/molecule/MirCodeNameList';
 import MirCard from '@common/components/molecule/MirCard';
+import ManagerInfo from '@module/system/components/manager/ManagerInfo';
 
 import UseModal from '@hooks/UseModal';
-import { useManagerCodeNameList } from '@module/system/hook/useManagerQuery';
+import { useManager, useManagerCodeNameList } from '@module/system/hook/useManagerQuery';
 
 const ManagerList = () => {
   const { openModal } = UseModal();
+  const [listClickItem, setListClickItem] = useState(0);
+
   const { data: managerCodeNameList } = useManagerCodeNameList();
+  const { data: managerData } = useManager(listClickItem);
 
   const locationListItem = () => {
     openModal({
@@ -15,8 +20,8 @@ const ManagerList = () => {
     });
   };
 
-  const HandleListClick = () => {
-    alert('HandleListClick');
+  const HandleListClick = (code: string | number) => {
+    setListClickItem(code as number);
   };
 
   const HandleCreateClick = () => {
@@ -26,7 +31,7 @@ const ManagerList = () => {
   };
 
   const HandlerModifyClick = () => {
-    alert('HandlerModifyClick');
+    // alert('HandlerModifyClick');
   };
 
   return (
@@ -42,7 +47,7 @@ const ManagerList = () => {
       </Grid>
       <Grid item xs={8} sx={{ bgcolor: '#EEF2F6' }}>
         <MirCard title="기관정보">
-          {/* <SystemLocationInfo locationInfo={locationData?.data} /> */}
+          <ManagerInfo managerData={managerData?.data} />
         </MirCard>
       </Grid>
     </Grid>
