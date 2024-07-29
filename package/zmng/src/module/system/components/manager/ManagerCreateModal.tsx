@@ -20,6 +20,7 @@ const ManagerCreateModal = () => {
       name: "",
       email: "",
       tel: "",
+      password: "",
     }
   });
 
@@ -91,6 +92,24 @@ const ManagerCreateModal = () => {
                   label: '전화번호',
                   id: 'tel',
                   placeholder: '전화번호를 입력하세요.',
+                }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <MirValidTextField
+                name="password"
+                control={control}
+                rules={{
+                  pattern: {
+                    value: /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/,
+                    message: '암호는 문자, 숫자, 특수 문자를 포함한 8자 이상이어야 합니다.'
+                  },
+                }}
+                textFieldProps={{
+                  type: "password",
+                  label: '비밀번호',
+                  id: 'password',
+                  placeholder: '비밀번호를 입력하세요.'
                 }}
               />
             </Grid>
