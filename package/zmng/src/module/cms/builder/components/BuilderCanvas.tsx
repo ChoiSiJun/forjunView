@@ -1,26 +1,32 @@
 import { BuilderItemsProps } from '@module/cms/builder/components/BuilderSideBarItem';
-
 import { UniqueIdentifier, useDroppable } from '@dnd-kit/core';
-
 import 'react-resizable/css/styles.css';
-
 import { Grid } from '@mui/material';
 import SortableItem from '@module/cms/builder/components/BuilderCanvasItem';
-import { ResizableBox } from 'react-resizable';
+
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import BuilderCanvasContainer from '@module/cms/builder/components/BuilderCanvasContainer';
 
 // Builder Cavas에 Dnd Drop 설정
 const BuilderCanvas = ({
   items,
   onDelete,
   canvasId,
-  selectedId,
-  setSelectedId,
+  selectedItemId,
+  setSelectedItemId,
+  selectedCanvasId,
+  setSelectedCanvasId,
 }: {
   items: BuilderItemsProps[];
   onDelete: (id: UniqueIdentifier) => void;
   canvasId: UniqueIdentifier;
-  selectedId: UniqueIdentifier;
-  setSelectedId: (id: UniqueIdentifier) => void;
+  selectedItemId: UniqueIdentifier;
+  setSelectedItemId: (id: UniqueIdentifier) => void;
+  selectedCanvasId: UniqueIdentifier | undefined;
+  setSelectedCanvasId: (id: UniqueIdentifier | undefined) => void;
 }) => {
   const { setNodeRef } = useDroppable({
     id: canvasId,
@@ -32,36 +38,43 @@ const BuilderCanvas = ({
   });
 
   return (
-    <ResizableBox
-      width={1150} // 초기 너비 설정
-      height={300} // 초기 높이 설정
-      minConstraints={[300, 300]} // 최소 제약 조건 설정
-      maxConstraints={[1150, 300]} // 최대 제약 조건 설정
+    <BuilderCanvasContainer
+      canvasId={canvasId}
+      selectedCanvasId={selectedCanvasId}
     >
-      <Grid item lg={12} xs={12} sm={12}>
+      <Grid container spacing={1} ref={setNodeRef} className="canvas">
         <Grid
           container
-          spacing={1}
-          ref={setNodeRef}
-          className="canvas"
-          border={1}
-          height={300}
+          style={{
+            height: 'auto',
+            width: '100%',
+            minHeight: 100,
+            alignItems: 'flex-start',
+          }}
+          border={2}
         >
-          <Grid item lg={12} xs={12} sm={12}>
+          <SortableContext
+            key={canvasId}
+            strategy={verticalListSortingStrategy}
+            items={items.map(d => d.dragId)}
+          >
             {items?.map((item, i) => (
-              <SortableItem
-                key={item.dragId}
-                item={item}
-                index={i}
-                selectedId={selectedId}
-                setSelectedId={setSelectedId}
-                onDelete={onDelete}
-              />
+              <Grid item lg={12} xs={12} sm={12} border={1}>
+                <SortableItem
+                  key={item.dragId}
+                  item={item}
+                  index={i}
+                  selectedItemId={selectedItemId}
+                  setSelectedItemId={setSelectedItemId}
+                  setSelectedCanvasId={setSelectedCanvasId}
+                  onDelete={onDelete}
+                />
+              </Grid>
             ))}
-          </Grid>
+          </SortableContext>
         </Grid>
       </Grid>
-    </ResizableBox>
+    </BuilderCanvasContainer>
   );
 };
 

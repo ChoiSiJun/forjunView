@@ -40,15 +40,17 @@ export function CanvasItem({ item, overlay = false }: CanvasItemProps) {
 export default function SortableItem({
   item,
   index,
-  selectedId,
-  setSelectedId,
+  selectedItemId,
+  setSelectedItemId,
   onDelete,
+  setSelectedCanvasId,
 }: {
   item: BuilderItemsProps;
   index: number;
-  selectedId: UniqueIdentifier;
-  setSelectedId: (id: UniqueIdentifier) => void;
+  selectedItemId: UniqueIdentifier;
+  setSelectedItemId: (id: UniqueIdentifier) => void;
   onDelete: (id: UniqueIdentifier) => void;
+  setSelectedCanvasId: (id: UniqueIdentifier | undefined) => void;
 }) {
   const {
     attributes,
@@ -66,7 +68,7 @@ export default function SortableItem({
   });
 
   // 클릭이 되는 기준은... 아무것도 선택한 상태가 아닐때.
-  const isSelected = selectedId === item.dragId;
+  const isSelected = selectedItemId === item.dragId;
   const theme = useTheme();
 
   const style = {
@@ -77,7 +79,13 @@ export default function SortableItem({
   };
 
   const HandleDragItemClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    setSelectedId(item.dragId === selectedId ? 'NOT_SELECTED' : item.dragId);
+    setSelectedItemId(
+      item.dragId === selectedItemId ? 'NOT_SELECTED' : item.dragId,
+    );
+
+    setSelectedCanvasId(
+      item.dragId === selectedItemId ? 'NOT_SELECTED' : item.canvasId,
+    );
     // 컴포넌트 속성창 옆으로 띄우기.
     e.stopPropagation(); // 부모 요소로 이벤트가 전파되는 것을 방지
   };
