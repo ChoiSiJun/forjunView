@@ -101,6 +101,262 @@ export function useBuilderDragState() {
     spacerInsertedRef.current = false;
   };
 
+  const handleDragStartBySidebarItem = (e: DragStartEvent) => {
+    const { active } = e;
+    const activeData = active?.data?.current ?? {};
+    const { item } = activeData;
+    setActiveSidebarItem(item);
+    currentDragItemRef.current = item;
+  };
+
+  const handleDragOverBySidebarItem = (e: DragOverEvent) => {
+    const { active, over } = e;
+    // Over 대상이 컨버스 일경우. currentOverCanvesIdRef 변경
+    if (over?.data?.current?.canvasId) {
+      // 캔버스 참조값 비교하여 스페이서 객체 초기화 및 참조값 변경
+      if (currentOverCanvesIdRef.current !== over.data.current.canvasId) {
+        cleanSpacer();
+      }
+      currentOverCanvesIdRef.current = over?.data?.current?.canvasId;
+    }
+
+    // 마우스 위치 대상이 아이템 일경우 아이템의 캔버스로 참조값 변경.
+    if (over?.data?.current?.item?.canvasId) {
+      if (currentOverCanvesIdRef.current !== over.data.current.item.canvasId) {
+        cleanSpacer();
+      }
+      currentOverCanvesIdRef.current = over.data.current.item.canvasId;
+    }
+
+    // 사이드바 아이템이 캔버스위로 이동하는것을 감지할경우
+    // 스페이서 접미사가 있는 사이드바 아이템 id를 이용해서 스페이서를 생성후 캔버스에 렌더링될수있도록 배열에 값을 저장.
+    // 배열에 객체 생성시작.
+
+    // 현재 마우스가 위치한 데이터
+    const overData = over?.data?.current ?? {};
+    if (!spacerInsertedRef.current) {
+      const spacer = createSpacer({
+        dragId: `${active.id}-spacer`,
+        canvasId: currentOverCanvesIdRef.current,
+      });
+
+      setCanvases(draft => {
+        const canvas = draft.find(
+          c => c.canvasId === currentOverCanvesIdRef.current,
+        );
+
+        if (canvas) {
+          if (!canvas.items.length) {
+            canvas.items.push(spacer);
+          } else {
+            const nextIndex =
+              overData.index > -1 ? overData.index : canvas.items.length;
+            canvas.items.splice(nextIndex, 0, spacer);
+          }
+          spacerInsertedRef.current = true;
+        }
+      });
+    } else if (!over) {
+      cleanSpacer();
+      currentOverCanvesIdRef.current = undefined;
+    } else {
+      // 실질적으로 캔버스별 아이템을 스페이서로 교체해서 렌더링
+      setCanvases(draft => {
+        const canvas = draft.find(
+          c => c.canvasId === currentOverCanvesIdRef.current,
+        );
+        if (canvas) {
+          const spacerIndex = canvas.items.findIndex(
+            d => d.dragId === `${active.id}-spacer`,
+          );
+          const nextIndex =
+            overData.index > -1 ? overData.index : canvas.items.length - 1;
+
+          if (nextIndex !== spacerIndex) {
+            canvas.items = arrayMove(canvas.items, spacerIndex, nextIndex);
+          }
+        }
+      });
+    }
+  };
+
+  const handleDragEndBySidebarItem = (e: DragEndEvent) => {
+    const { over } = e;
+    if (!over) {
+      cleanUp();
+      setCanvases(draft => {
+        draft.forEach(canvas => {
+          canvas.items = canvas.items.filter(f => f.dragType !== 'spacer');
+        });
+      });
+      return;
+    }
+
+    // 스페이스 객체를 실제 아이템으로 교체해서 적용
+    const nextField = {
+      ...currentDragItemRef.current!,
+      canvasId: currentOverCanvesIdRef.current,
+    };
+
+    if (nextField) {
+      // 스페이스 객체를 의미..
+      const overData = over?.data?.current ?? {};
+      setCanvases(draft => {
+        const canvas = draft.find(
+          c => c.canvasId === currentOverCanvesIdRef.current,
+        );
+
+        if (canvas) {
+          const spacerIndex = canvas.items.findIndex(
+            d => d.dragType === 'spacer',
+          );
+          canvas.items.splice(spacerIndex, 1, nextField);
+          canvas.items = arrayMove(
+            canvas.items,
+            spacerIndex,
+            overData.index || 0,
+          );
+        }
+      });
+    }
+    setSidebarFieldsRegenKey(Date.now());
+    cleanUp();
+  };
+
+  const handleDragStartCanvasItem = (e: DragStartEvent) => {
+    const { active } = e;
+    const activeData = active?.data?.current ?? {};
+
+    // 캔버스의 아이템일 경우 실제 아이템 복사대신 공백만 생성해서 삽입 & 캔버스 아이템의 캔버스 ID를 기본으로 세팅
+    const { item, index } = activeData;
+    setActiveCanverItem(item);
+    currentDragItemRef.current = item;
+
+    // 시작 캔버스값은 아이템의 Canves ID
+    currentOverCanvesIdRef.current = item.canvasId;
+
+    // 드래그앤 드롭을 통해 세팅되있는 필드값 변경 ( 해당 인덱스를 스페이서 객체로 교체)
+    setCanvases(draft => {
+      const canvas = draft.find(
+        c => c.canvasId === currentOverCanvesIdRef.current,
+      );
+      if (canvas) {
+        canvas.items.splice(
+          index,
+          1,
+          createSpacer({ dragId: active.id, canvasId: canvas.canvasId }),
+        );
+      }
+    });
+  };
+
+  const handleDragOverCanvasItem = (e: DragOverEvent) => {
+    const { active, over } = e;
+
+    // Over 대상이 컨버스 일경우. currentOverCanvesIdRef 변경
+    if (over?.data?.current?.canvasId) {
+      if (currentOverCanvesIdRef.current !== over.data.current.canvasId) {
+        cleanSpacer();
+      }
+      currentOverCanvesIdRef.current = over?.data?.current?.canvasId;
+    }
+
+    // Over 대상이 아이템 일경우 아이템의 CanvesItem으로 변경.
+    if (over?.data?.current?.item?.canvasId) {
+      if (currentOverCanvesIdRef.current !== over.data.current.item.canvasId) {
+        cleanSpacer();
+      }
+      currentOverCanvesIdRef.current = over.data.current.item.canvasId;
+    }
+
+    const overData = over?.data?.current ?? {};
+    if (!spacerInsertedRef.current) {
+      const spacer = createSpacer({
+        dragId: `${active.id}-spacer`,
+        canvasId: currentOverCanvesIdRef.current,
+      });
+
+      setCanvases(draft => {
+        const canvas = draft.find(
+          c => c.canvasId === currentOverCanvesIdRef.current,
+        );
+
+        if (canvas) {
+          if (!canvas.items.length) {
+            canvas.items.push(spacer);
+          } else {
+            const nextIndex =
+              overData.index > -1 ? overData.index : canvas.items.length;
+            canvas.items.splice(nextIndex, 0, spacer);
+          }
+          spacerInsertedRef.current = true;
+        }
+      });
+      return;
+    }
+
+    if (over) {
+      setCanvases(draft => {
+        const canvas = draft.find(
+          c => c.canvasId === currentOverCanvesIdRef.current,
+        );
+        if (canvas) {
+          const spacerIndex = canvas.items.findIndex(
+            d => d.dragId === `${active.id}-spacer`,
+          );
+          const nextIndex =
+            overData.index > -1 ? overData.index : canvas.items.length - 1;
+
+          if (nextIndex !== spacerIndex) {
+            canvas.items = arrayMove(canvas.items, spacerIndex, nextIndex);
+          }
+        }
+      });
+    } else {
+      cleanSpacer();
+      currentOverCanvesIdRef.current = undefined;
+    }
+  };
+
+  const handleDragEndCanvasItem = (e: DragEndEvent) => {
+    const { over } = e;
+
+    if (!over) {
+      cleanUp();
+      cleanSpacer();
+      return;
+    }
+
+    // 실제 들어갈 Item
+    const nextField = {
+      ...currentDragItemRef.current!,
+      canvasId: currentOverCanvesIdRef.current,
+    };
+
+    if (nextField) {
+      const overData = over?.data?.current ?? {};
+      setCanvases(draft => {
+        const canvas = draft.find(
+          c => c.canvasId === currentOverCanvesIdRef.current,
+        );
+
+        if (canvas) {
+          const spacerIndex = canvas.items.findIndex(
+            d => d.dragType === 'spacer',
+          );
+          canvas.items.splice(spacerIndex, 1, nextField);
+          canvas.items = arrayMove(
+            canvas.items,
+            spacerIndex,
+            overData.index || 0,
+          );
+        }
+      });
+    }
+    setSidebarFieldsRegenKey(Date.now());
+    cleanUp();
+  };
+
   const handleDragStart = (e: DragStartEvent) => {
     const { active } = e;
     const activeData = active?.data?.current ?? {};
@@ -288,5 +544,8 @@ export function useBuilderDragState() {
     addCanvas,
     setCanvases,
     removeCanvas,
+    handleDragStartBySidebarItem,
+    handleDragOverBySidebarItem,
+    handleDragEndBySidebarItem,
   };
 }
