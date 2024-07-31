@@ -14,7 +14,7 @@ interface MuiProps {
   textFieldProps?: TextFieldProps;
 }
 
-const StyleValidTextField = styled(TextField)(({ theme }) => ({
+const StyledValidTextField = styled(TextField)(({ theme }) => ({
 }));
 
 const MirValidTextField = <
@@ -34,7 +34,7 @@ const MirValidTextField = <
       maxWidth: '100%',
     }}>
       <InputLabel error={!!error}>{textFieldProps?.required && '* '}{textFieldProps?.label}</InputLabel>
-      <StyleValidTextField 
+      <StyledValidTextField 
         {...textFieldProps}
         {...field}
         size="small"

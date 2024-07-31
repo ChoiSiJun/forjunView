@@ -5,6 +5,9 @@ import MirModalContents from '@common/components/atoms/modal/MirModalContents';
 import MirModalAction from '@common/components/atoms/modal/MirModalAction';
 import MirValidTextField from '@common/components/atoms/input/MirValidTextField';
 import MirButton from '@common/components/atoms/button/MirButton';
+import MirValidCheckBox from '@common/components/atoms/input/MirValidCheckBox';
+import FormGroup from '@mui/material/FormGroup';
+import FormLabel from '@mui/material/FormLabel';
 
 import UseModal from '@hooks/UseModal';
 import { useForm  } from "react-hook-form";
@@ -112,6 +115,14 @@ const ManagerCreateModal = () => {
                   placeholder: '비밀번호를 입력하세요.'
                 }}
               />
+            </Grid>
+
+            <Grid item xs={6}>
+            <FormLabel component="legend">Pick two</FormLabel>
+            <FormGroup>
+              <MirValidCheckBox />
+            </FormGroup>
+              
             </Grid>
           </Grid>
         </form>
