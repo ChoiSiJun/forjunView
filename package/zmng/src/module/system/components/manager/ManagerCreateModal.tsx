@@ -5,7 +5,7 @@ import MirModalContents from '@common/components/atoms/modal/MirModalContents';
 import MirModalAction from '@common/components/atoms/modal/MirModalAction';
 import MirValidTextField from '@common/components/atoms/input/MirValidTextField';
 import MirButton from '@common/components/atoms/button/MirButton';
-import MirValidCheckBox from '@common/components/atoms/input/MirValidCheckBox';
+import MirMultiCheckBox from '@common/components/atoms/input/MirMultiCheckBox';
 import FormGroup from '@mui/material/FormGroup';
 import FormLabel from '@mui/material/FormLabel';
 
@@ -24,6 +24,7 @@ const ManagerCreateModal = () => {
       email: "",
       tel: "",
       password: "",
+      mlocs: ""
     }
   });
 
@@ -118,10 +119,13 @@ const ManagerCreateModal = () => {
             </Grid>
 
             <Grid item xs={6}>
-            <FormLabel component="legend">Pick two</FormLabel>
-            <FormGroup>
-              <MirValidCheckBox />
-            </FormGroup>
+            <MirMultiCheckBox 
+              name="mlocs"
+              control={control}
+              rules={{ required: '체크하세요' }}
+              label="접속기관"
+              required
+            />
               
             </Grid>
           </Grid>

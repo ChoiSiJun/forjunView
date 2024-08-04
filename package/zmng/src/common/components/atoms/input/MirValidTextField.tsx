@@ -33,7 +33,7 @@ const MirValidTextField = <
     <Box pr={1} sx={{
       maxWidth: '100%',
     }}>
-      <InputLabel error={!!error}>{textFieldProps?.required && '* '}{textFieldProps?.label}</InputLabel>
+      <InputLabel error={!!error} required={textFieldProps?.required}>{textFieldProps?.label}</InputLabel>
       <StyledValidTextField 
         {...textFieldProps}
         {...field}

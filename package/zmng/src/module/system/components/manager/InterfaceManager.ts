@@ -5,6 +5,7 @@ export interface IManager {
   email?: string;
   tel?: string;
   password:string;
+  mlocs:string;
 };
 
 export interface IManagerState {
@@ -13,6 +14,7 @@ export interface IManagerState {
   email?: string;
   tel?: string;
   password:string;
+  mlocs:string;
 };
 
 export interface IFormValues extends IManagerState {};
