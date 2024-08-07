@@ -3,6 +3,7 @@ import {
   DragOverEvent,
   DragStartEvent,
   UniqueIdentifier,
+  Over,
 } from '@dnd-kit/core';
 import { useRef, useState } from 'react';
 import { BuilderItemsProps } from '@module/cms/builder/components/BuilderSideBarItem';
@@ -99,6 +100,28 @@ export function useBuilderDragState() {
       });
     });
     spacerInsertedRef.current = false;
+  };
+
+  const findCanvesArea = (over: Over | null) => {
+    if (over?.data?.current?.canvasId) {
+      if (currentOverCanvesIdRef.current !== over.data.current.canvasId) {
+        cleanSpacer();
+        if (currentOverCanvesIdRef.current !== undefined) {
+          newCanvasMoveCheckRef.current = true;
+        }
+      }
+      currentOverCanvesIdRef.current = over?.data?.current?.canvasId;
+    }
+
+    if (over?.data?.current?.item?.canvasId) {
+      if (currentOverCanvesIdRef.current !== over.data.current.item.canvasId) {
+        cleanSpacer();
+        if (currentOverCanvesIdRef.current !== undefined) {
+          newCanvasMoveCheckRef.current = true;
+        }
+      }
+      currentOverCanvesIdRef.current = over.data.current.item.canvasId;
+    }
   };
 
   const handleDragStartBySidebarItem = (e: DragStartEvent) => {
@@ -254,67 +277,58 @@ export function useBuilderDragState() {
     const { active, over } = e;
 
     // Over 대상이 컨버스 일경우. currentOverCanvesIdRef 변경
-    if (over?.data?.current?.canvasId) {
-      if (currentOverCanvesIdRef.current !== over.data.current.canvasId) {
-        cleanSpacer();
-      }
-      currentOverCanvesIdRef.current = over?.data?.current?.canvasId;
-    }
 
-    // Over 대상이 아이템 일경우 아이템의 CanvesItem으로 변경.
-    if (over?.data?.current?.item?.canvasId) {
-      if (currentOverCanvesIdRef.current !== over.data.current.item.canvasId) {
-        cleanSpacer();
-      }
-      currentOverCanvesIdRef.current = over.data.current.item.canvasId;
-    }
+    findCanvesArea(over);
 
     const overData = over?.data?.current ?? {};
-    if (!spacerInsertedRef.current) {
-      const spacer = createSpacer({
-        dragId: `${active.id}-spacer`,
-        canvasId: currentOverCanvesIdRef.current,
-      });
 
-      setCanvases(draft => {
-        const canvas = draft.find(
-          c => c.canvasId === currentOverCanvesIdRef.current,
-        );
+    if (newCanvasMoveCheckRef.current) {
+      if (!spacerInsertedRef.current) {
+        const spacer = createSpacer({
+          dragId: `${active.id}-spacer`,
+          canvasId: currentOverCanvesIdRef.current,
+        });
 
-        if (canvas) {
-          if (!canvas.items.length) {
-            canvas.items.push(spacer);
-          } else {
-            const nextIndex =
-              overData.index > -1 ? overData.index : canvas.items.length;
-            canvas.items.splice(nextIndex, 0, spacer);
-          }
-          spacerInsertedRef.current = true;
-        }
-      });
-      return;
-    }
-
-    if (over) {
-      setCanvases(draft => {
-        const canvas = draft.find(
-          c => c.canvasId === currentOverCanvesIdRef.current,
-        );
-        if (canvas) {
-          const spacerIndex = canvas.items.findIndex(
-            d => d.dragId === `${active.id}-spacer`,
+        setCanvases(draft => {
+          const canvas = draft.find(
+            c => c.canvasId === currentOverCanvesIdRef.current,
           );
-          const nextIndex =
-            overData.index > -1 ? overData.index : canvas.items.length - 1;
 
-          if (nextIndex !== spacerIndex) {
-            canvas.items = arrayMove(canvas.items, spacerIndex, nextIndex);
+          if (canvas) {
+            if (!canvas.items.length) {
+              canvas.items.push(spacer);
+            } else {
+              const nextIndex =
+                overData.index > -1 ? overData.index : canvas.items.length;
+
+              canvas.items.splice(nextIndex, 0, spacer);
+            }
+            spacerInsertedRef.current = true;
           }
-        }
-      });
-    } else {
-      cleanSpacer();
-      currentOverCanvesIdRef.current = undefined;
+        });
+      }
+
+      if (over) {
+        setCanvases(draft => {
+          const canvas = draft.find(
+            c => c.canvasId === currentOverCanvesIdRef.current,
+          );
+          if (canvas) {
+            const spacerIndex = canvas.items.findIndex(
+              d => d.dragId === `${active.id}-spacer`,
+            );
+            const nextIndex =
+              overData.index > -1 ? overData.index : canvas.items.length - 1;
+
+            if (nextIndex !== spacerIndex) {
+              canvas.items = arrayMove(canvas.items, spacerIndex, nextIndex);
+            }
+          }
+        });
+      } else {
+        cleanSpacer();
+        currentOverCanvesIdRef.current = undefined;
+      }
     }
   };
 
@@ -401,85 +415,18 @@ export function useBuilderDragState() {
   // 드래그중일때.
   const handleDragOver = (e: DragOverEvent) => {
     const { active, over } = e;
-    const activeData = active?.data?.current ?? {};
 
-    // Over 대상이 컨버스 일경우. currentOverCanvesIdRef 변경
-    if (over?.data?.current?.canvasId) {
-      if (currentOverCanvesIdRef.current !== over.data.current.canvasId) {
-        cleanSpacer();
-        if (currentOverCanvesIdRef.current !== undefined) {
-          newCanvasMoveCheckRef.current = true;
-        }
-      }
-      currentOverCanvesIdRef.current = over?.data?.current?.canvasId;
-    }
-
-    // Over 대상이 아이템 일경우 아이템의 CanvesItem으로 변경.
-    if (over?.data?.current?.item?.canvasId) {
-      if (currentOverCanvesIdRef.current !== over.data.current.item.canvasId) {
-        cleanSpacer();
-        if (currentOverCanvesIdRef.current !== undefined) {
-          newCanvasMoveCheckRef.current = true;
-        }
-      }
-      currentOverCanvesIdRef.current = over.data.current.item.canvasId;
-    }
-
-    if (newCanvasMoveCheckRef.current) {
-      cleanSpacer();
-    }
+    const dragFrom = active?.data?.current?.dragFrom ?? {};
+    findCanvesArea(over);
 
     // 사이드바 아이템이 캔버스위로 이동하는것을 감지할경우
     // 스페이서 접미사가 있는 사이드바 아이템 id를 이용해서 스페이서를 생성후 캔버스에 렌더링될수있도록 배열에 값을 저장.
     // 배열에 객체 생성시작.
-    if (activeData.fromSidebar || newCanvasMoveCheckRef.current) {
-      // 현재 마우스가 위치한 데이터
-      const overData = over?.data?.current ?? {};
-      if (!spacerInsertedRef.current) {
-        const spacer = createSpacer({
-          dragId: `${active.id}-spacer`,
-          canvasId: currentOverCanvesIdRef.current,
-        });
 
-        setCanvases(draft => {
-          const canvas = draft.find(
-            c => c.canvasId === currentOverCanvesIdRef.current,
-          );
-
-          if (canvas) {
-            if (!canvas.items.length) {
-              canvas.items.push(spacer);
-            } else {
-              const nextIndex =
-                overData.index > -1 ? overData.index : canvas.items.length;
-              canvas.items.splice(nextIndex, 0, spacer);
-            }
-            spacerInsertedRef.current = true;
-          }
-        });
-      } else if (!over) {
-        cleanSpacer();
-        currentOverCanvesIdRef.current = undefined;
-      } else {
-        // 실질적으로 캔버스별 아이템을 스페이서로 교체해서 렌더링
-
-        setCanvases(draft => {
-          const canvas = draft.find(
-            c => c.canvasId === currentOverCanvesIdRef.current,
-          );
-          if (canvas) {
-            const spacerIndex = canvas.items.findIndex(
-              d => d.dragId === `${active.id}-spacer`,
-            );
-            const nextIndex =
-              overData.index > -1 ? overData.index : canvas.items.length - 1;
-
-            if (nextIndex !== spacerIndex) {
-              canvas.items = arrayMove(canvas.items, spacerIndex, nextIndex);
-            }
-          }
-        });
-      }
+    if (dragFrom === 'sidebarItem') {
+      handleDragOverBySidebarItem(e);
+    } else {
+      handleDragOverCanvasItem(e);
     }
   };
 

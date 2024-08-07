@@ -47,6 +47,7 @@ export default function SortableItem({
 }: {
   item: BuilderItemsProps;
   index: number;
+  dragFrom: string;
   selectedItemId: UniqueIdentifier;
   setSelectedItemId: (id: UniqueIdentifier) => void;
   onDelete: (id: UniqueIdentifier) => void;
@@ -62,6 +63,7 @@ export default function SortableItem({
   } = useSortable({
     id: item.dragId,
     data: {
+      dragFrom: 'canvasItem',
       index,
       item,
     },

@@ -38,6 +38,7 @@ const DraggableSideBarItem = ({ item }: SideBarItemProps) => {
     id: draggableItem.dragId,
     data: {
       item: draggableItem,
+      dragFrom: 'sidebarItem',
       fromSidebar: true,
     },
   });
