@@ -1,9 +1,11 @@
 import { useAppSelector, useAppDispatch } from '@config/ReduxHooks';
+import MirModalContainer from '@common/components/atoms/modal/MirModalContainer';
+import React from 'react';
 
 import LocationCreateModal from '@module/system/components/location/LocationCreateModal';
 import LocationUpdateModal from '@module/system/components/location/LocationUpdateModal';
-import MirModalContainer from '@common/components/atoms/modal/MirModalContainer';
-import React from 'react';
+import ManagerCreateModal from '@module/system/components/manager/ManagerCreateModal';
+import ManagerUpdateModal from '@module/system/components/manager/ManagerUpdateModal';
 
 export interface ModalComponentProps {
   Target: React.FC
@@ -17,6 +19,14 @@ const MODAL_COMPONENTS = {
   },
   LocationUpdateModal: {
     Target: LocationUpdateModal,
+    size: 'md',
+  },
+  ManagerCreateModal: {
+    Target: ManagerCreateModal,
+    size: 'md',
+  },
+  ManagerUpdateModal: {
+    Target: ManagerUpdateModal,
     size: 'md',
   },
 };

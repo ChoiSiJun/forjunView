@@ -3,16 +3,16 @@ import { useAppSelector, useAppDispatch } from '@config/ReduxHooks';
 import Grid from '@mui/material/Grid';
 import MirCodeNameList from '@common/components/molecule/MirCodeNameList';
 import MirCard from '@common/components/molecule/MirCard';
-import SystemLocationInfo from '@module/system/components/location/SystemLocationInfo';
+import LocationInfo from '@module/system/components/location/LocationInfo';
 import UseModal from '@hooks/UseModal';
 import { updateLocation } from '@module/system/slice/LocationSlice'; 
 
 import {
-  useLocationList,
+  useLocationCodeNameList,
   useLocation,
 } from '@module/system/hook/useLocationQuery';
 
-const SystemLocationList = () => {
+const LocationList = () => {
   const { openModal } = UseModal();
   const dispatch = useAppDispatch();
   const [listClickItem, setListClickItem] = useState('');
@@ -20,8 +20,8 @@ const SystemLocationList = () => {
   const {
     isLoading: locationListLoading,
     isFetching: locationListFetching,
-    data: locationListItem,
-  } = useLocationList();
+    data: locationCodeNameList,
+  } = useLocationCodeNameList();
 
   const {
     isLoading,
@@ -42,13 +42,6 @@ const SystemLocationList = () => {
     });
   };
 
-  // 삭제 Event Handler
-  // const HandleDeleteClick = (code: string | number) => {
-  //   openModal({
-  //     type: 'LocationDeleteModal',
-  //   });
-  // };
-
   // 수정 Event Handler
   const HandlerModifyClick = (code: string | number) => {
     dispatch(updateLocation({code}));
@@ -62,7 +55,7 @@ const SystemLocationList = () => {
     <Grid container spacing={2}>
       <Grid item xs={4} sx={{ bgcolor: '#EEF2F6' }}>
         <MirCodeNameList
-          codeNameList={locationListItem}
+          codeNameList={locationCodeNameList}
           onListClick={HandleListClick}
           onCreateClick={HandleCreateClick}
           onModifyClick={HandlerModifyClick}
@@ -71,11 +64,11 @@ const SystemLocationList = () => {
       </Grid>
       <Grid item xs={8} sx={{ bgcolor: '#EEF2F6' }}>
         <MirCard title="기관정보">
-          <SystemLocationInfo locationInfo={locationData?.data} />
+          <LocationInfo locationInfo={locationData?.data} />
         </MirCard>
       </Grid>
     </Grid>
   );
 };
 
-export default SystemLocationList;
+export default LocationList;

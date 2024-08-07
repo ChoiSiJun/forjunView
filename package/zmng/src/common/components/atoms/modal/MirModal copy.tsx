@@ -11,7 +11,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import MirCard from '@common/components/molecule/MirCard';
-import SystemLocationInfo from '@module/system/components/location/SystemLocationInfo';
+import SystemLocationInfo from '@module/system/components/location/LocationInfo';
 
 export const MirModalGuide = {
   title: '기본모달',

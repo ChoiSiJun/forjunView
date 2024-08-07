@@ -9,16 +9,9 @@ import MirModalContents from '@common/components/atoms/modal/MirModalContents';
 import MirModalAction from '@common/components/atoms/modal/MirModalAction';
 import UseModal from '@hooks/UseModal'; 
 import { useUpdateLocation, useLocation } from '@module/system/hook/useLocationQuery'
+import { ILocation } from '@module/system/components/location/InterfaceLocation'
 
-export interface FormValues {
-  "mloc": string;
-  "name_ko": string;
-  "zipcode": string;
-  "address": string;
-  "addressDetail": string,
-  "email": string,
-  "tel": string
-};
+interface FormValues extends ILocation {};
 
 const LocationUpdateModal = () => {
   const { closeModal } = UseModal(); 
@@ -51,6 +44,7 @@ const LocationUpdateModal = () => {
     updateLocation(data)
   };
   
+  // 데이터 셋팅
   setValue("mloc", locationData?.data.mloc);
   setValue("name_ko", locationData?.data.name_ko);
   setValue("zipcode", locationData?.data.zipcode);

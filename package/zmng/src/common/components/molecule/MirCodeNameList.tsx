@@ -1,7 +1,4 @@
 import * as React from 'react';
-import { useEffect, useRef } from 'react';
-import { useAppSelector, useAppDispatch } from '@config/ReduxHooks';
-
 import Paper from '@mui/material/Paper';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -12,10 +9,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MirButton from '@common/components/atoms/button/MirButton';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
 
 interface MirCodeNameListItem {
-  // key : number;
-  code: string;
+  key: string | number;
+  code: string | number;
   name_ko: string;
 }
 
@@ -24,10 +23,10 @@ export interface CodeNameListState {
 }
 
 export interface CodeNameListProps extends CodeNameListState {
-  onListClick: (code: string | number) => void;
+  onListClick: (key: string | number) => void;
   onCreateClick: () => void;
-  onModifyClick: (code: string | number) => void;
-  onDeleteClick?: (code: string | number) => void;
+  onModifyClick: (key: string | number) => void;
+  onDeleteClick?: (key: string | number) => void;
 }
 
 const MirCodeNameList = ({
@@ -43,39 +42,39 @@ const MirCodeNameList = ({
   // 리스트 클릭 Event Handler
   const handleListItemClick = (
     index: number,
-    code: string | number,
-    HandleListClick: (code: string | number) => void,
+    key: string | number,
+    HandleListClick: (key: string | number) => void,
   ) => {
     setSelectedIndex(index);
 
     // 리스트 클릭 callback 이벤트
-    HandleListClick(code);
+    HandleListClick(key);
   };
 
   // 삭제 Event Handler
   const handleListItemDeleteClick = (
     index: number,
-    code: string | number,
-    propDeleteClickEvent: (code: string | number) => void,
+    key: string | number,
+    propDeleteClickEvent: (key: string | number) => void,
   ) => {
     setSelectedIndex(index);
 
-    onListClick(code);
+    onListClick(key);
 
-    propDeleteClickEvent(code);
+    propDeleteClickEvent(key);
   };
 
   // 수정 Event Handler
   const handleListItemUpdateClick = (
     index: number,
-    code: string | number,
-    propUpdateClickEvent: (code: string | number) => void,
+    key: string | number,
+    propUpdateClickEvent: (key: string | number) => void,
   ) => {
     setSelectedIndex(index);
 
-    onListClick(code);
+    onListClick(key);
 
-    propUpdateClickEvent(code);
+    propUpdateClickEvent(key);
   };
 
   return (
@@ -100,7 +99,8 @@ const MirCodeNameList = ({
         {codeNameList?.map((codeName, index) => {
           return (
             <ListItem
-              key={codeName.code}
+              divider={<Divider />}
+              key={codeName.key}
               secondaryAction={
                 <>
                   <IconButton
@@ -109,7 +109,7 @@ const MirCodeNameList = ({
                     onClick={() =>
                       handleListItemUpdateClick(
                         index,
-                        codeName.code,
+                        codeName.key,
                         onModifyClick,
                       )
                     }
@@ -123,7 +123,7 @@ const MirCodeNameList = ({
                       onClick={() =>
                         handleListItemDeleteClick(
                           index,
-                          codeName.code,
+                          codeName.key,
                           onDeleteClick,
                         )
                       }
@@ -139,15 +139,19 @@ const MirCodeNameList = ({
                 role={undefined}
                 selected={selectedIndex === index}
                 onClick={() =>
-                  handleListItemClick(index, codeName.code, onListClick)
+                  handleListItemClick(index, codeName.key, onListClick)
                 }
                 dense
                 key={codeName.code}
               >
                 <ListItemText
                   id={codeName.code}
-                  primary={codeName.code}
-                  secondary={codeName.name_ko}
+                  primary={
+                    <Typography variant="h6">{codeName.code}</Typography>
+                  }
+                  secondary={
+                    <Typography variant="body2">{codeName.name_ko}</Typography>
+                  }
                 />
               </ListItemButton>
             </ListItem>

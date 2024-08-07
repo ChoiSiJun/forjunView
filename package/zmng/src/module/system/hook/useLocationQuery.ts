@@ -2,22 +2,9 @@ import axios from 'axios'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import UseModal from '@hooks/UseModal'; 
 import { toast } from 'react-toastify';
+import { IFormValues } from '@module/system/components/manager/InterfaceManager';
 
 const api_url = import.meta.env.VITE_SYSTEM_API;
-
-export interface LocationInfoState {
-  mloc:string
-  name_ko:string
-  name_en?:string
-  name_jp?:string
-  name_cn?:string
-  zipcode?:string
-  address?:string
-  address_detail?:string
-  email?:string
-  tel?:string
-  fax?:string
-}
 
 /**
  * 기관리스트 가져오기
@@ -29,10 +16,10 @@ const getLocationList = () => {
   )
 }
 
-export const useLocationList = () => {
-  return useQuery("getLocationList", getLocationList, {
+export const useLocationCodeNameList = () => {
+  return useQuery("getLocationCodeNameList", getLocationList, {
     select: data => {
-      const codeNameList = data.data?.map(item  => ({code: item.mloc, name_ko: item.name_ko}))
+      const codeNameList = data.data?.map(item  => ({key: item.mloc, code: item.mloc, name_ko: item.name_ko}))
 
       return codeNameList
     },
@@ -62,7 +49,7 @@ export const useLocation = (mloc:string|number) => {
  * @param location 
  * @returns 
  */
-const createLocation = (location:LocationInfoState) => {
+const createLocation = (location:IFormValues) => {
   return axios.post(
     `${api_url}/sys-system/locations`, location
   );
@@ -74,10 +61,13 @@ export const useCreateLocation = () => {
 
   return useMutation(createLocation, {
     onSuccess: () => {
-      queryClient.invalidateQueries('getLocationList')
+      queryClient.invalidateQueries('getLocationCodeNameList')
       closeModal();
       toast.success('저장되었습니다.');
     },
+    onError: () => {
+      toast.success('저장하지 못하였습니다.');
+    }
   })
 }
 
@@ -86,7 +76,7 @@ export const useCreateLocation = () => {
  * @param location 
  * @returns 
  */
-const updateLocation = (location:LocationInfoState) => {
+const updateLocation = (location:IFormValues) => {
   return axios.put(
     `${api_url}/sys-system/locations/${location.mloc}`, location
   );
@@ -98,10 +88,13 @@ export const useUpdateLocation = () => {
 
   return useMutation(updateLocation, {
     onSuccess: () => {
-      queryClient.invalidateQueries('getLocationList')
+      queryClient.invalidateQueries('getLocationCodeNameList')
       closeModal();
       toast.success('수정 되었습니다.');
     },
+    onError: () => {
+      toast.success('저장하지 못하였습니다.');
+    }
   })
 }
 
