@@ -63,7 +63,7 @@ export const useCreateManager = () => {
       toast.success('저장되었습니다.');
     },
     onError: () => {
-      toast.success('저장하지 못하였습니다.');
+      toast.error('저장하지 못하였습니다.');
     }
   });
 }

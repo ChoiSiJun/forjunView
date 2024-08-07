@@ -3,6 +3,7 @@ import {
   FieldValues,
   FieldPath,
   UseControllerProps,
+  useWatch
 } from 'react-hook-form';
 import {
   styled,
@@ -18,40 +19,52 @@ import Box from '@mui/material/Box';
 const StyledValidCheckBox = styled(FormControlLabel)(({ theme }) => ({}));
 
 interface MirMultiCheckBoxProps {
-  label:string;
-  required:boolean;
+  control: any, 
+  name: string, 
+  label: string, 
+  options:{ value: string | number, label: string } []
 }
 
-const options = [
-  {
-    label: 'Checkbox Option 1',
-    value: '1',
-  },
-  {
-    label: 'Checkbox Option 2',
-    value: '2',
-  },
-];
-
-const MirMultiCheckBox = <
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->({
+const MirMultiCheckBox = ({
+  control,
+  name,
   label,
-  required,
-  ...props
-}: MirMultiCheckBoxProps & UseControllerProps<TFieldValues, TName>) => {
+  options
+}: MirMultiCheckBoxProps) => {
   const {
-    field,
-    fieldState: { error },
-  } = useController(props);
+      field: { ref, value, onChange, ...inputProps },
+      formState: { errors },
+  } = useController({
+      name,
+      control,
+      defaultValue: [],
+  })
+
+  const checkboxIds = useWatch({ control, name }) || []
+
+  function handleChange(changeValue:any) {
+    const newArray = [...checkboxIds]
+    const item = changeValue
+
+    if (newArray.length > 0) {
+        const index = newArray.findIndex((x) => x === item)
+        if (index === -1) {
+            newArray.push(item)
+        } else {
+            newArray.splice(index, 1)
+        }
+    } else {
+        newArray.push(item)
+    }
+    onChange(newArray)
+  }
 
   return (
     <Box pr={1} sx={{
       maxWidth: '100%',
     }}>
-      <FormControl error={!!error} required={required}>
-        {/* <InputLabel error={!!error}>{required && '* '}{label}</InputLabel> */}
+      {/* <FormControl error={!!errors}> */}
+      <FormControl>
         <FormLabel component="legend">{label}</FormLabel>
         <FormGroup>
           {options.map((option: any) => {
@@ -60,11 +73,13 @@ const MirMultiCheckBox = <
                 control={<Checkbox />}
                 label={option.label}
                 key={option.value}
+                inputRef={ref}
+                onChange={() => handleChange(option.value)}
               />
             );
           })}
         </FormGroup>
-        <FormHelperText>{!!error && error.message}</FormHelperText>
+        {/* <FormHelperText>{!!errors && errors.message}</FormHelperText> */}
       </FormControl>
     </Box>
   );

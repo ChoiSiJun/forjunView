@@ -6,8 +6,6 @@ import MirModalAction from '@common/components/atoms/modal/MirModalAction';
 import MirValidTextField from '@common/components/atoms/input/MirValidTextField';
 import MirButton from '@common/components/atoms/button/MirButton';
 import MirMultiCheckBox from '@common/components/atoms/input/MirMultiCheckBox';
-import FormGroup from '@mui/material/FormGroup';
-import FormLabel from '@mui/material/FormLabel';
 
 import UseModal from '@hooks/UseModal';
 import { useForm  } from "react-hook-form";
@@ -24,7 +22,7 @@ const ManagerCreateModal = () => {
       email: "",
       tel: "",
       password: "",
-      mlocs: ""
+      mlocs: []
     }
   });
 
@@ -32,7 +30,19 @@ const ManagerCreateModal = () => {
 
   const handleCreateManagers = (data: IFormValues) => {
     createManager(data)
+    // console.log(data)
   };
+
+  const options = [
+    {
+      label: 'Checkbox Option 1',
+      value: '1',
+    },
+    {
+      label: 'Checkbox Option 2',
+      value: '2',
+    },
+  ];
 
   return (
     <>
@@ -70,6 +80,12 @@ const ManagerCreateModal = () => {
                 }}
               />
             </Grid>
+            
+            {/* <Grid item xs={12}>
+            <Divider><Chip label="연락처" size="small" /></Divider>
+            </Grid> */}
+            
+
             <Grid item xs={6}>
               <MirValidTextField
                 name="email"
@@ -99,7 +115,8 @@ const ManagerCreateModal = () => {
                 }}
               />
             </Grid>
-            <Grid item xs={6}>
+
+            <Grid item xs={12}>
               <MirValidTextField
                 name="password"
                 control={control}
@@ -119,13 +136,12 @@ const ManagerCreateModal = () => {
             </Grid>
 
             <Grid item xs={6}>
-            <MirMultiCheckBox 
-              name="mlocs"
-              control={control}
-              rules={{ required: '체크하세요' }}
-              label="접속기관"
-              required
-            />
+              <MirMultiCheckBox 
+                name="accessLocation"
+                control={control}
+                label="접속기관"
+                options={options}
+              />
               
             </Grid>
           </Grid>

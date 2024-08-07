@@ -6,15 +6,19 @@ import {
   UseControllerProps,
 } from "react-hook-form";
 import TextField from '@mui/material/TextField';
-import { styled } from '@mui/material/styles';
+import { alpha, styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import InputLabel from "@mui/material/InputLabel"
+import FormControl from '@mui/material/FormControl';
 
 interface MuiProps {
   textFieldProps?: TextFieldProps;
 }
 
 const StyledValidTextField = styled(TextField)(({ theme }) => ({
+}));
+
+const StyledValidInputLabel = styled(InputLabel)(({ theme }) => ({
 }));
 
 const MirValidTextField = <
@@ -33,17 +37,28 @@ const MirValidTextField = <
     <Box pr={1} sx={{
       maxWidth: '100%',
     }}>
-      <InputLabel error={!!error} required={textFieldProps?.required}>{textFieldProps?.label}</InputLabel>
-      <StyledValidTextField 
-        {...textFieldProps}
-        {...field}
-        size="small"
-        variant="outlined"
-        error={!!error}
-        helperText={!!error && error.message}
-        label=""
-        fullWidth
-      />
+      {/* <StyledValidInputLabel shrink error={!!error} required={textFieldProps?.required} >{textFieldProps?.label}</StyledValidInputLabel> */}
+        {/* <StyledValidTextField
+          {...textFieldProps}
+          {...field}
+          size="small"
+          variant="outlined"
+          error={!!error}
+          helperText={!!error && error.message}
+          label=""
+          fullWidth
+        /> */}
+      <StyledValidTextField
+          {...textFieldProps}
+          {...field}
+          required={textFieldProps?.required}
+          size="small"
+          variant="outlined"
+          error={!!error}
+          helperText={!!error && error.message}
+          label={textFieldProps?.label}
+          fullWidth
+        />
     </Box>
   );
 };
