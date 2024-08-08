@@ -22,7 +22,6 @@ import {
 } from '@dnd-kit/sortable';
 
 import BuilderSettingBar from '@module/cms/builder/components/BuilderSettingBar';
-import BuilderDndMonitor from '@module/cms/builder/components/BuilderDndMonitor';
 import { CanvasItem } from '@module/cms/builder/components/BuilderCanvasItem';
 
 const SidebarWidth = 340;
@@ -74,7 +73,6 @@ const BuilderLayout = () => {
         onDragEnd={handleDragEnd}
         autoScroll
       >
-        <BuilderDndMonitor />
         <Box
           component="main"
           sx={{

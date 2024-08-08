@@ -9,8 +9,8 @@ import DragIndicatorOutlinedIcon from '@mui/icons-material/DragIndicatorOutlined
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import {
   BuilderItemsProps,
-  RenderComponent,
-} from '@module/cms/builder/components/BuilderSideBarItem';
+  RenderCanvasItem,
+} from '@module/cms/builder/components/BuilderItem';
 
 interface CanvasItemProps {
   item: BuilderItemsProps;
@@ -24,7 +24,7 @@ export function CanvasItem({ item, overlay = false }: CanvasItemProps) {
       <Box border={1} height={50} bgcolor="gray" className="spacer" />
     ) : (
       <Box width="100%">
-        <RenderComponent type={item.dragType} />
+        <RenderCanvasItem type={item.dragType} />
       </Box>
     );
 
@@ -47,7 +47,6 @@ export default function SortableItem({
 }: {
   item: BuilderItemsProps;
   index: number;
-  dragFrom: string;
   selectedItemId: UniqueIdentifier;
   setSelectedItemId: (id: UniqueIdentifier) => void;
   onDelete: (id: UniqueIdentifier) => void;
@@ -63,7 +62,7 @@ export default function SortableItem({
   } = useSortable({
     id: item.dragId,
     data: {
-      dragFrom: 'canvasItem',
+      dragFrom: 'canvas',
       index,
       item,
     },

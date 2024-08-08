@@ -1,16 +1,11 @@
 import { Box, Typography } from '@mui/material';
 import {
-  BuilderItems,
+  SideBarItems,
   BuilderItemsProps,
-} from '@module/cms/builder/components/BuilderSideBarItem';
+} from '@module/cms/builder/components/BuilderItem';
 import { useDraggable } from '@dnd-kit/core';
 import { useRef } from 'react';
 import { nanoid } from '@reduxjs/toolkit';
-
-// 사이드바 컨테이너 속성
-interface BuilderSidebarProps {
-  fieldsRegKey: number;
-}
 
 // 사이드바 Item 렌더링
 interface SideBarItemProps {
@@ -38,7 +33,7 @@ const DraggableSideBarItem = ({ item }: SideBarItemProps) => {
     id: draggableItem.dragId,
     data: {
       item: draggableItem,
-      dragFrom: 'sidebarItem',
+      dragFrom: 'sidebar',
       fromSidebar: true,
     },
   });
@@ -55,13 +50,13 @@ const DraggableSideBarItem = ({ item }: SideBarItemProps) => {
 };
 
 // 사이드바 컨테이너
-const BuilderSidebar = ({ fieldsRegKey }: BuilderSidebarProps) => {
+const BuilderSidebar = ({ fieldsRegKey }: { fieldsRegKey: number }) => {
   return (
     <Box sx={{}}>
       <Typography variant="h6">Sidebar Content</Typography>
 
       <div key={fieldsRegKey} className="sidebar">
-        {BuilderItems.map(item => (
+        {SideBarItems.map(item => (
           <DraggableSideBarItem key={item.dragType} item={item} />
         ))}
       </div>

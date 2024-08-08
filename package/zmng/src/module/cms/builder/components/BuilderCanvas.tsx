@@ -1,4 +1,4 @@
-import { BuilderItemsProps } from '@module/cms/builder/components/BuilderSideBarItem';
+import { BuilderItemsProps } from '@module/cms/builder/components/BuilderItem';
 import { UniqueIdentifier, useDroppable } from '@dnd-kit/core';
 import 'react-resizable/css/styles.css';
 import { Grid } from '@mui/material';

@@ -6,7 +6,7 @@ import {
   Over,
 } from '@dnd-kit/core';
 import { useRef, useState } from 'react';
-import { BuilderItemsProps } from '@module/cms/builder/components/BuilderSideBarItem';
+import { BuilderItemsProps } from '@module/cms/builder/components/BuilderItem';
 import { useImmer } from 'use-immer';
 import { arrayMove } from '@dnd-kit/sortable';
 
@@ -251,7 +251,9 @@ export function useBuilderDragState() {
     const activeData = active?.data?.current ?? {};
 
     // 캔버스의 아이템일 경우 실제 아이템 복사대신 공백만 생성해서 삽입 & 캔버스 아이템의 캔버스 ID를 기본으로 세팅
+    newCanvasMoveCheckRef.current = false;
     const { item, index } = activeData;
+
     setActiveCanverItem(item);
     currentDragItemRef.current = item;
 
@@ -334,13 +336,11 @@ export function useBuilderDragState() {
 
   const handleDragEndCanvasItem = (e: DragEndEvent) => {
     const { over } = e;
-
     if (!over) {
       cleanUp();
       cleanSpacer();
       return;
     }
-
     // 실제 들어갈 Item
     const nextField = {
       ...currentDragItemRef.current!,
@@ -373,57 +373,29 @@ export function useBuilderDragState() {
 
   const handleDragStart = (e: DragStartEvent) => {
     const { active } = e;
-    const activeData = active?.data?.current ?? {};
-
-    newCanvasMoveCheckRef.current = false;
-
-    // 드래그중인 아이템에 참조를 설정
-    // 복사 완료는 onDragEnd 핸들러에서
-
-    // 사이드바의 아이템일 경우 복사시작.
-
-    if (activeData.fromSidebar) {
-      const { item } = activeData;
-      setActiveSidebarItem(item);
-      currentDragItemRef.current = item;
-      return;
-    }
-
-    // 캔버스의 아이템일 경우 실제 아이템 복사대신 공백만 생성해서 삽입 & 캔버스 아이템의 캔버스 ID를 기본으로 세팅
-    const { item, index } = activeData;
-    setActiveCanverItem(item);
-    currentDragItemRef.current = item;
-
-    // 시작 캔버스값은 아이템의 Canves ID
-    currentOverCanvesIdRef.current = item.canvasId;
-
-    // 드래그앤 드롭을 통해 세팅되있는 필드값 변경 ( 해당 인덱스를 스페이서 객체로 교체)
-    setCanvases(draft => {
-      const canvas = draft.find(
-        c => c.canvasId === currentOverCanvesIdRef.current,
-      );
-      if (canvas) {
-        canvas.items.splice(
-          index,
-          1,
-          createSpacer({ dragId: active.id, canvasId: canvas.canvasId }),
-        );
-      }
-    });
-  };
-
-  // 드래그중일때.
-  const handleDragOver = (e: DragOverEvent) => {
-    const { active, over } = e;
-
     const dragFrom = active?.data?.current?.dragFrom ?? {};
-    findCanvesArea(over);
 
     // 사이드바 아이템이 캔버스위로 이동하는것을 감지할경우
     // 스페이서 접미사가 있는 사이드바 아이템 id를 이용해서 스페이서를 생성후 캔버스에 렌더링될수있도록 배열에 값을 저장.
     // 배열에 객체 생성시작.
 
-    if (dragFrom === 'sidebarItem') {
+    if (dragFrom === 'sidebar') {
+      handleDragStartBySidebarItem(e);
+    } else if (dragFrom === 'canvas') {
+      handleDragStartCanvasItem(e);
+    }
+  };
+
+  // 드래그중일때.
+  const handleDragOver = (e: DragOverEvent) => {
+    const { active } = e;
+    const dragFrom = active?.data?.current?.dragFrom ?? {};
+
+    // 사이드바 아이템이 캔버스위로 이동하는것을 감지할경우
+    // 스페이서 접미사가 있는 사이드바 아이템 id를 이용해서 스페이서를 생성후 캔버스에 렌더링될수있도록 배열에 값을 저장.
+    // 배열에 객체 생성시작.
+
+    if (dragFrom === 'sidebar') {
       handleDragOverBySidebarItem(e);
     } else {
       handleDragOverCanvasItem(e);
@@ -432,48 +404,14 @@ export function useBuilderDragState() {
 
   // 드래그 종료시
   const handleDragEnd = (e: DragEndEvent) => {
-    const { over } = e;
+    const { active } = e;
+    const dragFrom = active?.data?.current?.dragFrom ?? {};
 
-    // We dropped outside of the over so clean up so we can start fresh.
-    if (!over) {
-      cleanUp();
-      setCanvases(draft => {
-        draft.forEach(canvas => {
-          canvas.items = canvas.items.filter(f => f.dragType !== 'spacer');
-        });
-      });
-      return;
+    if (dragFrom === 'sidebar') {
+      handleDragEndBySidebarItem(e);
+    } else {
+      handleDragEndCanvasItem(e);
     }
-
-    // 스페이스 객체를 실제 아이템으로 교체해서 적용
-    const nextField = {
-      ...currentDragItemRef.current!,
-      canvasId: currentOverCanvesIdRef.current,
-    };
-
-    if (nextField) {
-      // 스페이스 객체를 의미..
-      const overData = over?.data?.current ?? {};
-      setCanvases(draft => {
-        const canvas = draft.find(
-          c => c.canvasId === currentOverCanvesIdRef.current,
-        );
-
-        if (canvas) {
-          const spacerIndex = canvas.items.findIndex(
-            d => d.dragType === 'spacer',
-          );
-          canvas.items.splice(spacerIndex, 1, nextField);
-          canvas.items = arrayMove(
-            canvas.items,
-            spacerIndex,
-            overData.index || 0,
-          );
-        }
-      });
-    }
-    setSidebarFieldsRegenKey(Date.now());
-    cleanUp();
   };
 
   return {
