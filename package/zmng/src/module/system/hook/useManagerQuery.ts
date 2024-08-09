@@ -45,6 +45,8 @@ export const useManager = (id:string|number) => {
 
 /**
  * 관리자 생성
+ * @param manager 
+ * @returns 
  */
 const createManager = (manager:IFormValues) => {
   return axios.post(
@@ -66,4 +68,31 @@ export const useCreateManager = () => {
       toast.error('저장하지 못하였습니다.');
     }
   });
+}
+
+/**
+ * 관리자 아이디 중복체크
+ * @param userid 
+ * @returns 
+ */
+const getManagerByUserid = (userid:string) => {
+  try {
+    return axios.get(
+      `${api_url}/sys-system/managers/userid/${userid}`,
+    );
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      const { code } = error.response.data;
+
+      console.log("code",code)
+    }
+  };
+}
+
+export const useCheckUseridExists = async (userid:string) => {
+  const methods = await getManagerByUserid(userid);
+
+  console.log("methods", methods);
+
+  return methods===undefined ? '이미 등록된 아이디입니다.' : undefined ;
 }

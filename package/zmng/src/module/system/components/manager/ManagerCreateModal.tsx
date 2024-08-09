@@ -8,39 +8,40 @@ import MirButton from '@common/components/atoms/button/MirButton';
 import MirMultiCheckBox from '@common/components/atoms/input/MirMultiCheckBox';
 
 import UseModal from '@hooks/UseModal';
-import { useForm  } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 import { IFormValues } from '@module/system/components/manager/InterfaceManager';
-import { useCreateManager } from '@module/system/hook/useManagerQuery'
+import { useCreateManager, useCheckUseridExists } from '@module/system/hook/useManagerQuery';
 
 const ManagerCreateModal = () => {
   const { closeModal } = UseModal();
 
-  const {handleSubmit, control} = useForm<IFormValues>({
+  const { handleSubmit, control } = useForm<IFormValues>({
     defaultValues: {
-      userid: "",
-      name: "",
-      email: "",
-      tel: "",
-      password: "",
-      mlocs: []
-    }
+      userid: '',
+      name: '',
+      email: '',
+      tel: '',
+      password: '',
+      accessLocations: [],
+    },
+    reValidateMode: 'onBlur',
   });
 
   const { mutate: createManager } = useCreateManager();
 
   const handleCreateManagers = (data: IFormValues) => {
-    createManager(data)
-    // console.log(data)
+    createManager(data);
+    console.log(data);
   };
 
   const options = [
     {
-      label: 'Checkbox Option 1',
-      value: '1',
+      label: '미르테크',
+      value: 'MIRL',
     },
     {
-      label: 'Checkbox Option 2',
-      value: '2',
+      label: '미르테크2',
+      value: 'MIRL2',
     },
   ];
 
@@ -58,7 +59,12 @@ const ManagerCreateModal = () => {
               <MirValidTextField
                 name="userid"
                 control={control}
-                rules={{ required: '아이디를 입력하세요.' }}
+                rules={{
+                  required: '아이디를 입력하세요.',
+                  validate: {
+                    exists: async value => useCheckUseridExists(value),
+                  },
+                }}
                 textFieldProps={{
                   label: '아이디',
                   id: 'userid',
@@ -80,11 +86,10 @@ const ManagerCreateModal = () => {
                 }}
               />
             </Grid>
-            
+
             {/* <Grid item xs={12}>
             <Divider><Chip label="연락처" size="small" /></Divider>
             </Grid> */}
-            
 
             <Grid item xs={6}>
               <MirValidTextField
@@ -122,27 +127,28 @@ const ManagerCreateModal = () => {
                 control={control}
                 rules={{
                   pattern: {
-                    value: /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/,
-                    message: '암호는 문자, 숫자, 특수 문자를 포함한 8자 이상이어야 합니다.'
+                    value:
+                      /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/,
+                    message:
+                      '암호는 문자, 숫자, 특수 문자를 포함한 8자 이상이어야 합니다.',
                   },
                 }}
                 textFieldProps={{
-                  type: "password",
+                  type: 'password',
                   label: '비밀번호',
                   id: 'password',
-                  placeholder: '비밀번호를 입력하세요.'
+                  placeholder: '비밀번호를 입력하세요.',
                 }}
               />
             </Grid>
 
             <Grid item xs={6}>
-              <MirMultiCheckBox 
-                name="accessLocation"
+              <MirMultiCheckBox
+                name="accessLocations"
                 control={control}
                 label="접속기관"
                 options={options}
               />
-              
             </Grid>
           </Grid>
         </form>
