@@ -75,7 +75,7 @@ export const useCreateManager = () => {
  * @param userid 
  * @returns 
  */
-const getManagerByUserid = (userid:string) => {
+export const getManagerByUserid = (userid:string) => {
   return axios.get(
     `${api_url}/sys-system/managers/userid/${userid}`,
   );
