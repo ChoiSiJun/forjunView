@@ -27,7 +27,7 @@ export const useManagerCodeNameList = () => {
 }
 
 /**
- * 관리자 정보 가져오기
+ * 관리자 데이터 가져오기
  * @param id 
  * @returns 
  */
@@ -71,28 +71,25 @@ export const useCreateManager = () => {
 }
 
 /**
- * 관리자 아이디 중복체크
+ * 아이디로 관라자 데이터 가져오기
  * @param userid 
  * @returns 
  */
 const getManagerByUserid = (userid:string) => {
-  try {
-    return axios.get(
-      `${api_url}/sys-system/managers/userid/${userid}`,
-    );
-  } catch (error) {
-    if (axios.isAxiosError(error) && error.response) {
-      const { code } = error.response.data;
-
-      console.log("code",code)
-    }
-  };
+  return axios.get(
+    `${api_url}/sys-system/managers/userid/${userid}`,
+  );
 }
 
-export const useCheckUseridExists = async (userid:string) => {
-  const methods = await getManagerByUserid(userid);
+export const useManagerByUserid = (userid:string) => {
+  return useQuery(["getManagerByUserid", userid], () => getManagerByUserid(userid), {
+    enabled: !!userid,
+  });
+}
+
+  /* const methods = await getManagerByUserid(userid);
 
   console.log("methods", methods);
 
-  return methods===undefined ? '이미 등록된 아이디입니다.' : undefined ;
-}
+  return methods===undefined ? '이미 등록된 아이디입니다.' : undefined ; */
+ // }

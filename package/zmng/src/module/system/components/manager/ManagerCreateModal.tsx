@@ -10,7 +10,8 @@ import MirMultiCheckBox from '@common/components/atoms/input/MirMultiCheckBox';
 import UseModal from '@hooks/UseModal';
 import { useForm } from 'react-hook-form';
 import { IFormValues } from '@module/system/components/manager/InterfaceManager';
-import { useCreateManager, useCheckUseridExists } from '@module/system/hook/useManagerQuery';
+import { useCreateManager, useManagerByUserid } from '@module/system/hook/useManagerQuery';
+import { useState } from 'react';
 
 const ManagerCreateModal = () => {
   const { closeModal } = UseModal();
@@ -27,11 +28,27 @@ const ManagerCreateModal = () => {
     reValidateMode: 'onBlur',
   });
 
+  // 관리자 저장
   const { mutate: createManager } = useCreateManager();
 
   const handleCreateManagers = (data: IFormValues) => {
     createManager(data);
     console.log(data);
+  };
+
+  // 관리자 아이디 중복체크
+  const [dupUserid, setDupUserid] = useState("");
+
+  const {
+    data: managerData,
+  } = useManagerByUserid(dupUserid);
+
+  const checkUseridExists = (userid:string) => {
+    setDupUserid(userid);
+
+    console.log("managerData : ",managerData);
+
+    return managerData!==undefined ? '이미 등록된 아이디입니다.' : undefined ;
   };
 
   const options = [
@@ -62,7 +79,7 @@ const ManagerCreateModal = () => {
                 rules={{
                   required: '아이디를 입력하세요.',
                   validate: {
-                    exists: async value => useCheckUseridExists(value),
+                    exists: async value => checkUseridExists(value),
                   },
                 }}
                 textFieldProps={{
