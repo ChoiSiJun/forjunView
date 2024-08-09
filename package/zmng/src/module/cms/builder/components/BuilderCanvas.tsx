@@ -2,7 +2,7 @@ import { BuilderItemsProps } from '@module/cms/builder/components/BuilderItem';
 import { UniqueIdentifier, useDroppable } from '@dnd-kit/core';
 import 'react-resizable/css/styles.css';
 import { Grid } from '@mui/material';
-import SortableItem from '@module/cms/builder/components/BuilderCanvasItem';
+import BuilderCanvasItem from '@module/cms/builder/components/BuilderCanvasItem';
 
 import {
   SortableContext,
@@ -60,7 +60,7 @@ const BuilderCanvas = ({
           >
             {items?.map((item, i) => (
               <Grid item lg={12} xs={12} sm={12} border={1}>
-                <SortableItem
+                <BuilderCanvasItem
                   key={item.dragId}
                   item={item}
                   index={i}

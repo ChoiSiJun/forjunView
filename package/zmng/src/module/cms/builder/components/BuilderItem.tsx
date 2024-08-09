@@ -44,7 +44,7 @@ export const CanvasItem: Record<string, RenderersProps> = {
   Toolbar: props => <MainExport.MirToolbarContent {...props} />,
 };
 
-// Builder Item 컴포넌트 렌더링
+// Canvas Builder Item 컴포넌트 렌더링
 export const RenderCanvasItem = ({
   type,
   ComponentProps = {},
@@ -54,4 +54,15 @@ export const RenderCanvasItem = ({
   }
 
   return <div>Unknown component type: {type}</div>;
+};
+
+// Canvas Builder Item 컴포넌트 렌더링
+export const RenderSidebarItem = ({
+  className,
+  displayTitle,
+}: {
+  className: string;
+  displayTitle: string;
+}) => {
+  return <div className={className}>{displayTitle}</div>;
 };

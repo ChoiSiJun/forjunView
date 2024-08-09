@@ -2,6 +2,7 @@ import { Box, Typography } from '@mui/material';
 import {
   SideBarItems,
   BuilderItemsProps,
+  RenderSidebarItem,
 } from '@module/cms/builder/components/BuilderItem';
 import { useDraggable } from '@dnd-kit/core';
 import { useRef } from 'react';
@@ -20,11 +21,13 @@ export const SideBarItem = ({ item, overlay = false }: SideBarItemProps) => {
     className += ' overlay';
   }
 
-  return <div className={className}>{item.displayTitle}</div>;
+  return (
+    <RenderSidebarItem className={className} displayTitle={item.displayTitle} />
+  );
 };
 
 // 사이드바 item에 관련 속성부여
-const DraggableSideBarItem = ({ item }: SideBarItemProps) => {
+const BuilderSideBarItem = ({ item }: { item: BuilderItemsProps }) => {
   // 드래그 제어할 고유 ID
   const dragId = useRef(nanoid());
   const draggableItem = { ...item, dragId: dragId.current };
@@ -57,7 +60,7 @@ const BuilderSidebar = ({ fieldsRegKey }: { fieldsRegKey: number }) => {
 
       <div key={fieldsRegKey} className="sidebar">
         {SideBarItems.map(item => (
-          <DraggableSideBarItem key={item.dragType} item={item} />
+          <BuilderSideBarItem key={item.dragType} item={item} />
         ))}
       </div>
 

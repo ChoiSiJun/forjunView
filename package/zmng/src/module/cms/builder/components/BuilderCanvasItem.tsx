@@ -37,7 +37,7 @@ export function CanvasItem({ item, overlay = false }: CanvasItemProps) {
 }
 
 // 아이템에 소트 및 드래그 설정
-export default function SortableItem({
+export default function BuilderCanvasItem({
   item,
   index,
   selectedItemId,
