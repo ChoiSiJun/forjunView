@@ -33,6 +33,9 @@ export function useBuilderDragState() {
   // 현재 드래그중인 아이템 참조
   const currentDragItemRef = useRef<BuilderItemsProps | null>(null);
 
+  // 현재 드래그중인 캔버스 참조
+  const currentDragCanvasRef = useRef<UniqueIdentifier | null>(null);
+
   // 사이드바에서 드래그 시작한 활성화된 아이템
   const [activeSidebarItem, setActiveSidebarItem] = useState(null);
 
@@ -371,6 +374,26 @@ export function useBuilderDragState() {
     cleanUp();
   };
 
+  const handleDragStartCanvas = (e: DragStartEvent) => {
+    const { active } = e;
+    const canvasId = active?.id ?? null;
+
+    // 현재 드래그 중인 캔버스 ID 저장
+    currentDragCanvasRef.current = canvasId;
+  };
+
+  const handleDragOverCanvas = (e: DragOverEvent) => {
+    const { over } = e;
+    const dragFrom = over?.data?.current?.dragFrom ?? -1;
+
+    console.log(dragFrom);
+    // 위치변경 대상 캔버스 가져온다.
+  };
+
+  const handleDragEndCanvas = (e: DragEndEvent) => {
+    console.log('testdata');
+  };
+
   const handleDragStart = (e: DragStartEvent) => {
     const { active } = e;
     const dragFrom = active?.data?.current?.dragFrom ?? {};
@@ -379,7 +402,10 @@ export function useBuilderDragState() {
     // 스페이서 접미사가 있는 사이드바 아이템 id를 이용해서 스페이서를 생성후 캔버스에 렌더링될수있도록 배열에 값을 저장.
     // 배열에 객체 생성시작.
 
-    if (dragFrom === 'sidebar') {
+    if (dragFrom === 'mainCanvas') {
+      return;
+      handleDragStartCanvas(e);
+    } else if (dragFrom === 'sidebar') {
       handleDragStartBySidebarItem(e);
     } else if (dragFrom === 'canvas') {
       handleDragStartCanvasItem(e);
@@ -395,7 +421,10 @@ export function useBuilderDragState() {
     // 스페이서 접미사가 있는 사이드바 아이템 id를 이용해서 스페이서를 생성후 캔버스에 렌더링될수있도록 배열에 값을 저장.
     // 배열에 객체 생성시작.
 
-    if (dragFrom === 'sidebar') {
+    if (dragFrom === 'mainCanvas') {
+      return;
+      handleDragOverCanvas(e);
+    } else if (dragFrom === 'sidebar') {
       handleDragOverBySidebarItem(e);
     } else {
       handleDragOverCanvasItem(e);
@@ -406,8 +435,9 @@ export function useBuilderDragState() {
   const handleDragEnd = (e: DragEndEvent) => {
     const { active } = e;
     const dragFrom = active?.data?.current?.dragFrom ?? {};
-
-    if (dragFrom === 'sidebar') {
+    if (dragFrom === 'mainCanvas') {
+      handleDragEndCanvas(e);
+    } else if (dragFrom === 'sidebar') {
       handleDragEndBySidebarItem(e);
     } else {
       handleDragEndCanvasItem(e);

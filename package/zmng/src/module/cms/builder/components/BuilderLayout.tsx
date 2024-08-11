@@ -110,7 +110,6 @@ const BuilderLayout = () => {
 
             <Grid item lg={12} xs={12} sm={12}>
               <SortableContext
-                key="Canvas"
                 strategy={verticalListSortingStrategy}
                 items={canvases.map(d => d.canvasId)}
               >

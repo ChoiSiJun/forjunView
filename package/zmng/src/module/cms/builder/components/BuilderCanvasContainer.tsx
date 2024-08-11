@@ -43,6 +43,9 @@ const BuilderCanvasContainer = ({
   const { attributes, listeners, setNodeRef, setActivatorNodeRef } =
     useSortable({
       id: canvasId,
+      data: {
+        dragFrom: 'mainCanvas',
+      },
     });
 
   return (
@@ -51,12 +54,19 @@ const BuilderCanvasContainer = ({
       lg={canverGridValue}
       md={canverGridValue}
       sm={12}
-      style={{ position: 'relative' }}
+      style={{
+        position: 'relative',
+        border: isSelected ? '2px solid #3f51b5' : '1px solid #ccc',
+        borderRadius: '8px',
+        margin: 10,
+        boxShadow: isSelected ? '0 4px 8px rgba(0, 0, 0, 0.2)' : 'none',
+        transition: 'box-shadow 0.3s ease, border 0.3s ease',
+      }}
+      ref={setNodeRef}
+      {...attributes}
     >
-      <div ref={setNodeRef} {...attributes}>
-        {children}
-      </div>
-      {isSelected && (
+      <div>{children}</div>
+      {!isSelected && (
         <ButtonGroup
           variant="contained"
           color="primary"
@@ -77,7 +87,7 @@ const BuilderCanvasContainer = ({
             <SvgIcon component={SettingsOutlinedIcon} fontSize="small" />
           </IconButton>
 
-          <IconButton ref={setActivatorNodeRef} size="small" {...listeners}>
+          <IconButton ref={setActivatorNodeRef} {...listeners} size="small">
             <SvgIcon component={SettingsOutlinedIcon} fontSize="small" />
           </IconButton>
 

@@ -42,37 +42,36 @@ const BuilderCanvas = ({
       canvasId={canvasId}
       selectedCanvasId={selectedCanvasId}
     >
-      <Grid container spacing={1} ref={setNodeRef} className="canvas">
-        <Grid
-          container
-          style={{
-            height: 'auto',
-            width: '100%',
-            minHeight: 100,
-            alignItems: 'flex-start',
-          }}
-          border={2}
+      <Grid
+        container
+        spacing={0}
+        ref={setNodeRef}
+        className="canvas"
+        style={{
+          height: 'auto',
+          width: '100%',
+          minHeight: 100,
+          alignItems: 'flex-start',
+        }}
+      >
+        <SortableContext
+          strategy={verticalListSortingStrategy}
+          items={items.map(d => d.dragId)}
         >
-          <SortableContext
-            key={canvasId}
-            strategy={verticalListSortingStrategy}
-            items={items.map(d => d.dragId)}
-          >
-            {items?.map((item, i) => (
-              <Grid item lg={12} xs={12} sm={12} border={1}>
-                <BuilderCanvasItem
-                  key={item.dragId}
-                  item={item}
-                  index={i}
-                  selectedItemId={selectedItemId}
-                  setSelectedItemId={setSelectedItemId}
-                  setSelectedCanvasId={setSelectedCanvasId}
-                  onDelete={onDelete}
-                />
-              </Grid>
-            ))}
-          </SortableContext>
-        </Grid>
+          {items?.map((item, i) => (
+            <Grid item key={item.dragId} lg={12} xs={12} sm={12} border={1}>
+              <BuilderCanvasItem
+                key={item.dragId}
+                item={item}
+                index={i}
+                selectedItemId={selectedItemId}
+                setSelectedItemId={setSelectedItemId}
+                setSelectedCanvasId={setSelectedCanvasId}
+                onDelete={onDelete}
+              />
+            </Grid>
+          ))}
+        </SortableContext>
       </Grid>
     </BuilderCanvasContainer>
   );
