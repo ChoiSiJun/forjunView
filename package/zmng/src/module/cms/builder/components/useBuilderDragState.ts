@@ -384,15 +384,11 @@ export function useBuilderDragState() {
 
   const handleDragOverCanvas = (e: DragOverEvent) => {
     const { over } = e;
-    const dragFrom = over?.data?.current?.dragFrom ?? -1;
 
-    console.log(dragFrom);
     // 위치변경 대상 캔버스 가져온다.
   };
 
-  const handleDragEndCanvas = (e: DragEndEvent) => {
-    console.log('testdata');
-  };
+  const handleDragEndCanvas = (e: DragEndEvent) => {};
 
   const handleDragStart = (e: DragStartEvent) => {
     const { active } = e;
@@ -403,9 +399,11 @@ export function useBuilderDragState() {
     // 배열에 객체 생성시작.
 
     if (dragFrom === 'mainCanvas') {
-      return;
       handleDragStartCanvas(e);
-    } else if (dragFrom === 'sidebar') {
+      return;
+    }
+
+    if (dragFrom === 'sidebar') {
       handleDragStartBySidebarItem(e);
     } else if (dragFrom === 'canvas') {
       handleDragStartCanvasItem(e);
@@ -420,11 +418,12 @@ export function useBuilderDragState() {
     // 사이드바 아이템이 캔버스위로 이동하는것을 감지할경우
     // 스페이서 접미사가 있는 사이드바 아이템 id를 이용해서 스페이서를 생성후 캔버스에 렌더링될수있도록 배열에 값을 저장.
     // 배열에 객체 생성시작.
-
     if (dragFrom === 'mainCanvas') {
-      return;
       handleDragOverCanvas(e);
-    } else if (dragFrom === 'sidebar') {
+      return;
+    }
+
+    if (dragFrom === 'sidebar') {
       handleDragOverBySidebarItem(e);
     } else {
       handleDragOverCanvasItem(e);

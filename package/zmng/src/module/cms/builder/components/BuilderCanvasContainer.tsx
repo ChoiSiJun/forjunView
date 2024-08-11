@@ -5,6 +5,7 @@ import { ReactNode, useState } from 'react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import { CSS } from '@dnd-kit/utilities';
 
 interface BuilderCanvasContainerProps {
   canvasId: UniqueIdentifier;
@@ -40,13 +41,27 @@ const BuilderCanvasContainer = ({
     return true;
   };
 
-  const { attributes, listeners, setNodeRef, setActivatorNodeRef } =
-    useSortable({
-      id: canvasId,
-      data: {
-        dragFrom: 'mainCanvas',
-      },
-    });
+  const {
+    attributes,
+    listeners,
+    transform,
+    transition,
+    setNodeRef,
+    setActivatorNodeRef,
+  } = useSortable({
+    id: canvasId,
+    data: {
+      dragFrom: 'mainCanvas',
+    },
+  });
+
+  const overrayStyle = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    border: '1px solid #000',
+    padding: '8px',
+    cursor: 'move',
+  };
 
   return (
     <Grid
@@ -55,6 +70,7 @@ const BuilderCanvasContainer = ({
       md={canverGridValue}
       sm={12}
       style={{
+        ...overrayStyle,
         position: 'relative',
         border: isSelected ? '2px solid #3f51b5' : '1px solid #ccc',
         borderRadius: '8px',
@@ -66,7 +82,7 @@ const BuilderCanvasContainer = ({
       {...attributes}
     >
       <div>{children}</div>
-      {!isSelected && (
+      {isSelected && (
         <ButtonGroup
           variant="contained"
           color="primary"
