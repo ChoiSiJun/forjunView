@@ -117,7 +117,7 @@ const BuilderLayout = () => {
                   <BuilderCanvas
                     key={canvas.canvasId}
                     items={canvas.items}
-                    canvasId={canvas.canvasId}
+                    canvas={canvas}
                     selectedItemId={selectedItemId}
                     setSelectedItemId={setSelectedItemId}
                     selectedCanvasId={selectedCanvasId}

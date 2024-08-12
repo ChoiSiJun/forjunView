@@ -5,14 +5,15 @@ import {
   UniqueIdentifier,
   Over,
 } from '@dnd-kit/core';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { BuilderItemsProps } from '@module/cms/builder/components/BuilderItem';
 import { useImmer } from 'use-immer';
 import { arrayMove } from '@dnd-kit/sortable';
 
-interface CanvasesProps {
+export interface CanvasesProps {
   canvasId: UniqueIdentifier;
   items: BuilderItemsProps[];
+  gird: number;
 }
 
 export function useBuilderDragState() {
@@ -63,11 +64,14 @@ export function useBuilderDragState() {
     spacerInsertedRef.current = false;
     currentOverCanvesIdRef.current = undefined;
   };
+  useEffect(() => {
+    console.log('Canvases updated:', canvases);
+  }, [canvases]);
 
   // 캔버스 추가
   const addCanvas = () => {
     setCanvases(draft => {
-      draft.push({ canvasId: `canvas-${Date.now()}`, items: [] });
+      draft.push({ canvasId: `canvas-${Date.now()}`, items: [], gird: 12 });
       return draft;
     });
   };
@@ -76,6 +80,30 @@ export function useBuilderDragState() {
   const removeCanvas = (canvasId: UniqueIdentifier) => {
     setCanvases(draft => {
       return draft.filter(canvas => canvas.canvasId !== canvasId);
+    });
+  };
+
+  // 캔버스 크기 축소
+  const continerSizeDown = (canvasId: UniqueIdentifier) => {
+    setCanvases(draft => {
+      const currentCanvas = draft.find(c => c.canvasId === canvasId);
+
+      if (currentCanvas) {
+        if (currentCanvas.gird > 1) {
+          currentCanvas.gird -= 1;
+        }
+      }
+    });
+  };
+  // 캔버스 크기 증가
+  const continerSizeUp = (canvasId: UniqueIdentifier) => {
+    setCanvases(draft => {
+      const currentCanvas = draft.find(canvas => canvas.canvasId === canvasId);
+      if (currentCanvas) {
+        if (currentCanvas.gird < 12) {
+          currentCanvas.gird += 1;
+        }
+      }
     });
   };
 
@@ -106,14 +134,14 @@ export function useBuilderDragState() {
   };
 
   const findCanvesArea = (over: Over | null) => {
-    if (over?.data?.current?.canvasId) {
+    if (over?.data?.current?.canvas?.canvasId) {
       if (currentOverCanvesIdRef.current !== over.data.current.canvasId) {
         cleanSpacer();
         if (currentOverCanvesIdRef.current !== undefined) {
           newCanvasMoveCheckRef.current = true;
         }
       }
-      currentOverCanvesIdRef.current = over?.data?.current?.canvasId;
+      currentOverCanvesIdRef.current = over?.data?.current?.canvas?.canvasId;
     }
 
     if (over?.data?.current?.item?.canvasId) {
@@ -138,12 +166,14 @@ export function useBuilderDragState() {
   const handleDragOverBySidebarItem = (e: DragOverEvent) => {
     const { active, over } = e;
     // Over 대상이 컨버스 일경우. currentOverCanvesIdRef 변경
-    if (over?.data?.current?.canvasId) {
+    if (over?.data?.current?.canvas?.canvasId) {
       // 캔버스 참조값 비교하여 스페이서 객체 초기화 및 참조값 변경
-      if (currentOverCanvesIdRef.current !== over.data.current.canvasId) {
+      if (
+        currentOverCanvesIdRef.current !== over.data.current.canvas?.canvasId
+      ) {
         cleanSpacer();
       }
-      currentOverCanvesIdRef.current = over?.data?.current?.canvasId;
+      currentOverCanvesIdRef.current = over?.data?.current?.canvas?.canvasId;
     }
 
     // 마우스 위치 대상이 아이템 일경우 아이템의 캔버스로 참조값 변경.
@@ -384,11 +414,19 @@ export function useBuilderDragState() {
 
   const handleDragOverCanvas = (e: DragOverEvent) => {
     const { over } = e;
+    findCanvesArea(over);
 
     // 위치변경 대상 캔버스 가져온다.
   };
 
-  const handleDragEndCanvas = (e: DragEndEvent) => {};
+  const handleDragEndCanvas = (e: DragEndEvent) => {
+    const { over } = e;
+    const currentIndex = 0;
+
+    const nextIndex = currentOverCanvesIdRef.current;
+
+    setCanvases(arrayMove(canvases, 0, 1));
+  };
 
   const handleDragStart = (e: DragStartEvent) => {
     const { active } = e;
@@ -457,6 +495,8 @@ export function useBuilderDragState() {
     handleDragEnd,
     addCanvas,
     setCanvases,
+    continerSizeDown,
+    continerSizeUp,
     removeCanvas,
     handleDragStartBySidebarItem,
     handleDragOverBySidebarItem,

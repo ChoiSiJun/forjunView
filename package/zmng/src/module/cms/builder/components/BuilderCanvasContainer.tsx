@@ -6,40 +6,26 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import { CSS } from '@dnd-kit/utilities';
+import {
+  useBuilderDragState,
+  CanvasesProps,
+} from '@module/cms/builder/components/useBuilderDragState';
 
 interface BuilderCanvasContainerProps {
-  canvasId: UniqueIdentifier;
+  canvas: CanvasesProps;
   selectedCanvasId: UniqueIdentifier | undefined;
   children: ReactNode;
 }
 
 const BuilderCanvasContainer = ({
-  canvasId,
+  canvas,
   selectedCanvasId,
   children,
 }: BuilderCanvasContainerProps) => {
-  const [canverGridValue, setCanverGridValue] = useState(12);
-  const isSelected = selectedCanvasId === canvasId;
+  const [canverGridValue, setCanverGridValue] = useState(canvas.gird);
+  const isSelected = selectedCanvasId === canvas.canvasId;
 
-  const continerSizeDown = () => {
-    if (canverGridValue > 1) {
-      setCanverGridValue(canverGridValue - 1);
-    } else {
-      return false;
-    }
-
-    return true;
-  };
-
-  const continerSizeUp = () => {
-    if (canverGridValue < 12) {
-      setCanverGridValue(canverGridValue + 1);
-    } else {
-      return false;
-    }
-
-    return true;
-  };
+  const { continerSizeUp, continerSizeDown } = useBuilderDragState();
 
   const {
     attributes,
@@ -49,7 +35,7 @@ const BuilderCanvasContainer = ({
     setNodeRef,
     setActivatorNodeRef,
   } = useSortable({
-    id: canvasId,
+    id: canvas.canvasId,
     data: {
       dragFrom: 'mainCanvas',
     },
@@ -95,7 +81,10 @@ const BuilderCanvasContainer = ({
             gap: '8px', // Space between buttons
           }}
         >
-          <IconButton size="small" onClick={continerSizeDown}>
+          <IconButton
+            size="small"
+            onClick={() => continerSizeDown(canvas.canvasId)}
+          >
             <SvgIcon component={ChevronLeftIcon} fontSize="small" />
           </IconButton>
 
@@ -107,7 +96,10 @@ const BuilderCanvasContainer = ({
             <SvgIcon component={SettingsOutlinedIcon} fontSize="small" />
           </IconButton>
 
-          <IconButton size="small" onClick={continerSizeUp}>
+          <IconButton
+            size="small"
+            onClick={() => continerSizeUp(canvas.canvasId)}
+          >
             <SvgIcon component={ChevronRightIcon} fontSize="small" />
           </IconButton>
         </ButtonGroup>

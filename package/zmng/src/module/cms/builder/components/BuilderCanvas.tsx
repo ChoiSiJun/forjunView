@@ -9,39 +9,41 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import BuilderCanvasContainer from '@module/cms/builder/components/BuilderCanvasContainer';
+import { CanvasesProps } from '@module/cms/builder/components/useBuilderDragState';
+
+interface BuilderCanvasProps {
+  items: BuilderItemsProps[];
+  canvas: CanvasesProps;
+  onDelete: (id: UniqueIdentifier) => void;
+  selectedItemId: UniqueIdentifier;
+  setSelectedItemId: (id: UniqueIdentifier) => void;
+  selectedCanvasId: UniqueIdentifier | undefined;
+  setSelectedCanvasId: (id: UniqueIdentifier | undefined) => void;
+}
 
 // Builder Cavas에 Dnd Drop 설정
 const BuilderCanvas = ({
   items,
   onDelete,
-  canvasId,
+  canvas,
   selectedItemId,
   setSelectedItemId,
   selectedCanvasId,
   setSelectedCanvasId,
-}: {
-  items: BuilderItemsProps[];
-  onDelete: (id: UniqueIdentifier) => void;
-  canvasId: UniqueIdentifier;
-  selectedItemId: UniqueIdentifier;
-  setSelectedItemId: (id: UniqueIdentifier) => void;
-  selectedCanvasId: UniqueIdentifier | undefined;
-  setSelectedCanvasId: (id: UniqueIdentifier | undefined) => void;
-}) => {
+}: BuilderCanvasProps) => {
+  const { canvasId } = canvas;
+
   const { setNodeRef } = useDroppable({
     id: canvasId,
     data: {
-      canvasId,
+      canvas,
       parent: null,
       isContainer: true,
     },
   });
 
   return (
-    <BuilderCanvasContainer
-      canvasId={canvasId}
-      selectedCanvasId={selectedCanvasId}
-    >
+    <BuilderCanvasContainer canvas={canvas} selectedCanvasId={selectedCanvasId}>
       <Grid
         container
         spacing={0}
