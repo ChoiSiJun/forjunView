@@ -55,8 +55,8 @@ const BuilderCanvasContainer = ({
         ...overrayStyle,
         position: 'relative',
         border: isSelected ? '2px solid #3f51b5' : '1px solid #ccc',
-        borderRadius: '8px',
-        margin: 10,
+        borderRadius: '10px',
+        margin: 0,
         boxShadow: isSelected ? '0 4px 8px rgba(0, 0, 0, 0.2)' : 'none',
         transition: 'box-shadow 0.3s ease, border 0.3s ease',
       }}

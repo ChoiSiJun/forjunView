@@ -5,7 +5,7 @@ import {
   UniqueIdentifier,
   Over,
 } from '@dnd-kit/core';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { BuilderItemsProps } from '@module/cms/builder/components/BuilderItem';
 import { useImmer } from 'use-immer';
 import { arrayMove } from '@dnd-kit/sortable';

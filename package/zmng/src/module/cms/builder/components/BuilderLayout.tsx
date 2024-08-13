@@ -85,11 +85,11 @@ const BuilderLayout = () => {
               }),
             width: isSidebarOpen ? `calc(100% - ${SidebarWidth}px)` : '100%',
             marginRight: !isSidebarOpen ? `-${SidebarWidth - 40}px` : 0,
-            marginLeft: '80px',
+            marginLeft: '100px',
             marginTop: `${AppBarHeight}px`, // 앱바 높이만큼 상단 여백 추가
           }}
         >
-          <Grid container spacing={1} border={3}>
+          <Grid container spacing={0} border={2}>
             <Grid
               key="mainCanvas"
               item
@@ -111,7 +111,7 @@ const BuilderLayout = () => {
             </Grid>
 
             <Grid item lg={12} xs={12} sm={12}>
-              <Grid container spacing={1} border={3}>
+              <Grid container>
                 <SortableContext
                   strategy={horizontalListSortingStrategy}
                   items={canvases.map(d => d.canvasId)}
