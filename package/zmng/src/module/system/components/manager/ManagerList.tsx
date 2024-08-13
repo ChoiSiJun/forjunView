@@ -3,7 +3,6 @@ import Grid from '@mui/material/Grid';
 import MirCodeNameList from '@common/components/molecule/MirCodeNameList';
 import MirCard from '@common/components/molecule/MirCard';
 import ManagerInfo from '@module/system/components/manager/ManagerInfo';
-
 import UseModal from '@hooks/UseModal';
 import { useManager, useManagerCodeNameList } from '@module/system/hook/useManagerQuery';
 

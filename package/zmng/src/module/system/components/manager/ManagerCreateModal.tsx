@@ -1,16 +1,19 @@
 import Grid from '@mui/material/Grid';
-
 import MirModalTitle from '@common/components/atoms/modal/MirModalTitle';
 import MirModalContents from '@common/components/atoms/modal/MirModalContents';
 import MirModalAction from '@common/components/atoms/modal/MirModalAction';
 import MirValidTextField from '@common/components/atoms/input/MirValidTextField';
 import MirButton from '@common/components/atoms/button/MirButton';
 import MirMultiCheckBox from '@common/components/atoms/input/MirMultiCheckBox';
-
 import UseModal from '@hooks/UseModal';
 import { useForm } from 'react-hook-form';
 import { IFormValues } from '@module/system/components/manager/InterfaceManager';
-import { useCreateManager, useManagerByUserid, getManagerByUserid } from '@module/system/hook/useManagerQuery';
+import {
+  useCreateManager,
+  existsManagerByUserid,
+  useManagerCodeNameList,
+} from '@module/system/hook/useManagerQuery';
+import { useLocationLabelValueList } from '@module/system/hook/useLocationQuery';
 import { useState } from 'react';
 
 const ManagerCreateModal = () => {
@@ -28,41 +31,25 @@ const ManagerCreateModal = () => {
     reValidateMode: 'onBlur',
   });
 
+  const {
+    data: locationLabelValueData,
+  } = useLocationLabelValueList();
+
   // 관리자 저장
   const { mutate: createManager } = useCreateManager();
 
   const handleCreateManagers = (data: IFormValues) => {
     createManager(data);
-    console.log(data);
   };
 
   // 관리자 아이디 중복체크
-  const checkUseridExists = (userid:string) => {
-    getManagerByUserid(userid)
-      .then((response) => {
-        return '이미 등록된 아이디입니다.';
-      })
-      .catch((error) => {
-        
-      }); 
+  const checkUseridExists = async (userid: string) => {
+    const response = await existsManagerByUserid(userid);
 
-      return '이미 등록된 아이디입니다.';
+    return response.data;
   };
 
-
-  /* const {
-    data: managerData,.
-  } = useManagerByUserid(dupUserid);
-
-  const checkUseridExists = (userid:string) => {
-    setDupUserid(userid);
-
-    console.log("managerData : ",managerData);
-
-    return managerData!==undefined ? '이미 등록된 아이디입니다.' : undefined ;
-  }; */
-
-  const options = [
+  /*   const options = [
     {
       label: '미르테크',
       value: 'MIRL',
@@ -71,7 +58,7 @@ const ManagerCreateModal = () => {
       label: '미르테크2',
       value: 'MIRL2',
     },
-  ];
+  ]; */
 
   return (
     <>
@@ -90,7 +77,10 @@ const ManagerCreateModal = () => {
                 rules={{
                   required: '아이디를 입력하세요.',
                   validate: {
-                    exists: async value => checkUseridExists(value),
+                    exists: async value =>
+                      (await checkUseridExists(value))
+                        ? '중복되는 아이디가 존재합니다.'
+                        : true,
                   },
                 }}
                 textFieldProps={{
@@ -175,7 +165,7 @@ const ManagerCreateModal = () => {
                 name="accessLocations"
                 control={control}
                 label="접속기관"
-                options={options}
+                options={locationLabelValueData}
               />
             </Grid>
           </Grid>

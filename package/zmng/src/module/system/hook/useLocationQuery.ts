@@ -26,6 +26,16 @@ export const useLocationCodeNameList = () => {
   })
 }
 
+export const useLocationLabelValueList = () => {
+  return useQuery("getLocationLabelValueList", getLocationList, {
+    select: data => {
+      const codeNameList = data.data?.map(item  => ({key: item.mloc, value: item.mloc, label: item.name_ko}))
+
+      return codeNameList
+    },
+  })
+}
+
 /**
  * 기관정보 가져오기
  * @param mloc 
