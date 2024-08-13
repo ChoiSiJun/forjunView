@@ -17,13 +17,13 @@ const getManagerList = () => {
 };
 
 export const useManagerCodeNameList = () => {
-    return useQuery("getManagerCodeNameList", getManagerList, {
-        select: data => {
-          const codeNameList = data.data?.map(item  => ({key: item.id, code: item.userid, name_ko: item.name}))
-    
-          return codeNameList
-        },
-      }) ;
+  return useQuery("getManagerCodeNameList", getManagerList, {
+      select: data => {
+        const codeNameList = data.data?.map(item  => ({key: item.id, code: item.userid, name_ko: item.name}))
+  
+        return codeNameList
+      },
+    }) ;
 }
 
 /**
@@ -83,6 +83,18 @@ export const getManagerByUserid = (userid:string) => {
 
 export const useManagerByUserid = (userid:string) => {
   return useQuery(["getManagerByUserid", userid], () => getManagerByUserid(userid), {
+    enabled: !!userid,
+  });
+}
+
+export const existsManagerByUserid = (userid:string) => {
+  return axios.get(
+    `${api_url}/sys-system/managers/userid/exists/${userid}`,
+  );
+};
+
+export const useExistsManagerByUserid = (userid:string) => {
+  return useQuery(["existsManagerByUserid", userid], () => existsManagerByUserid(userid), {
     enabled: !!userid,
   });
 }
