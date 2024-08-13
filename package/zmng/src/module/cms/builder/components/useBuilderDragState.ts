@@ -68,7 +68,7 @@ export function useBuilderDragState() {
   // 캔버스 추가
   const addCanvas = () => {
     setCanvases(draft => {
-      draft.push({ canvasId: `canvas-${Date.now()}`, items: [], gird: 6 });
+      draft.push({ canvasId: `canvas-${Date.now()}`, items: [], gird: 2 });
       return draft;
     });
   };
@@ -427,7 +427,7 @@ export function useBuilderDragState() {
 
     const nextIndex = currentOverCanvesIdRef.current;
 
-    setCanvases(arrayMove(canvases, 0, 1));
+    // setCanvases(arrayMove(canvases, 0, 1));
   };
 
   const handleDragStart = (e: DragStartEvent) => {

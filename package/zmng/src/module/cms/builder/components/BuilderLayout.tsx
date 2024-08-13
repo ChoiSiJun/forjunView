@@ -18,6 +18,7 @@ import { DndContext, DragOverlay } from '@dnd-kit/core';
 
 import {
   SortableContext,
+  horizontalListSortingStrategy,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 
@@ -110,35 +111,37 @@ const BuilderLayout = () => {
             </Grid>
 
             <Grid item lg={12} xs={12} sm={12}>
-              <SortableContext
-                strategy={verticalListSortingStrategy}
-                items={canvases.map(d => d.canvasId)}
-              >
-                {canvases.map(canvas => (
-                  <BuilderCanvas
-                    key={canvas.canvasId}
-                    items={canvas.items}
-                    canvas={canvas}
-                    continerUpdate={continerUpdate}
-                    selectedItemId={selectedItemId}
-                    setSelectedItemId={setSelectedItemId}
-                    selectedCanvasId={selectedCanvasId}
-                    setSelectedCanvasId={setSelectedCanvasId}
-                    onDelete={id =>
-                      setCanvases(draft => {
-                        const selectedCanvas = draft.find(
-                          c => c.canvasId === canvas.canvasId,
-                        );
-                        if (selectedCanvas) {
-                          selectedCanvas.items = selectedCanvas.items.filter(
-                            item => item.dragId !== id,
+              <Grid container spacing={1} border={3}>
+                <SortableContext
+                  strategy={horizontalListSortingStrategy}
+                  items={canvases.map(d => d.canvasId)}
+                >
+                  {canvases.map(canvas => (
+                    <BuilderCanvas
+                      key={canvas.canvasId}
+                      items={canvas.items}
+                      canvas={canvas}
+                      continerUpdate={continerUpdate}
+                      selectedItemId={selectedItemId}
+                      setSelectedItemId={setSelectedItemId}
+                      selectedCanvasId={selectedCanvasId}
+                      setSelectedCanvasId={setSelectedCanvasId}
+                      onDelete={id =>
+                        setCanvases(draft => {
+                          const selectedCanvas = draft.find(
+                            c => c.canvasId === canvas.canvasId,
                           );
-                        }
-                      })
-                    }
-                  />
-                ))}
-              </SortableContext>
+                          if (selectedCanvas) {
+                            selectedCanvas.items = selectedCanvas.items.filter(
+                              item => item.dragId !== id,
+                            );
+                          }
+                        })
+                      }
+                    />
+                  ))}
+                </SortableContext>
+              </Grid>
             </Grid>
 
             <Grid item lg={12} xs={12} sm={12} marginTop={10}>
