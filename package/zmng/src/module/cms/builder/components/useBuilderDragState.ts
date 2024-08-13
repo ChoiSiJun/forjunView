@@ -64,14 +64,11 @@ export function useBuilderDragState() {
     spacerInsertedRef.current = false;
     currentOverCanvesIdRef.current = undefined;
   };
-  useEffect(() => {
-    console.log('Canvases updated:', canvases);
-  }, [canvases]);
 
   // 캔버스 추가
   const addCanvas = () => {
     setCanvases(draft => {
-      draft.push({ canvasId: `canvas-${Date.now()}`, items: [], gird: 12 });
+      draft.push({ canvasId: `canvas-${Date.now()}`, items: [], gird: 6 });
       return draft;
     });
   };
@@ -83,26 +80,31 @@ export function useBuilderDragState() {
     });
   };
 
-  // 캔버스 크기 축소
-  const continerSizeDown = (canvasId: UniqueIdentifier) => {
+  // 컨테이너 조절 메소드
+  const continerUpdate = (canvasId: UniqueIdentifier, type: string) => {
     setCanvases(draft => {
       const currentCanvas = draft.find(c => c.canvasId === canvasId);
 
-      if (currentCanvas) {
-        if (currentCanvas.gird > 1) {
-          currentCanvas.gird -= 1;
-        }
-      }
-    });
-  };
-  // 캔버스 크기 증가
-  const continerSizeUp = (canvasId: UniqueIdentifier) => {
-    setCanvases(draft => {
-      const currentCanvas = draft.find(canvas => canvas.canvasId === canvasId);
-      if (currentCanvas) {
-        if (currentCanvas.gird < 12) {
-          currentCanvas.gird += 1;
-        }
+      switch (type) {
+        case 'sizeUp':
+          if (currentCanvas) {
+            if (currentCanvas.gird < 12) {
+              currentCanvas.gird += 1;
+              console.log(currentCanvas.gird);
+            }
+          }
+          break;
+        case 'sizeDown':
+          if (currentCanvas) {
+            if (currentCanvas.gird > 1) {
+              currentCanvas.gird -= 1;
+              console.log(currentCanvas.gird);
+            }
+          }
+          break;
+
+        default:
+          break;
       }
     });
   };
@@ -495,8 +497,7 @@ export function useBuilderDragState() {
     handleDragEnd,
     addCanvas,
     setCanvases,
-    continerSizeDown,
-    continerSizeUp,
+    continerUpdate,
     removeCanvas,
     handleDragStartBySidebarItem,
     handleDragOverBySidebarItem,

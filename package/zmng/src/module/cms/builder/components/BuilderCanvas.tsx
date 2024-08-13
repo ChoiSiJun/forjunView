@@ -19,6 +19,7 @@ interface BuilderCanvasProps {
   setSelectedItemId: (id: UniqueIdentifier) => void;
   selectedCanvasId: UniqueIdentifier | undefined;
   setSelectedCanvasId: (id: UniqueIdentifier | undefined) => void;
+  continerUpdate: (canvasId: UniqueIdentifier, type: string) => void;
 }
 
 // Builder Cavas에 Dnd Drop 설정
@@ -30,6 +31,7 @@ const BuilderCanvas = ({
   setSelectedItemId,
   selectedCanvasId,
   setSelectedCanvasId,
+  continerUpdate,
 }: BuilderCanvasProps) => {
   const { canvasId } = canvas;
 
@@ -43,7 +45,11 @@ const BuilderCanvas = ({
   });
 
   return (
-    <BuilderCanvasContainer canvas={canvas} selectedCanvasId={selectedCanvasId}>
+    <BuilderCanvasContainer
+      canvas={canvas}
+      selectedCanvasId={selectedCanvasId}
+      continerUpdate={continerUpdate}
+    >
       <Grid
         container
         spacing={0}

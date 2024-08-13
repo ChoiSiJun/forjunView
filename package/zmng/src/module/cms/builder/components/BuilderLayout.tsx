@@ -46,6 +46,7 @@ const BuilderLayout = () => {
     selectedCanvasId,
     setSelectedCanvasId,
     setSelectedItemId,
+    continerUpdate,
     handleDragStart,
     handleDragOver,
     handleDragEnd,
@@ -118,6 +119,7 @@ const BuilderLayout = () => {
                     key={canvas.canvasId}
                     items={canvas.items}
                     canvas={canvas}
+                    continerUpdate={continerUpdate}
                     selectedItemId={selectedItemId}
                     setSelectedItemId={setSelectedItemId}
                     selectedCanvasId={selectedCanvasId}

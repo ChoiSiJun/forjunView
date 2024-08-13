@@ -1,31 +1,27 @@
 import { UniqueIdentifier } from '@dnd-kit/core';
 import { useSortable } from '@dnd-kit/sortable';
 import { ButtonGroup, Grid, IconButton, SvgIcon } from '@mui/material';
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import { CSS } from '@dnd-kit/utilities';
-import {
-  useBuilderDragState,
-  CanvasesProps,
-} from '@module/cms/builder/components/useBuilderDragState';
+import { CanvasesProps } from '@module/cms/builder/components/useBuilderDragState';
 
 interface BuilderCanvasContainerProps {
   canvas: CanvasesProps;
   selectedCanvasId: UniqueIdentifier | undefined;
+  continerUpdate: (canvasId: UniqueIdentifier, type: string) => void;
   children: ReactNode;
 }
 
 const BuilderCanvasContainer = ({
   canvas,
   selectedCanvasId,
+  continerUpdate,
   children,
 }: BuilderCanvasContainerProps) => {
-  const [canverGridValue, setCanverGridValue] = useState(canvas.gird);
   const isSelected = selectedCanvasId === canvas.canvasId;
-
-  const { continerSizeUp, continerSizeDown } = useBuilderDragState();
 
   const {
     attributes,
@@ -52,8 +48,8 @@ const BuilderCanvasContainer = ({
   return (
     <Grid
       item
-      lg={canverGridValue}
-      md={canverGridValue}
+      lg={canvas.gird}
+      md={canvas.gird}
       sm={12}
       style={{
         ...overrayStyle,
@@ -83,7 +79,7 @@ const BuilderCanvasContainer = ({
         >
           <IconButton
             size="small"
-            onClick={() => continerSizeDown(canvas.canvasId)}
+            onClick={() => continerUpdate(canvas.canvasId, 'sizeDown')}
           >
             <SvgIcon component={ChevronLeftIcon} fontSize="small" />
           </IconButton>
@@ -98,7 +94,7 @@ const BuilderCanvasContainer = ({
 
           <IconButton
             size="small"
-            onClick={() => continerSizeUp(canvas.canvasId)}
+            onClick={() => continerUpdate(canvas.canvasId, 'sizeUp')}
           >
             <SvgIcon component={ChevronRightIcon} fontSize="small" />
           </IconButton>
