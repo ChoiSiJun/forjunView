@@ -11,10 +11,8 @@ import { IFormValues } from '@module/system/components/manager/InterfaceManager'
 import {
   useCreateManager,
   existsManagerByUserid,
-  useManagerCodeNameList,
 } from '@module/system/hook/useManagerQuery';
 import { useLocationLabelValueList } from '@module/system/hook/useLocationQuery';
-import { useState } from 'react';
 
 const ManagerCreateModal = () => {
   const { closeModal } = UseModal();
@@ -34,10 +32,10 @@ const ManagerCreateModal = () => {
   const {
     data: locationLabelValueData,
   } = useLocationLabelValueList();
-
-  // 관리자 저장
+  
   const { mutate: createManager } = useCreateManager();
 
+  // 관리자 저장
   const handleCreateManagers = (data: IFormValues) => {
     createManager(data);
   };
@@ -48,17 +46,6 @@ const ManagerCreateModal = () => {
 
     return response.data;
   };
-
-  /*   const options = [
-    {
-      label: '미르테크',
-      value: 'MIRL',
-    },
-    {
-      label: '미르테크2',
-      value: 'MIRL2',
-    },
-  ]; */
 
   return (
     <>

@@ -87,6 +87,11 @@ export const useManagerByUserid = (userid:string) => {
   });
 }
 
+/**
+ * 관리자 아이디 중복체크
+ * @param userid 
+ * @returns 
+ */
 export const existsManagerByUserid = (userid:string) => {
   return axios.get(
     `${api_url}/sys-system/managers/userid/exists/${userid}`,
@@ -98,10 +103,3 @@ export const useExistsManagerByUserid = (userid:string) => {
     enabled: !!userid,
   });
 }
-
-  /* const methods = await getManagerByUserid(userid);
-
-  console.log("methods", methods);
-
-  return methods===undefined ? '이미 등록된 아이디입니다.' : undefined ; */
- // }
