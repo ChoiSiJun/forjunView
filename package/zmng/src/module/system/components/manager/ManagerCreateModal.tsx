@@ -15,9 +15,15 @@ import {
   existsManagerByUserid,
 } from '@module/system/api/managerApi';
 import { useLocationLabelValueList } from '@module/system/hook/useLocationQuery';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const ManagerCreateModal = () => {
   const { closeModal } = UseModal();
+
+  /* const schema = yup.object({
+
+  }); */
 
   const { handleSubmit, control } = useForm<IFormValues>({
     defaultValues: {
@@ -28,6 +34,7 @@ const ManagerCreateModal = () => {
       password: '',
       accessLocations: [],
     },
+    // resolver: yupResolver(schema),
     reValidateMode: 'onBlur',
   });
 

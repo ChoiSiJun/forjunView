@@ -36,6 +36,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@hookform/resolvers": "^3.9.0",
     "@mui/icons-material": "^5.15.14",
     "@mui/material": "^5.15.14",
     "@mui/styled-engine-sc": "6.0.0-alpha.18",
@@ -52,6 +53,7 @@
     "react-toastify": "^10.0.5",
     "redux-persist": "^6.0.0",
     "simplebar-react": "^3.2.4",
-    "use-immer": "^0.10.0"
+    "use-immer": "^0.10.0",
+    "yup": "^1.4.0"
   }
 }
