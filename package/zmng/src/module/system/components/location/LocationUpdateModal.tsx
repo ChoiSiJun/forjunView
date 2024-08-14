@@ -9,7 +9,7 @@ import MirModalContents from '@common/components/atoms/modal/MirModalContents';
 import MirModalAction from '@common/components/atoms/modal/MirModalAction';
 import UseModal from '@hooks/UseModal'; 
 import { useUpdateLocation, useLocation } from '@module/system/hook/useLocationQuery'
-import { ILocation } from '@module/system/components/location/InterfaceLocation'
+import { ILocation } from '@module/system/api/InterfaceLocation'
 
 interface FormValues extends ILocation {};
 

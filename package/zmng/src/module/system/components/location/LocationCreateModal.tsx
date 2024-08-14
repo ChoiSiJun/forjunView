@@ -9,7 +9,7 @@ import MirModalContents from '@common/components/atoms/modal/MirModalContents';
 import MirModalAction from '@common/components/atoms/modal/MirModalAction';
 import UseModal from '@hooks/UseModal'; 
 import { useCreateLocation } from '@module/system/hook/useLocationQuery'
-import { IFormValues } from '@module/system/components/location/InterfaceLocation';
+import { IFormValues } from '@module/system/api/InterfaceLocation';
 
 const LocationCreateModal = () => {
   const { closeModal } = UseModal(); 

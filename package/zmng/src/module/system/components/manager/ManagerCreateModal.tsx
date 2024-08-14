@@ -7,7 +7,7 @@ import MirButton from '@common/components/atoms/button/MirButton';
 import MirMultiCheckBox from '@common/components/atoms/input/MirMultiCheckBox';
 import UseModal from '@hooks/UseModal';
 import { useForm } from 'react-hook-form';
-import { IFormValues } from '@module/system/components/manager/InterfaceManager';
+import { IFormValues } from '@module/system/api/InterfaceManager';
 import {
   useCreateManager,
   existsManagerByUserid,

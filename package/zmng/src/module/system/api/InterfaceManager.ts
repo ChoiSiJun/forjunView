@@ -9,12 +9,7 @@ export interface IManager {
 };
 
 export interface IManagerState {
-  userid: string;
-  name: string;
-  email?: string;
-  tel?: string;
-  password:string;
-  accessLocations:[];
-};
+  manager:IManager
+}
 
 export interface IFormValues extends IManagerState {};

@@ -8,7 +8,7 @@ import MirButton from '@common/components/atoms/button/MirButton';
 
 import UseModal from '@hooks/UseModal';
 import { useForm } from 'react-hook-form';
-import { IFormValues } from '@module/system/components/manager/InterfaceManager';
+import { IFormValues } from '@module/system/api/InterfaceManager';
 
 const ManagerUpodateModal = () => {
   const { closeModal } = UseModal();

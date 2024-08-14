@@ -3,7 +3,7 @@ import {
   MirLabelText,
   MirLabelTextList,
 } from '@common/components/molecule/MirLabelText';
-import { IManager } from '@module/system/components/manager/InterfaceManager';
+import { IManager } from '@module/system/api/InterfaceManager';
 
 interface ManagerInfoProps {
   managerData?: IManager;
