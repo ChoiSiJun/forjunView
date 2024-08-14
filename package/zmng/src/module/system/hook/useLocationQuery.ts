@@ -1,21 +1,17 @@
-import axios from 'axios'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import UseModal from '@hooks/UseModal'; 
 import { toast } from 'react-toastify';
-import { IFormValues } from '@module/system/components/manager/InterfaceManager';
-
-const api_url = import.meta.env.VITE_SYSTEM_API;
+import {
+  getLocationList,
+  getLocation,
+  createLocation,
+  updateLocation
+} from '@module/system/api/locationApi';
 
 /**
- * 기관리스트 가져오기
+ * 기관 리스트 가져오기 (code, name)
  * @returns 
  */
-const getLocationList = () => {
-  return axios.get(
-    `${api_url}/sys-system/locations`,
-  )
-}
-
 export const useLocationCodeNameList = () => {
   return useQuery("getLocationCodeNameList", getLocationList, {
     select: data => {
@@ -26,6 +22,10 @@ export const useLocationCodeNameList = () => {
   })
 }
 
+/**
+ * 기관 리스트 가져오기 (label, value)
+ * @returns 
+ */
 export const useLocationLabelValueList = () => {
   return useQuery("getLocationLabelValueList", getLocationList, {
     select: data => {
@@ -41,30 +41,16 @@ export const useLocationLabelValueList = () => {
  * @param mloc 
  * @returns 
  */
-const fetchLocation = (mloc:string|number) => {
-  return axios.get(
-    `${api_url}/sys-system/locations/${mloc}`,
-  )
-
-}
-
 export const useLocation = (mloc:string|number) => {
-  return useQuery(["getLocation", mloc], () => fetchLocation(mloc), {
+  return useQuery(["getLocation", mloc], () => getLocation(mloc), {
     enabled: !!mloc,
   })
 }
 
 /**
  * 기관 생성
- * @param location 
  * @returns 
  */
-const createLocation = (location:IFormValues) => {
-  return axios.post(
-    `${api_url}/sys-system/locations`, location
-  );
-}
-
 export const useCreateLocation = () => {
   const queryClient = useQueryClient()
   const { closeModal } = UseModal(); 
@@ -83,15 +69,8 @@ export const useCreateLocation = () => {
 
 /**
  * 기관 수정
- * @param location 
  * @returns 
  */
-const updateLocation = (location:IFormValues) => {
-  return axios.put(
-    `${api_url}/sys-system/locations/${location.mloc}`, location
-  );
-}
-
 export const useUpdateLocation = () => {
   const queryClient = useQueryClient()
   const { closeModal } = UseModal(); 

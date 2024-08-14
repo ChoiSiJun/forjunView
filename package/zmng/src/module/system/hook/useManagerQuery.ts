@@ -39,7 +39,7 @@ export const useManager = (id: string | number) => {
 };
 
 /**
- * 관리자 데이터 저장
+ * 관리자 생성
  * @returns 
  */
 export const useCreateManager = () => {

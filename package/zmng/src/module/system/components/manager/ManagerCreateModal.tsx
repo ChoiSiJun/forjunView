@@ -10,8 +10,10 @@ import { useForm } from 'react-hook-form';
 import { IFormValues } from '@module/system/api/InterfaceManager';
 import {
   useCreateManager,
-  existsManagerByUserid,
 } from '@module/system/hook/useManagerQuery';
+import {
+  existsManagerByUserid,
+} from '@module/system/api/managerApi';
 import { useLocationLabelValueList } from '@module/system/hook/useLocationQuery';
 
 const ManagerCreateModal = () => {

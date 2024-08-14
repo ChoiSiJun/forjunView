@@ -67,7 +67,7 @@ const MirMultiCheckBox = ({
       <FormControl>
         <FormLabel component="legend">{label}</FormLabel>
         <FormGroup>
-          {options.map((option: any) => {
+          {options?.map((option: any) => {
             return (
               <StyledValidCheckBox
                 control={<Checkbox />}

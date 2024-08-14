@@ -12,4 +12,4 @@ export interface IManagerState {
   manager:IManager
 }
 
-export interface IFormValues extends IManagerState {};
+export interface IFormValues extends IManager {};

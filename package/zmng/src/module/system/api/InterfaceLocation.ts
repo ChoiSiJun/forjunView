@@ -1,14 +1,4 @@
 export interface ILocation {
-  "mloc": string;
-  "name_ko": string;
-  "zipcode": string;
-  "address": string;
-  "addressDetail": string,
-  "email": string,
-  "tel": string
-}
-
-export interface ILocationInfoState {
   mloc:string
   name_ko:string
   name_en?:string
@@ -22,5 +12,9 @@ export interface ILocationInfoState {
   fax?:string
 }
 
-export interface IFormValues extends ILocationInfoState {};
+export interface ILocationInfoState {
+  location:ILocation
+}
+
+export interface IFormValues extends ILocation {};
 
