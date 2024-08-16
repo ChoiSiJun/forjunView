@@ -19,7 +19,6 @@ import { DndContext, DragOverlay } from '@dnd-kit/core';
 import {
   SortableContext,
   horizontalListSortingStrategy,
-  verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 
 import BuilderSettingBar from '@module/cms/builder/components/BuilderSettingBar';
@@ -114,11 +113,11 @@ const BuilderLayout = () => {
               <Grid container>
                 <SortableContext
                   strategy={horizontalListSortingStrategy}
-                  items={canvases.map(d => d.canvasId)}
+                  items={canvases.map(d => d.builderId)}
                 >
                   {canvases.map(canvas => (
                     <BuilderCanvas
-                      key={canvas.canvasId}
+                      key={canvas.builderId}
                       items={canvas.items}
                       canvas={canvas}
                       continerUpdate={continerUpdate}

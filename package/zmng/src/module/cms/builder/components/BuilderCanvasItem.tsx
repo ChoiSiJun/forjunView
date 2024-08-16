@@ -1,5 +1,3 @@
-import { UniqueIdentifier } from '@dnd-kit/core';
-
 import { useSortable } from '@dnd-kit/sortable';
 import { Box, ButtonGroup, IconButton, SvgIcon, useTheme } from '@mui/material';
 import { CSS } from '@dnd-kit/utilities';
@@ -7,24 +5,26 @@ import { CSS } from '@dnd-kit/utilities';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import DragIndicatorOutlinedIcon from '@mui/icons-material/DragIndicatorOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import { RenderCanvasItem } from '@module/cms/builder/components/BuilderItem';
 import {
   BuilderItemsProps,
-  RenderCanvasItem,
-} from '@module/cms/builder/components/BuilderItem';
-
-interface CanvasItemProps {
-  item: BuilderItemsProps;
-  overlay?: boolean;
-}
+  BuilderItemState,
+} from '@module/cms/builder/components/BuilderInterface';
 
 // Builder Canvas에 실제 컴포넌트 렌더링 수행
-export function CanvasItem({ item, overlay = false }: CanvasItemProps) {
+export function CanvasItem({
+  state,
+  overlay = false,
+}: {
+  state: BuilderItemState;
+  overlay?: boolean;
+}) {
   const Component =
-    item.dragType === 'spacer' ? (
+    state.builderType === 'spacer' ? (
       <Box border={1} height={50} bgcolor="gray" className="spacer" />
     ) : (
       <Box width="100%">
-        <RenderCanvasItem type={item.dragType} />
+        <RenderCanvasItem type={state.builderType} />
       </Box>
     );
 
@@ -38,20 +38,16 @@ export function CanvasItem({ item, overlay = false }: CanvasItemProps) {
 
 // 아이템에 소트 및 드래그 설정
 export default function BuilderCanvasItem({
-  item,
+  state,
   index,
   selectedItemId,
   setSelectedItemId,
-  onDelete,
+  itemDelete,
+  selectedCanvasId,
   setSelectedCanvasId,
-}: {
-  item: BuilderItemsProps;
-  index: number;
-  selectedItemId: UniqueIdentifier;
-  setSelectedItemId: (id: UniqueIdentifier) => void;
-  onDelete: (id: UniqueIdentifier) => void;
-  setSelectedCanvasId: (id: UniqueIdentifier | undefined) => void;
-}) {
+}: BuilderItemsProps) {
+  const { builderId, builderFromId } = state;
+
   const {
     attributes,
     listeners,
@@ -60,16 +56,16 @@ export default function BuilderCanvasItem({
     transition,
     setActivatorNodeRef,
   } = useSortable({
-    id: item.dragId,
+    id: state.builderId,
     data: {
       dragFrom: 'canvas',
       index,
-      item,
+      state,
     },
   });
 
   // 클릭이 되는 기준은... 아무것도 선택한 상태가 아닐때.
-  const isSelected = selectedItemId === item.dragId;
+  const isSelected = selectedItemId === builderId;
   const theme = useTheme();
 
   const style = {
@@ -81,11 +77,11 @@ export default function BuilderCanvasItem({
 
   const HandleDragItemClick = (e: React.MouseEvent<HTMLDivElement>) => {
     setSelectedItemId(
-      item.dragId === selectedItemId ? 'NOT_SELECTED' : item.dragId,
+      builderId === selectedItemId ? 'NOT_SELECTED' : builderId,
     );
 
     setSelectedCanvasId(
-      item.dragId === selectedItemId ? 'NOT_SELECTED' : item.canvasId,
+      builderFromId === selectedCanvasId ? 'NOT_SELECTED' : builderFromId,
     );
     // 컴포넌트 속성창 옆으로 띄우기.
     e.stopPropagation(); // 부모 요소로 이벤트가 전파되는 것을 방지
@@ -130,7 +126,7 @@ export default function BuilderCanvasItem({
             />
           </IconButton>
 
-          <IconButton onClick={() => onDelete(item.dragId)}>
+          <IconButton onClick={() => itemDelete(builderId)}>
             <SvgIcon
               component={DeleteOutlineIcon}
               inheritViewBox
@@ -141,7 +137,7 @@ export default function BuilderCanvasItem({
         </ButtonGroup>
       )}
 
-      <CanvasItem item={item} />
+      <CanvasItem state={state} />
     </div>
   );
 }

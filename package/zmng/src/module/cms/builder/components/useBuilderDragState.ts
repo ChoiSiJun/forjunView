@@ -9,6 +9,11 @@ import { useRef, useState } from 'react';
 import { BuilderItemsProps } from '@module/cms/builder/components/BuilderItem';
 import { useImmer } from 'use-immer';
 import { arrayMove } from '@dnd-kit/sortable';
+import {
+  BuilderCanvasState,
+  BuilderItemState,
+  BuilderProps,
+} from '@module/cms/builder/components/BuilderInterface';
 
 export interface CanvasesProps {
   canvasId: UniqueIdentifier;
@@ -18,7 +23,7 @@ export interface CanvasesProps {
 
 export function useBuilderDragState() {
   // 전체적인 캔버스 및 아이템 상태관리
-  const [canvases, setCanvases] = useImmer<CanvasesProps[]>([]);
+  const [canvases, setCanvases] = useImmer<BuilderCanvasState[]>([]);
 
   // 스페이서 아이템 참조
   const spacerInsertedRef = useRef(false);
@@ -27,15 +32,12 @@ export function useBuilderDragState() {
   const newCanvasMoveCheckRef = useRef(false);
 
   // 현재 아이템이 위치하고 있는 캔버스 ID 참조
-  const currentOverCanvesIdRef = useRef<UniqueIdentifier | undefined>(
-    undefined,
-  );
+  const currentOverCanvesIdRef = useRef<
+    BuilderCanvasState['builderId'] | undefined
+  >(undefined);
 
   // 현재 드래그중인 아이템 참조
-  const currentDragItemRef = useRef<BuilderItemsProps | null>(null);
-
-  // 현재 드래그중인 캔버스 참조
-  const currentDragCanvasRef = useRef<UniqueIdentifier | null>(null);
+  const currentDragItemRef = useRef<BuilderItemState | null>(null);
 
   // 사이드바에서 드래그 시작한 활성화된 아이템
   const [activeSidebarItem, setActiveSidebarItem] = useState(null);
@@ -47,14 +49,15 @@ export function useBuilderDragState() {
   const [sidebarFieldsRegenKey, setSidebarFieldsRegenKey] = useState(
     Date.now(),
   );
+
   // 캔버스 클릭 여부 상태관리
   const [selectedCanvasId, setSelectedCanvasId] = useState<
-    UniqueIdentifier | undefined
+    BuilderCanvasState['builderId'] | undefined
   >('NOT_SELECTED');
 
   // 아이템 클릭 여부 상태관리
   const [selectedItemId, setSelectedItemId] =
-    useState<UniqueIdentifier>('NOT_SELECTED');
+    useState<BuilderItemState['builderId']>('NOT_SELECTED');
   // --------------------------------- 함수--------------------------
   // 아이템 제어 상태 및 참조 초기화
   const cleanUp = () => {
@@ -68,29 +71,37 @@ export function useBuilderDragState() {
   // 캔버스 추가
   const addCanvas = () => {
     setCanvases(draft => {
-      draft.push({ canvasId: `canvas-${Date.now()}`, items: [], gird: 2 });
+      draft.push({
+        builderId: `canvas-${Date.now()}`,
+        builderType: 'canvas',
+        items: [],
+        gird: 2,
+        index: draft.length,
+      });
       return draft;
     });
   };
 
   // 캔버스 삭제
-  const removeCanvas = (canvasId: UniqueIdentifier) => {
+  const removeCanvas = (builderId: BuilderProps['builderId']) => {
     setCanvases(draft => {
-      return draft.filter(canvas => canvas.canvasId !== canvasId);
+      return draft.filter(canvas => canvas.builderId !== builderId);
     });
   };
 
   // 컨테이너 조절 메소드
-  const continerUpdate = (canvasId: UniqueIdentifier, type: string) => {
+  const continerUpdate = (
+    builderId: BuilderProps['builderId'],
+    type: string,
+  ) => {
     setCanvases(draft => {
-      const currentCanvas = draft.find(c => c.canvasId === canvasId);
+      const currentCanvas = draft.find(c => c.builderId === builderId);
 
       switch (type) {
         case 'sizeUp':
           if (currentCanvas) {
             if (currentCanvas.gird < 12) {
               currentCanvas.gird += 1;
-              console.log(currentCanvas.gird);
             }
           }
           break;
@@ -98,7 +109,6 @@ export function useBuilderDragState() {
           if (currentCanvas) {
             if (currentCanvas.gird > 1) {
               currentCanvas.gird -= 1;
-              console.log(currentCanvas.gird);
             }
           }
           break;
@@ -109,19 +119,33 @@ export function useBuilderDragState() {
     });
   };
 
+  const removeItem = (
+    builderId: BuilderProps['builderId'],
+    builderFromId: BuilderProps['builderFromId'],
+  ) => {
+    setCanvases(draft => {
+      const selectedCanvas = draft.find(c => c.builderId === builderFromId);
+      if (selectedCanvas) {
+        selectedCanvas.items = selectedCanvas.items.filter(
+          item => item.builderId !== builderId,
+        );
+      }
+    });
+  };
+
   // 스페이서 객체 생성
   function createSpacer({
-    dragId,
-    canvasId,
+    builderId,
+    builderFromId,
   }: {
-    dragId: UniqueIdentifier;
-    canvasId: UniqueIdentifier | undefined;
-  }): BuilderItemsProps {
+    builderId: BuilderItemState['builderId'];
+    builderFromId: BuilderItemState['builderFromId'];
+  }): BuilderItemState {
     return {
-      dragId,
-      dragType: 'spacer',
-      displayTitle: 'spacer',
-      canvasId,
+      builderId,
+      builderFromId,
+      builderType: 'spacer',
+      itemId: 'spacer',
     };
   }
 
@@ -129,31 +153,35 @@ export function useBuilderDragState() {
     // 스페이서 객체 삭제 및 초기화
     setCanvases(draft => {
       draft.forEach(canvas => {
-        canvas.items = canvas.items.filter(d => d.dragType !== 'spacer');
+        canvas.items = canvas.items.filter(d => d.builderType !== 'spacer');
       });
     });
     spacerInsertedRef.current = false;
   };
 
   const findCanvesArea = (over: Over | null) => {
-    if (over?.data?.current?.canvas?.canvasId) {
-      if (currentOverCanvesIdRef.current !== over.data.current.canvasId) {
+    if (over?.data?.current?.canvas?.builderId) {
+      if (
+        currentOverCanvesIdRef.current !== over.data.current.canvas.builderId
+      ) {
         cleanSpacer();
         if (currentOverCanvesIdRef.current !== undefined) {
           newCanvasMoveCheckRef.current = true;
         }
       }
-      currentOverCanvesIdRef.current = over?.data?.current?.canvas?.canvasId;
+      currentOverCanvesIdRef.current = over?.data?.current?.canvas?.builderId;
     }
 
-    if (over?.data?.current?.item?.canvasId) {
-      if (currentOverCanvesIdRef.current !== over.data.current.item.canvasId) {
+    if (over?.data?.current?.item?.builderFromId) {
+      if (
+        currentOverCanvesIdRef.current !== over.data.current.item.builderFromId
+      ) {
         cleanSpacer();
         if (currentOverCanvesIdRef.current !== undefined) {
           newCanvasMoveCheckRef.current = true;
         }
       }
-      currentOverCanvesIdRef.current = over.data.current.item.canvasId;
+      currentOverCanvesIdRef.current = over.data.current.item.builderFromId;
     }
   };
 
@@ -171,19 +199,21 @@ export function useBuilderDragState() {
     if (over?.data?.current?.canvas?.canvasId) {
       // 캔버스 참조값 비교하여 스페이서 객체 초기화 및 참조값 변경
       if (
-        currentOverCanvesIdRef.current !== over.data.current.canvas?.canvasId
+        currentOverCanvesIdRef.current !== over.data.current.canvas?.builderId
       ) {
         cleanSpacer();
       }
-      currentOverCanvesIdRef.current = over?.data?.current?.canvas?.canvasId;
+      currentOverCanvesIdRef.current = over?.data?.current?.canvas?.builderId;
     }
 
     // 마우스 위치 대상이 아이템 일경우 아이템의 캔버스로 참조값 변경.
-    if (over?.data?.current?.item?.canvasId) {
-      if (currentOverCanvesIdRef.current !== over.data.current.item.canvasId) {
+    if (over?.data?.current?.item?.builderFromId) {
+      if (
+        currentOverCanvesIdRef.current !== over.data.current.item.builderFromId
+      ) {
         cleanSpacer();
       }
-      currentOverCanvesIdRef.current = over.data.current.item.canvasId;
+      currentOverCanvesIdRef.current = over.data.current.item.builderFromId;
     }
 
     // 사이드바 아이템이 캔버스위로 이동하는것을 감지할경우
@@ -194,13 +224,13 @@ export function useBuilderDragState() {
     const overData = over?.data?.current ?? {};
     if (!spacerInsertedRef.current) {
       const spacer = createSpacer({
-        dragId: `${active.id}-spacer`,
-        canvasId: currentOverCanvesIdRef.current,
+        builderId: `${active.id}-spacer`,
+        builderFromId: currentOverCanvesIdRef.current,
       });
 
       setCanvases(draft => {
         const canvas = draft.find(
-          c => c.canvasId === currentOverCanvesIdRef.current,
+          c => c.builderId === currentOverCanvesIdRef.current,
         );
 
         if (canvas) {
@@ -221,11 +251,11 @@ export function useBuilderDragState() {
       // 실질적으로 캔버스별 아이템을 스페이서로 교체해서 렌더링
       setCanvases(draft => {
         const canvas = draft.find(
-          c => c.canvasId === currentOverCanvesIdRef.current,
+          c => c.builderId === currentOverCanvesIdRef.current,
         );
         if (canvas) {
           const spacerIndex = canvas.items.findIndex(
-            d => d.dragId === `${active.id}-spacer`,
+            d => d.builderId === `${active.id}-spacer`,
           );
           const nextIndex =
             overData.index > -1 ? overData.index : canvas.items.length - 1;
@@ -244,7 +274,7 @@ export function useBuilderDragState() {
       cleanUp();
       setCanvases(draft => {
         draft.forEach(canvas => {
-          canvas.items = canvas.items.filter(f => f.dragType !== 'spacer');
+          canvas.items = canvas.items.filter(f => f.builderType !== 'spacer');
         });
       });
       return;
@@ -253,7 +283,7 @@ export function useBuilderDragState() {
     // 스페이스 객체를 실제 아이템으로 교체해서 적용
     const nextField = {
       ...currentDragItemRef.current!,
-      canvasId: currentOverCanvesIdRef.current,
+      builderFromId: currentOverCanvesIdRef.current,
     };
 
     if (nextField) {
@@ -261,12 +291,12 @@ export function useBuilderDragState() {
       const overData = over?.data?.current ?? {};
       setCanvases(draft => {
         const canvas = draft.find(
-          c => c.canvasId === currentOverCanvesIdRef.current,
+          c => c.builderId === currentOverCanvesIdRef.current,
         );
 
         if (canvas) {
           const spacerIndex = canvas.items.findIndex(
-            d => d.dragType === 'spacer',
+            d => d.builderType === 'spacer',
           );
           canvas.items.splice(spacerIndex, 1, nextField);
           canvas.items = arrayMove(
@@ -293,18 +323,21 @@ export function useBuilderDragState() {
     currentDragItemRef.current = item;
 
     // 시작 캔버스값은 아이템의 Canves ID
-    currentOverCanvesIdRef.current = item.canvasId;
+    currentOverCanvesIdRef.current = item.builderFromId;
 
     // 드래그앤 드롭을 통해 세팅되있는 필드값 변경 ( 해당 인덱스를 스페이서 객체로 교체)
     setCanvases(draft => {
       const canvas = draft.find(
-        c => c.canvasId === currentOverCanvesIdRef.current,
+        c => c.builderId === currentOverCanvesIdRef.current,
       );
       if (canvas) {
         canvas.items.splice(
           index,
           1,
-          createSpacer({ dragId: active.id, canvasId: canvas.canvasId }),
+          createSpacer({
+            builderId: active.id,
+            builderFromId: canvas.builderId,
+          }),
         );
       }
     });
@@ -322,13 +355,13 @@ export function useBuilderDragState() {
     if (newCanvasMoveCheckRef.current) {
       if (!spacerInsertedRef.current) {
         const spacer = createSpacer({
-          dragId: `${active.id}-spacer`,
-          canvasId: currentOverCanvesIdRef.current,
+          builderId: `${active.id}-spacer`,
+          builderFromId: currentOverCanvesIdRef.current,
         });
 
         setCanvases(draft => {
           const canvas = draft.find(
-            c => c.canvasId === currentOverCanvesIdRef.current,
+            c => c.builderId === currentOverCanvesIdRef.current,
           );
 
           if (canvas) {
@@ -348,11 +381,11 @@ export function useBuilderDragState() {
       if (over) {
         setCanvases(draft => {
           const canvas = draft.find(
-            c => c.canvasId === currentOverCanvesIdRef.current,
+            c => c.builderId === currentOverCanvesIdRef.current,
           );
           if (canvas) {
             const spacerIndex = canvas.items.findIndex(
-              d => d.dragId === `${active.id}-spacer`,
+              d => d.builderId === `${active.id}-spacer`,
             );
             const nextIndex =
               overData.index > -1 ? overData.index : canvas.items.length - 1;
@@ -386,12 +419,12 @@ export function useBuilderDragState() {
       const overData = over?.data?.current ?? {};
       setCanvases(draft => {
         const canvas = draft.find(
-          c => c.canvasId === currentOverCanvesIdRef.current,
+          c => c.builderId === currentOverCanvesIdRef.current,
         );
 
         if (canvas) {
           const spacerIndex = canvas.items.findIndex(
-            d => d.dragType === 'spacer',
+            d => d.builderType === 'spacer',
           );
           canvas.items.splice(spacerIndex, 1, nextField);
           canvas.items = arrayMove(
@@ -408,10 +441,8 @@ export function useBuilderDragState() {
 
   const handleDragStartCanvas = (e: DragStartEvent) => {
     const { active } = e;
-    const canvasId = active?.id ?? null;
-
-    // 현재 드래그 중인 캔버스 ID 저장
-    currentDragCanvasRef.current = canvasId;
+    const builderId = active?.id ?? null;
+    console.log(builderId);
   };
 
   const handleDragOverCanvas = (e: DragOverEvent) => {
@@ -422,30 +453,25 @@ export function useBuilderDragState() {
   };
 
   const handleDragEndCanvas = (e: DragEndEvent) => {
-    const { over } = e;
-    const currentIndex = 0;
-
-    const nextIndex = currentOverCanvesIdRef.current;
-
-    // setCanvases(arrayMove(canvases, 0, 1));
+    console.log(e);
   };
 
   const handleDragStart = (e: DragStartEvent) => {
     const { active } = e;
-    const dragFrom = active?.data?.current?.dragFrom ?? {};
+    const builderFrom = active?.data?.current?.builderFrom ?? {};
 
     // 사이드바 아이템이 캔버스위로 이동하는것을 감지할경우
     // 스페이서 접미사가 있는 사이드바 아이템 id를 이용해서 스페이서를 생성후 캔버스에 렌더링될수있도록 배열에 값을 저장.
     // 배열에 객체 생성시작.
 
-    if (dragFrom === 'mainCanvas') {
+    if (builderFrom === 'mainCanvas') {
       handleDragStartCanvas(e);
       return;
     }
 
-    if (dragFrom === 'sidebar') {
+    if (builderFrom === 'sidebar') {
       handleDragStartBySidebarItem(e);
-    } else if (dragFrom === 'canvas') {
+    } else if (builderFrom === 'canvas') {
       handleDragStartCanvasItem(e);
     }
   };
@@ -453,17 +479,17 @@ export function useBuilderDragState() {
   // 드래그중일때.
   const handleDragOver = (e: DragOverEvent) => {
     const { active } = e;
-    const dragFrom = active?.data?.current?.dragFrom ?? {};
+    const builderFrom = active?.data?.current?.builderFrom ?? {};
 
     // 사이드바 아이템이 캔버스위로 이동하는것을 감지할경우
     // 스페이서 접미사가 있는 사이드바 아이템 id를 이용해서 스페이서를 생성후 캔버스에 렌더링될수있도록 배열에 값을 저장.
     // 배열에 객체 생성시작.
-    if (dragFrom === 'mainCanvas') {
+    if (builderFrom === 'mainCanvas') {
       handleDragOverCanvas(e);
       return;
     }
 
-    if (dragFrom === 'sidebar') {
+    if (builderFrom === 'sidebar') {
       handleDragOverBySidebarItem(e);
     } else {
       handleDragOverCanvasItem(e);
@@ -473,10 +499,10 @@ export function useBuilderDragState() {
   // 드래그 종료시
   const handleDragEnd = (e: DragEndEvent) => {
     const { active } = e;
-    const dragFrom = active?.data?.current?.dragFrom ?? {};
-    if (dragFrom === 'mainCanvas') {
+    const builderFrom = active?.data?.current?.builderFrom ?? {};
+    if (builderFrom === 'mainCanvas') {
       handleDragEndCanvas(e);
-    } else if (dragFrom === 'sidebar') {
+    } else if (builderFrom === 'sidebar') {
       handleDragEndBySidebarItem(e);
     } else {
       handleDragEndCanvasItem(e);
@@ -490,6 +516,7 @@ export function useBuilderDragState() {
     sidebarFieldsRegenKey,
     selectedItemId,
     selectedCanvasId,
+    removeItem,
     setSelectedCanvasId,
     setSelectedItemId,
     handleDragStart,
