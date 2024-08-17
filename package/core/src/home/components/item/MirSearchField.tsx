@@ -3,16 +3,20 @@ import SearchIcon from '@mui/icons-material/Search';
 import { InputBase, Paper } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
-import { ItemProps } from '@home/components/item/ItemProps';
+import { ItemState } from '@home/components/item/ItemState';
 
-export interface MirSearchFieldProps extends ItemProps {
+export interface MirSearchFieldProps extends ItemState {
   placeholder?: string;
 }
 
 const handlerClick = () => {
   alert('클릭!');
 };
-const MirSearchField = ({ placeholder }: MirSearchFieldProps) => {
+const MirSearchField = ({ placeholder, renderType }: MirSearchFieldProps) => {
+  if (renderType === 'preview') {
+    return <div>MirSearchField</div>;
+  }
+
   return (
     <Paper
       component="form"

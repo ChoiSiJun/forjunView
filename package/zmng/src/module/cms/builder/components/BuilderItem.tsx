@@ -1,6 +1,7 @@
 import { UniqueIdentifier } from '@dnd-kit/core/dist/types';
 import { ReactNode } from 'react';
-import MainExport from '@package/core/src/components/MainExport';
+import { ItemRender } from '@package/core/src/home/components/ItemRender';
+import { ItemState } from '@package/core/src/home/components/item/ItemState';
 
 // ---------------------------인터페이스 정의
 export interface BuilderItemsProps {
@@ -9,11 +10,6 @@ export interface BuilderItemsProps {
   displayTitle: string;
   canvasId?: UniqueIdentifier;
   component?: ReactNode;
-}
-
-interface RenderComponentProps {
-  type: string;
-  ComponentProps?: Record<string, any>;
 }
 
 interface RenderersProps {
@@ -38,19 +34,10 @@ export const SideBarItems: BuilderItemsProps[] = [
   },
 ];
 
-// Builder Item 연결된 실제 컴포넌트 호출
-export const CanvasItem: Record<string, RenderersProps> = {
-  SearchBar: props => <MainExport.MirSearchField {...props} />,
-  Toolbar: props => <MainExport.MirToolbarContent {...props} />,
-};
-
 // Canvas Builder Item 컴포넌트 렌더링
-export const RenderCanvasItem = ({
-  type,
-  ComponentProps = {},
-}: RenderComponentProps) => {
-  if (CanvasItem[type]) {
-    return CanvasItem[type](ComponentProps);
+export const RenderCanvasItem = ({ type, ComponentProps = {} }: ItemState) => {
+  if (ItemRender[type]) {
+    return ItemRender[type](ComponentProps);
   }
 
   return <div>Unknown component type: {type}</div>;

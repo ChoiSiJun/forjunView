@@ -1,3 +1,4 @@
 export interface ItemState {
-  itemId: String | number;
+  ComponentProps?: Record<string, any>;
+  renderType?: 'preview';
 }

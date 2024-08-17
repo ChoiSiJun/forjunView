@@ -1,11 +1,13 @@
 import { useSortable } from '@dnd-kit/sortable';
-import { Box, ButtonGroup, IconButton, SvgIcon, useTheme } from '@mui/material';
+import { ButtonGroup, IconButton, SvgIcon, useTheme } from '@mui/material';
 import { CSS } from '@dnd-kit/utilities';
+
+import { RenderItem } from '@package/core/src/home/components/RenderItem';
 
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import DragIndicatorOutlinedIcon from '@mui/icons-material/DragIndicatorOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import { RenderCanvasItem } from '@module/cms/builder/components/BuilderItem';
+
 import {
   BuilderItemsProps,
   BuilderItemState,
@@ -19,21 +21,16 @@ export function CanvasItem({
   state: BuilderItemState;
   overlay?: boolean;
 }) {
-  const Component =
-    state.builderType === 'spacer' ? (
-      <Box border={1} height={50} bgcolor="gray" className="spacer" />
-    ) : (
-      <Box width="100%">
-        <RenderCanvasItem type={state.builderType} />
-      </Box>
-    );
-
   let className = 'canvas-field';
   if (overlay) {
     className += ' overlay';
   }
 
-  return <div className={className}>{Component}</div>;
+  return (
+    <div className={className}>
+      {RenderItem[state.renderId](state.ComponentProps)}
+    </div>
+  );
 }
 
 // 아이템에 소트 및 드래그 설정

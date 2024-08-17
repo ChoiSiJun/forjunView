@@ -1,12 +1,19 @@
 import { Toolbar, Typography } from '@mui/material';
 
-import { ItemProps } from '@home/components/item/ItemProps';
+import { ItemState } from '@home/components/item/ItemState';
 
-export interface MirToolbarContentProps extends ItemProps {
-  title: string;
-}
+export interface MirToolbarContentProps extends ItemState {}
 
-const MirToolbarContent = ({ title = 'test' }: MirToolbarContentProps) => {
+const MirToolbarContent = ({
+  renderType,
+  ComponentProps = {},
+}: MirToolbarContentProps) => {
+  const { title } = ComponentProps;
+
+  if (renderType === 'preview') {
+    return <div>Toolbar</div>;
+  }
+
   return (
     <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
       <Typography variant="h5" fontWeight="bold">

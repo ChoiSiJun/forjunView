@@ -46,4 +46,6 @@ export interface BuilderCanvasState extends CanvasState, BuilderProps {
 }
 
 // Builder Item 상태 인터페이스
-export interface BuilderItemState extends ItemState, BuilderProps {}
+export interface BuilderItemState extends ItemState, BuilderProps {
+  renderId: string;
+}
