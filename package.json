@@ -30,7 +30,7 @@
   },
   "scripts": {
     "core": "yarn workspace @package/core",
-    "zmng": "yarn workspace @package/zmng",
+    "home": "yarn workspace @package/home",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {

@@ -3083,9 +3083,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@package/zmng@workspace:package/zmng":
+"@package/home@workspace:package/home":
   version: 0.0.0-use.local
-  resolution: "@package/zmng@workspace:package/zmng"
+  resolution: "@package/home@workspace:package/home"
   dependencies:
     "@dnd-kit/core": "npm:^6.1.0"
     "@dnd-kit/modifiers": "npm:^7.0.0"
