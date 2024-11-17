@@ -1,18 +1,12 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import MemberSlice from '@module/member/slice/MemberSlice';
-import MemberListSlice from '@module/member/slice/MemberListSlice';
-import LocationListSlice from '@module/system/slice/LocationListSilce';
-import LocationSlice from '@module/system/slice/LocationSlice';
+
+
 import MenuSlice from '@common/slice/Menu/MenuSlice';
 import ModalSlice from '@common/slice/ModalSlice';
 import { persistReducer } from 'redux-persist';
 import sessionStorage from 'redux-persist/lib/storage/session';
 const reducers = combineReducers({
   Menu: MenuSlice,
-  Member: MemberSlice,
-  MemberList: MemberListSlice,
-  LocationList: LocationListSlice,
-  Location: LocationSlice,
   Modal: ModalSlice,
 });
 

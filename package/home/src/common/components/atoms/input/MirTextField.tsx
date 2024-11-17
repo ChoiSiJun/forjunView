@@ -1,31 +1,33 @@
-import { Box } from '@mui/material';
-import MuiTextField from '@mui/material/TextField';
-
-export const MirTextFieldGuide = {
-  title: '텍스트 필드',
-  code: `const inputRef = useRef(null);
-  <TextField textFieldType={'outlined-basic'} label={'텍스트필드'} InputRef={inputRef}/>`,
-
-  requireNote: ['label: 텍스트 필드 라벨값'],
-  optionNote: [
-    'textFieldType: 텍스트 필드 타입 ( outlined-basic -> default ,filled-basic, standard-basic)',
-    'InputRef : 텍스트 필드에 연결될 Ref값',
-  ],
-};
+import MuiTextField, { TextFieldProps } from '@mui/material/TextField';
 
 export interface MirTextFieldProps {
   label: string;
+  name: string;
   textFieldType?: 'outlined-basic' | 'filled-basic' | 'standard-basic';
   InputRef?: React.RefObject<HTMLInputElement>;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  InputProps?: TextFieldProps['InputProps'];
 }
 
 const MirTextField = ({
   InputRef,
   label,
+  name,
   textFieldType = 'outlined-basic',
+  InputProps,
+  onChange,
 }: MirTextFieldProps) => {
   return (
-    <MuiTextField ref={InputRef} id={textFieldType} label={label} size="small" />
+    <MuiTextField
+      ref={InputRef}
+      id={textFieldType}
+      name={name}
+      label={label}
+      onChange={onChange}
+      InputProps={InputProps}
+      size="small"
+      fullWidth
+    />
   );
 };
 

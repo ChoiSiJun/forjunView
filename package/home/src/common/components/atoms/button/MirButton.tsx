@@ -1,21 +1,6 @@
 import { styled } from '@mui/material';
 import Button from '@mui/material/Button';
 
-export const MirButtonGuide = {
-  title: '버튼',
-  code: `
-  const clickHandler = () => {
-    alert('클릭동작!!');
-  };
-  <MirButton ButtonType={'default'} buttonName={'기본'} onClick={clickHandler}/>
-`,
-  requireNote: [
-    `ButtonType : 버튼 종류 ('default' | 'create' | 'read' | 'delete' |'update' | 'export' | 'etc')`,
-    'buttonName: 버튼이름',
-  ],
-  optionNote: ['onClick: 클릭이벤트'],
-};
-
 interface MirButtonProps {
   ButtonType:
     | 'default'
@@ -24,6 +9,7 @@ interface MirButtonProps {
     | 'update'
     | 'delete'
     | 'export'
+    | 'input'
     | 'etc';
   buttonName: string;
   onClick?: () => void;
@@ -138,6 +124,25 @@ const MirButton = ({
           margin: '30',
         }}
         onClick={onClick}
+      >
+        {buttonName}
+      </ButtonStyled>
+    );
+  }
+
+  if (ButtonType == 'input') {
+    return (
+      <ButtonStyled
+        variant="outlined"
+        color="primary"
+        onClick={onClick}
+        sx={{
+          minWidth: 0, // 최소 너비 제거
+          padding: '6px 12px', // 버튼 내부 여백
+          margin: 0, // 외부 마진 제거
+          lineHeight: 1, // 버튼 높이 정렬
+          boxShadow: 'none', // 그림자 제거 (필요 시)
+        }}
       >
         {buttonName}
       </ButtonStyled>

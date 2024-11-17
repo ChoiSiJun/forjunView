@@ -13,24 +13,38 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import { Drawer } from '@mui/material';
+import Join from '@module/auth/subpage/Join';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function Login() {
+export default function AuthMain() {
+  //상태관리
+  const [joinOpen, setJoinOpen] = React.useState(false);
+
+  //핸들러
+  const handleJoin = () => {
+    setJoinOpen(!joinOpen);
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const requestData = {
-      loginId: data.get('loginId'),
+      id: data.get('loginId'),
       password: data.get('password'),
     };
 
     try {
-      const response = await axios.post('/api/login/', requestData);
-      console.log(response);
-    } catch (error) {
-      console.log(error);
+      const response = await axios.post(
+        import.meta.env.VITE_REST_API + '/user/login',
+        requestData,
+      );
+      toast.success(response.data);
+    } catch (error: any) {
+      toast.error(error.response.data);
     }
   };
 
@@ -115,7 +129,7 @@ export default function Login() {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link href="#" onClick={handleJoin} variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
@@ -123,6 +137,8 @@ export default function Login() {
             </Box>
           </Box>
         </Grid>
+
+        <Join joinOpen={joinOpen} handleJoin={handleJoin}></Join>
       </Grid>
     </ThemeProvider>
   );
