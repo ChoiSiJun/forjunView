@@ -1,19 +1,18 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-
 import MenuSlice from '@common/slice/Menu/MenuSlice';
-import ModalSlice from '@common/slice/ModalSlice';
+import AuthSlice from '@module/auth/slice/AuthSlice';
 import { persistReducer } from 'redux-persist';
 import sessionStorage from 'redux-persist/lib/storage/session';
 const reducers = combineReducers({
   Menu: MenuSlice,
-  Modal: ModalSlice,
+  Auth: AuthSlice,
 });
 
 const persistConfig = {
   key: 'root',
   storage: sessionStorage,
-  whitelist: ['Menu'],
+  whitelist: ['auth'],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);

@@ -10,9 +10,9 @@ import {
 } from '@mui/material';
 import { useFormik } from 'formik';
 import axios from 'axios';
-import { useState } from 'react';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
+import { useState } from 'react';
 
 interface JoinProps {
   joinOpen: boolean;
@@ -20,49 +20,74 @@ interface JoinProps {
 }
 
 export default function Join({ joinOpen, handleJoin }: JoinProps) {
+  const [idDuplicateCheck, setIdDuplicateCheck] = useState(false);
+
+  const handelCustomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    joinForm.handleChange(e);
+    if (e.target.name === 'userId') {
+      setIdDuplicateCheck(false);
+    }
+  };
+
   //회원가입 Form 관리
   const joinForm = useFormik({
     initialValues: {
       userId: '',
       password: '',
-      name: '',
+      userName: '',
       email: '',
     },
 
     validationSchema: Yup.object({
       userId: Yup.string().required('아이디는 필수 항목입니다.'),
       password: Yup.string()
-        .min(6, '비밀번호는 최소 6자 이상이어야 합니다.')
-        .required('비밀번호는 필수 항목입니다.'),
+        .required('비밀번호는 필수 항목입니다.')
+        .matches(
+          /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/,
+          '비밀번호는 최소 8자 이상이어야 하며, 영문 대소문자, 숫자, 특수문자를 모두 포함해야 합니다.',
+        ),
+      userName: Yup.string().required('이름은 필수 항목입니다.'),
+      email: Yup.string()
+        .email('이메일 형식이 아닙니다.')
+        .required('이메일은 필수 항목입니다.'),
     }),
 
     onSubmit: async values => {
       try {
-        // axios로 폼 데이터 비동기 전송
-        const response = await axios.post(
-          import.meta.env.VITE_REST_API + +'/user/save',
-          values,
-        );
-
-        // 서버 응답에 따른 처리
-        if (response.data.success) {
-          // 성공적인 등록 처리
-          console.log('회원가입 성공');
+        if (!idDuplicateCheck) {
+          toast.error('아이디 중복체크를 진행해주세요.');
+          return false;
         }
-      } catch (error) {
+
+        // axios로 폼 데이터 비동기 전송
+        await axios.post(import.meta.env.VITE_REST_API + '/user/save', values);
+
+        toast.success('가입 되었습니다.');
+        handleJoin();
+      } catch (error: any) {
         // 에러 처리
-        console.error('회원가입 실패:', error);
+        if (error?.response?.data == '') {
+          toast.error(error.code);
+        } else {
+          toast.error(error.response.data);
+        }
       }
     },
+    validateOnChange: true,
   });
-
-  // 아이디 상태 관리
-  const [userId, setUserId] = useState('');
 
   //아이디 중복체크 핸들러.
   const duplicateCheck = async () => {
     const requestData = new URLSearchParams();
-    requestData.append('id', userId);
+    if (
+      joinForm.values.userId === null ||
+      joinForm.values.userId === undefined ||
+      joinForm.values.userId === ''
+    ) {
+      toast.error('아이디를 입력해주세요.');
+      return false;
+    }
+    requestData.append('id', joinForm.values.userId);
     try {
       const result = await axios.post(
         import.meta.env.VITE_REST_API + '/user/duplicate',
@@ -78,6 +103,7 @@ export default function Join({ joinOpen, handleJoin }: JoinProps) {
         toast.error('중복된 아이디가 존재합니다');
       } else {
         toast.success('가입 가능한 아이디입니다.');
+        setIdDuplicateCheck(true);
       }
     } catch (error: any) {
       if (error?.response?.data == '') {
@@ -87,9 +113,6 @@ export default function Join({ joinOpen, handleJoin }: JoinProps) {
       }
     }
   };
-
-  //회원가입
-  const JoinPrss = () => {};
 
   return (
     <Drawer
@@ -135,9 +158,16 @@ export default function Join({ joinOpen, handleJoin }: JoinProps) {
             {/* 아이디 */}
             <Grid item xs={12}>
               <MirTextField
-                label="아이디"
+                label="ID"
                 name="userId"
-                onChange={e => setUserId(e.target.value)} // 상태 업데이트
+                onChange={handelCustomChange}
+                onBlur={joinForm.handleBlur}
+                error={!!joinForm.errors.userId && !!joinForm.touched.userId}
+                helperText={
+                  joinForm.touched.userId && joinForm.errors.userId
+                    ? joinForm.errors.userId
+                    : undefined
+                }
                 InputProps={{
                   endAdornment: (
                     <InputAdornment
@@ -160,23 +190,65 @@ export default function Join({ joinOpen, handleJoin }: JoinProps) {
 
             {/* 패스워드 */}
             <Grid item xs={12}>
-              <MirTextField label="패스워드" name="passwrod" />
+              <MirTextField
+                label="Password"
+                name="password"
+                type="password"
+                onChange={joinForm.handleChange}
+                onBlur={joinForm.handleBlur}
+                error={
+                  !!joinForm.errors.password && !!joinForm.touched.password
+                }
+                helperText={
+                  joinForm.touched.password && joinForm.errors.password
+                    ? joinForm.errors.password
+                    : undefined
+                }
+              />
             </Grid>
 
             {/* 이름 */}
             <Grid item xs={12}>
-              <MirTextField label="이름" name="name" />
+              <MirTextField
+                label="Name"
+                name="userName"
+                onChange={joinForm.handleChange}
+                onBlur={joinForm.handleBlur}
+                error={
+                  !!joinForm.errors.userName && !!joinForm.touched.userName
+                }
+                helperText={
+                  joinForm.touched.userName && joinForm.errors.userName
+                    ? joinForm.errors.userName
+                    : undefined
+                }
+              />
             </Grid>
 
             {/* 이메일 */}
             <Grid item xs={12}>
-              <MirTextField label="이메일" name="email" />
+              <MirTextField
+                label="E-MAIL"
+                name="email"
+                onChange={joinForm.handleChange}
+                onBlur={joinForm.handleBlur}
+                error={!!joinForm.errors.email && !!joinForm.touched.email}
+                helperText={
+                  joinForm.touched.email && joinForm.errors.email
+                    ? joinForm.errors.email
+                    : undefined
+                }
+              />
             </Grid>
           </Grid>
 
           {/* Submit Button */}
           <Box textAlign="center" mt={4}>
-            <MirButton ButtonType={'create'} buttonName={'가입'} />
+            <MirButton
+              ButtonType={'create'}
+              buttonName={'가입'}
+              onClick={joinForm.handleSubmit}
+            />
           </Box>
         </Paper>
       </Box>

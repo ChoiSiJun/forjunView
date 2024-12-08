@@ -2,7 +2,6 @@ import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
@@ -14,14 +13,22 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Drawer } from '@mui/material';
+import * as Yup from 'yup';
 import Join from '@module/auth/subpage/Join';
+import MirTextField from '@common/components/atoms/input/MirTextField';
+import { useFormik } from 'formik';
+import { useAppDispatch } from '@config/ReduxHooks';
+import { jwtInsert, jwtDelete } from '@module/auth/slice/AuthSlice';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function AuthMain() {
+  //리덕스
+  const dispatch = useAppDispatch();
+
   //상태관리
+  //회원가입폼
   const [joinOpen, setJoinOpen] = React.useState(false);
 
   //핸들러
@@ -29,24 +36,40 @@ export default function AuthMain() {
     setJoinOpen(!joinOpen);
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const requestData = {
-      id: data.get('loginId'),
-      password: data.get('password'),
-    };
+  const loginForm = useFormik({
+    initialValues: {
+      loginId: '',
+      loginPassword: '',
+    },
+    validationSchema: Yup.object({
+      loginId: Yup.string().required('아이디는 필수 항목입니다.'),
+      loginPassword: Yup.string()
+        .required('비밀번호는 필수 항목입니다.')
+        .matches(
+          /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/,
+          '비밀번호는 최소 8자 이상이어야 하며, 영문 대소문자, 숫자, 특수문자를 모두 포함해야 합니다.',
+        ),
+    }),
 
-    try {
-      const response = await axios.post(
-        import.meta.env.VITE_REST_API + '/user/login',
-        requestData,
-      );
-      toast.success(response.data);
-    } catch (error: any) {
-      toast.error(error.response.data);
-    }
-  };
+    onSubmit: async values => {
+      try {
+        const reponse = await axios.post(
+          import.meta.env.VITE_REST_API + '/user/login',
+          values,
+        );
+
+        const jwtToken = reponse.data;
+        dispatch(jwtInsert(jwtToken));
+      } catch (error: any) {
+        // 에러 처리
+        if (error?.response?.data == '') {
+          toast.error(error.code);
+        } else {
+          toast.error(error.response.data);
+        }
+      }
+    },
+  });
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -87,29 +110,48 @@ export default function AuthMain() {
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmit}
-              sx={{ mt: 1 }}
+              onSubmit={loginForm.handleSubmit}
+              sx={{
+                mt: 1,
+                width: '320px', // 폼 전체의 최소 너비
+              }}
             >
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="loginId"
-                label="ID"
-                name="loginId"
-                autoComplete="loginId"
-                autoFocus
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
+              <Grid item xs={12} sm={12} md={12} margin={1}>
+                <MirTextField
+                  label="ID"
+                  name="loginId"
+                  size="medium"
+                  onChange={loginForm.handleChange}
+                  onBlur={loginForm.handleBlur}
+                  error={
+                    !!loginForm.errors.loginId && !!loginForm.touched.loginId
+                  }
+                  helperText={
+                    loginForm.touched.loginId && loginForm.errors.loginId
+                      ? loginForm.errors.loginId
+                      : undefined
+                  }
+                />
+              </Grid>
+              <Grid item xs={12} sm={12} md={12} margin={1}>
+                <MirTextField
+                  name="loginPassword"
+                  label="Password"
+                  type="password"
+                  onChange={loginForm.handleChange}
+                  onBlur={loginForm.handleBlur}
+                  error={
+                    !!loginForm.errors.loginPassword &&
+                    !!loginForm.touched.loginPassword
+                  }
+                  helperText={
+                    loginForm.touched.loginPassword &&
+                    loginForm.errors.loginPassword
+                      ? loginForm.errors.loginPassword
+                      : undefined
+                  }
+                />
+              </Grid>
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
@@ -122,15 +164,10 @@ export default function AuthMain() {
               >
                 Sign In
               </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
+              <Grid container justifyContent="center">
                 <Grid item>
                   <Link href="#" onClick={handleJoin} variant="body2">
-                    {"Don't have an account? Sign Up"}
+                    {'Sign Up'}
                   </Link>
                 </Grid>
               </Grid>
