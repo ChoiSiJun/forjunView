@@ -1,7 +1,7 @@
 import { SxProps, Theme } from '@mui/material';
 import MuiTextField, { TextFieldProps } from '@mui/material/TextField';
 
-export interface MirTextFieldProps {
+export interface SjTextFieldProps {
   label: string;
   name: string;
   type?: string;
@@ -16,7 +16,7 @@ export interface MirTextFieldProps {
   sx?: SxProps<Theme> | undefined;
 }
 
-const MirTextField = ({
+const SjTextField = ({
   InputRef,
   label,
   name,
@@ -26,10 +26,10 @@ const MirTextField = ({
   onChange,
   onBlur,
   error,
-  size,
+  size = 'small',
   sx,
   helperText,
-}: MirTextFieldProps) => {
+}: SjTextFieldProps) => {
   return (
     <MuiTextField
       ref={InputRef}
@@ -42,11 +42,11 @@ const MirTextField = ({
       error={error}
       helperText={helperText}
       InputProps={InputProps}
-      size={(size = 'small')}
+      size={size}
       fullWidth
       sx={sx}
     />
   );
 };
 
-export default MirTextField;
+export default SjTextField;

@@ -1,7 +1,7 @@
 import { FormControlLabel, Switch, styled } from '@mui/material';
 import { isEmpty } from 'lodash';
 
-export const MirSwitchGuide = {
+export const SjSwitchGuide = {
   title: '스위치',
   code: `<MirCheckbox label="라벨값" />`,
   requireNote: [],
@@ -14,7 +14,7 @@ export const MirSwitchGuide = {
   ],
 };
 
-interface MirSwitchProps {
+interface SjSwitchProps {
   label?: string;
   defaultChecked?: boolean;
   disabled?: boolean;
@@ -25,14 +25,14 @@ interface MirSwitchProps {
 
 const SwitchStyled = styled(Switch)({});
 
-const MirSwitch = ({
+const SjSwitch = ({
   label,
   defaultChecked = false,
   disabled = false,
   required = false,
   color,
   onChange,
-}: MirSwitchProps) => {
+}: SjSwitchProps) => {
   if (isEmpty(label)) {
     return (
       <SwitchStyled
@@ -61,4 +61,4 @@ const MirSwitch = ({
   }
 };
 
-export default MirSwitch;
+export default SjSwitch;

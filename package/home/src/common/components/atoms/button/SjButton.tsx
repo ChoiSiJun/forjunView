@@ -1,7 +1,8 @@
 import { styled } from '@mui/material';
 import Button from '@mui/material/Button';
+import { useAppSelector } from '@config/ReduxHooks';
 
-interface MirButtonProps {
+interface SjButtonProps {
   ButtonType:
     | 'default'
     | 'create'
@@ -12,16 +13,26 @@ interface MirButtonProps {
     | 'input'
     | 'etc';
   buttonName: string;
+  displayRule?: string;
   onClick?: () => void;
 }
 
 const ButtonStyled = styled(Button)({});
 
-const MirButton = ({
+const SjButton = ({
   ButtonType = 'default',
   buttonName,
+  displayRule = 'GUEST',
   onClick,
-}: MirButtonProps) => {
+}: SjButtonProps) => {
+  const role = useAppSelector(state => state.Auth.role);
+  const test = useAppSelector(state => state.Auth);
+  if (displayRule != 'GUEST' && displayRule != role) {
+    console.log(role);
+    console.log(test);
+    return null;
+  }
+
   if (ButtonType == 'default') {
     return (
       <ButtonStyled
@@ -168,4 +179,4 @@ const MirButton = ({
   }
 };
 
-export default MirButton;
+export default SjButton;

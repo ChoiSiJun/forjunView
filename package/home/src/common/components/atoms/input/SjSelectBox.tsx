@@ -8,7 +8,7 @@ import {
 import { useState } from 'react';
 
 /******** 컴포넌트 가이드 **********/
-export const MirSelectBoxGuide = {
+export const SjSelectBoxGuide = {
   title: '셀렉트박스',
   code: ``,
   requireNote: [
@@ -24,13 +24,13 @@ export const MirSelectBoxGuide = {
 };
 /********************************/
 
-interface MirSelectBoxMenuItem {
+interface SjSelectBoxMenuItem {
   name: string;
   value: string;
 }
 
-interface MirSelectBoxProps {
-  menuItem: MirSelectBoxMenuItem[];
+interface SjSelectBoxProps {
+  menuItem: SjSelectBoxMenuItem[];
   defaultValue: string;
   label: string;
   layout?: undefined | 'standard' | 'outlined' | 'filled';
@@ -38,14 +38,14 @@ interface MirSelectBoxProps {
   onChange?: () => void;
 }
 
-const MirSelectBox = ({
+const SjSelectBox = ({
   layout = undefined,
   menuItem,
   defaultValue,
   label,
   onChange,
   inputRef,
-}: MirSelectBoxProps) => {
+}: SjSelectBoxProps) => {
   const [value, setValue] = useState(defaultValue);
   const handleChange = (event: SelectChangeEvent) => {
     setValue(event.target.value as string);
@@ -71,4 +71,4 @@ const MirSelectBox = ({
   );
 };
 
-export default MirSelectBox;
+export default SjSelectBox;

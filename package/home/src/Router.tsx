@@ -13,7 +13,7 @@ function LibertyRouter() {
         <Routes>
           <Route path="/" element={<AuthMain />} />
           <Route path="login" element={<AuthMain />} />
-          <Route path="liberty/*" element={<AppContainer />}>
+          <Route path="forjun/*" element={<AppContainer />}>
             <Route index element={<PersonalStatement />} />
             <Route path="personal-statement" element={<PersonalStatement />} />
             <Route path="si-history" element={<SiHistory />} />

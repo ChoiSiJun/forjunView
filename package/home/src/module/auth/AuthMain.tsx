@@ -11,14 +11,14 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import Join from '@module/auth/subpage/Join';
-import MirTextField from '@common/components/atoms/input/MirTextField';
+import SjTextField from '@common/components/atoms/input/SjTextField';
 import { useFormik } from 'formik';
 import { useAppDispatch } from '@config/ReduxHooks';
-import { jwtInsert, jwtDelete } from '@module/auth/slice/AuthSlice';
+import { authInsert } from '@module/auth/slice/AuthSlice';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -28,6 +28,7 @@ export default function AuthMain() {
   const dispatch = useAppDispatch();
 
   //상태관리
+
   //회원가입폼
   const [joinOpen, setJoinOpen] = React.useState(false);
 
@@ -46,7 +47,7 @@ export default function AuthMain() {
       loginPassword: Yup.string()
         .required('비밀번호는 필수 항목입니다.')
         .matches(
-          /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/,
+          /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\\[\]{};':"\\|,.<>\\/?]).{8,}$/,
           '비밀번호는 최소 8자 이상이어야 하며, 영문 대소문자, 숫자, 특수문자를 모두 포함해야 합니다.',
         ),
     }),
@@ -56,16 +57,22 @@ export default function AuthMain() {
         const reponse = await axios.post(
           import.meta.env.VITE_REST_API + '/user/login',
           values,
+          { timeout: 5000 }, // 5초 동안 응답이 없으면 요청 취소
         );
 
-        const jwtToken = reponse.data;
-        dispatch(jwtInsert(jwtToken));
-      } catch (error: any) {
-        // 에러 처리
-        if (error?.response?.data == '') {
-          toast.error(error.code);
+        const jwtToken = reponse?.data?.token;
+        if (!jwtToken) {
+          throw new Error('Invalid or missing JWT token');
+        }
+        dispatch(authInsert(jwtToken));
+        location.href = '/forjun';
+      } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+          toast.error(error.response?.data);
+        } else if (error instanceof Error) {
+          toast.error(error.message);
         } else {
-          toast.error(error.response.data);
+          toast.error('Unknown error');
         }
       }
     },
@@ -117,7 +124,7 @@ export default function AuthMain() {
               }}
             >
               <Grid item xs={12} sm={12} md={12} margin={1}>
-                <MirTextField
+                <SjTextField
                   label="ID"
                   name="loginId"
                   size="medium"
@@ -134,7 +141,7 @@ export default function AuthMain() {
                 />
               </Grid>
               <Grid item xs={12} sm={12} md={12} margin={1}>
-                <MirTextField
+                <SjTextField
                   name="loginPassword"
                   label="Password"
                   type="password"

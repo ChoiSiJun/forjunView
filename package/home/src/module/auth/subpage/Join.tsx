@@ -1,5 +1,5 @@
-import MirButton from '@common/components/atoms/button/MirButton';
-import MirTextField from '@common/components/atoms/input/MirTextField';
+import SjButton from '@common/components/atoms/button/SjButton';
+import SjTextField from '@common/components/atoms/input/SjTextField';
 import {
   Box,
   Drawer,
@@ -157,7 +157,7 @@ export default function Join({ joinOpen, handleJoin }: JoinProps) {
           <Grid container spacing={3}>
             {/* 아이디 */}
             <Grid item xs={12}>
-              <MirTextField
+              <SjTextField
                 label="ID"
                 name="userId"
                 onChange={handelCustomChange}
@@ -177,7 +177,7 @@ export default function Join({ joinOpen, handleJoin }: JoinProps) {
                         padding: 0,
                       }}
                     >
-                      <MirButton
+                      <SjButton
                         ButtonType={'input'}
                         buttonName={'중복체크'}
                         onClick={duplicateCheck}
@@ -190,7 +190,7 @@ export default function Join({ joinOpen, handleJoin }: JoinProps) {
 
             {/* 패스워드 */}
             <Grid item xs={12}>
-              <MirTextField
+              <SjTextField
                 label="Password"
                 name="password"
                 type="password"
@@ -209,7 +209,7 @@ export default function Join({ joinOpen, handleJoin }: JoinProps) {
 
             {/* 이름 */}
             <Grid item xs={12}>
-              <MirTextField
+              <SjTextField
                 label="Name"
                 name="userName"
                 onChange={joinForm.handleChange}
@@ -227,7 +227,7 @@ export default function Join({ joinOpen, handleJoin }: JoinProps) {
 
             {/* 이메일 */}
             <Grid item xs={12}>
-              <MirTextField
+              <SjTextField
                 label="E-MAIL"
                 name="email"
                 onChange={joinForm.handleChange}
@@ -244,7 +244,7 @@ export default function Join({ joinOpen, handleJoin }: JoinProps) {
 
           {/* Submit Button */}
           <Box textAlign="center" mt={4}>
-            <MirButton
+            <SjButton
               ButtonType={'create'}
               buttonName={'가입'}
               onClick={joinForm.handleSubmit}
