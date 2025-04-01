@@ -7,7 +7,6 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { Toast } from '@common/components/common_components_index';
-import { Portal } from '@mui/base/Portal';
 
 import { QueryClientProvider, QueryClient, QueryCache } from 'react-query';
 // import useApiError from "@module/common/hook/useApiError";

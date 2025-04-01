@@ -20,8 +20,10 @@ interface JoinProps {
 }
 
 export default function Join({ joinOpen, handleJoin }: JoinProps) {
+  //Id 중복체크 여부
   const [idDuplicateCheck, setIdDuplicateCheck] = useState(false);
 
+  //Form 변경 이벤트 캐치
   const handelCustomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     joinForm.handleChange(e);
     if (e.target.name === 'userId') {
@@ -245,7 +247,7 @@ export default function Join({ joinOpen, handleJoin }: JoinProps) {
           {/* Submit Button */}
           <Box textAlign="center" mt={4}>
             <SjButton
-              ButtonType={'create'}
+              ButtonType={'confirm'}
               buttonName={'가입'}
               onClick={joinForm.handleSubmit}
             />

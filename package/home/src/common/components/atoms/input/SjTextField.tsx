@@ -5,6 +5,7 @@ export interface SjTextFieldProps {
   label: string;
   name: string;
   type?: string;
+  value?: string | number;
   textFieldType?: 'outlined-basic' | 'filled-basic' | 'standard-basic';
   InputRef?: React.RefObject<HTMLInputElement>;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -17,10 +18,10 @@ export interface SjTextFieldProps {
 }
 
 const SjTextField = ({
-  InputRef,
   label,
   name,
   type,
+  value,
   textFieldType = 'outlined-basic',
   InputProps,
   onChange,
@@ -32,7 +33,6 @@ const SjTextField = ({
 }: SjTextFieldProps) => {
   return (
     <MuiTextField
-      ref={InputRef}
       id={textFieldType}
       name={name}
       type={type}
@@ -40,6 +40,7 @@ const SjTextField = ({
       onChange={onChange}
       onBlur={onBlur}
       error={error}
+      value={value}
       helperText={helperText}
       InputProps={InputProps}
       size={size}

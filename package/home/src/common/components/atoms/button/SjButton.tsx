@@ -5,6 +5,8 @@ import { useAppSelector } from '@config/ReduxHooks';
 interface SjButtonProps {
   ButtonType:
     | 'default'
+    | 'confirm'
+    | 'cancle'
     | 'create'
     | 'read'
     | 'update'
@@ -26,10 +28,7 @@ const SjButton = ({
   onClick,
 }: SjButtonProps) => {
   const role = useAppSelector(state => state.Auth.role);
-  const test = useAppSelector(state => state.Auth);
   if (displayRule != 'GUEST' && displayRule != role) {
-    console.log(role);
-    console.log(test);
     return null;
   }
 
@@ -51,11 +50,47 @@ const SjButton = ({
     );
   }
 
-  if (ButtonType == 'create') {
+  if (ButtonType == 'confirm') {
     return (
       <ButtonStyled
         variant="contained"
         color="primary"
+        size="small"
+        sx={{
+          ml: 'auto',
+          minWidth: '80px',
+          margin: '30',
+        }}
+        onClick={onClick}
+      >
+        {buttonName}
+      </ButtonStyled>
+    );
+  }
+
+  if (ButtonType == 'cancle') {
+    return (
+      <ButtonStyled
+        variant="contained"
+        size="small"
+        sx={{
+          ml: 'auto',
+          minWidth: '80px',
+          margin: '30',
+          backgroundColor: 'red',
+        }}
+        onClick={onClick}
+      >
+        {buttonName}
+      </ButtonStyled>
+    );
+  }
+
+  if (ButtonType == 'create') {
+    return (
+      <ButtonStyled
+        variant="contained"
+        color="success"
         size="small"
         sx={{
           ml: 'auto',
