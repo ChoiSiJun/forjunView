@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
-import { useAppDispatch } from '@config/ReduxHooks';
-import { menuAccess } from '@common/slice/Menu/MenuSlice';
+import { useAppDispatch } from 'store/ReduxHooks';
+import { menuAccess } from 'store/slice/MenuSlice';
 
 const ModuleSettingUtill = () => {
   const location = useLocation();

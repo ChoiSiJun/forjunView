@@ -1,7 +1,7 @@
 import { Box, List } from '@mui/material';
 import Item from '@ui-kit/app/components/SideBar/Item';
 import Group from '@ui-kit/app/components/SideBar/Group';
-import { useAppSelector } from '@config/ReduxHooks';
+import { useAppSelector } from 'store/ReduxHooks';
 import React from 'react';
 
 const ItemContainer = () => {

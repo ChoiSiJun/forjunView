@@ -14,10 +14,10 @@ import Button from '@mui/material/Button';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import AccessibilityIcon from '@mui/icons-material/Accessibility';
 import { useState } from 'react';
-import packageInfo from '@common/slice/Menu/Package';
+import packageInfo from '@config/Menu/Package';
 import React from 'react';
-import { useAppDispatch, useAppSelector } from '@config/ReduxHooks';
-import { packageAccess } from '@common/slice/Menu/MenuSlice';
+import { useAppDispatch, useAppSelector } from 'store/ReduxHooks';
+import { packageAccess } from 'store/slice/MenuSlice';
 import { start } from 'repl';
 
 //**************************컴포넌트 스타일 재설정

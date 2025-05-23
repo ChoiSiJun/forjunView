@@ -11,20 +11,20 @@
       //공통
       "@common/*": ["common/*"],
 
-      //템플릿
-      "@template/*": ["template/*"],
+      //API
+      "@api/*": ["api/*"],
 
-      //모듈제외 기능
-      "@features/*": ["features/*"],
-
-      //모듈
-      "@module/*": ["module/*"],
+      //페이지
+      "@pages/*": ["pages/*"],
 
       //UI-kit
       "@ui-kit/*": ["ui-kit/*"],
 
-      //hooks
-      "@hooks/*": ["hooks/*"]
+      //store
+      "@store/*": ["store/*"],
+
+      //자원파일
+      "@asset/*": ["asset/*"]
     }
   }
 }
