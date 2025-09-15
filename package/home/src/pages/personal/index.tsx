@@ -1,121 +1,328 @@
-import { Avatar, Box, Collapse, Grid } from '@mui/material';
-import { useState } from 'react';
-import profileImage from '@asset/image/jun.jpg'; // @는 보통 src alias (안 되면 상대경로로)
-import SjText from '@common/ui/elements/text/SjText';
-import SjTitleAndSubTextList from '@common/ui/elements/text/SjTitleAndSubTextList';
+import {
+  Avatar,
+  Box,
+  Button,
+  Grid,
+  TextField,
+  Chip,
+  Paper,
+  Typography,
+  IconButton,
+} from '@mui/material';
+import { useState, useCallback } from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import profileImage from '@asset/image/jun.jpg';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import usePersonaSaveMutation from '@api/module/personal/usePersonalSaveMutation';
 
-//총경력 계산
-const TotalEXPERIENCE = (date: string) => {
-  const [year, month] = date.split('.').map(Number);
-  const startDate = new Date(year, month - 1); // 월은 0부터 시작함
-  const today = new Date();
+interface CompanyEntry {
+  company: string;
+  startDate: string;
+  endDate: string;
+}
 
-  const totalMonths =
-    (today.getFullYear() - startDate.getFullYear()) * 12 +
-    (today.getMonth() - startDate.getMonth());
+export interface PersonalInsertParam {
+  name: string;
+  job: string;
+  imageFile: File | null;
+  companies: CompanyEntry[];
+  awards: string[];
+  skills: string[];
+}
 
-  const years = Math.floor(totalMonths / 12);
-  const months = totalMonths % 12;
-
-  return `${years}년 ${months}개월`;
-};
-
-const profileData = {
-  image: 'https://via.placeholder.com/150', // 정사각형 프로필 이미지
+const defaultProfileData: PersonalInsertParam = {
   name: '최시준',
   job: 'Software Developer',
-  skill: {
-    languageSkill: [
-      'java',
-      'MarkUp(Html,JSP)',
-      'React',
-      'JavaScript',
-      'TypeScript',
-      'Jquery',
-      'CachaDatabase',
-      'Lucene (Solr, Elasticsearch)',
-      'Git',
-    ],
-    frameWorkSkill: [
-      'Spring',
-      'SpringBoot',
-      'Spring Security',
-      'Spring cloud',
-      'Spring Batch',
-      'JPA',
-    ],
-    dbSkill: ['Oracle', 'Tibero', 'MariaDB', 'MSSQL', 'CacheDB', 'Redis'],
-    toolSKill: ['Eclipse', 'IntelliJ', 'Git', 'Svn', 'Docker'],
-  },
-
-  reference: {
-    company: ['(주)미르테크 ( 2019.09 ~ )'],
-    experience: [TotalEXPERIENCE('2019.09')],
-    awards: [
-      '우수논문상 ( 매장 어플리케이션에 대한 고찰 )',
-      '서일대학교 수석졸업',
-      '서일대학교 공로상',
-    ],
-  },
+  awards: [
+    '우수논문상 (매장 어플리케이션에 대한 고찰)',
+    '서일대학교 수석졸업',
+    '서일대학교 공로상',
+  ],
+  skills: ['Java', 'React', 'TypeScript', 'SpringBoot', 'Oracle', 'IntelliJ'],
+  companies: [{ company: '(주)미르테크', startDate: '2019.09', endDate: '' }],
+  imageFile: null,
 };
 
 const Personal = () => {
-  const [openSkills, setOpenSkills] = useState(false); // 스킬 영역 펼침/접힘 상태 관리
-  const toggleSkills = () => {
-    setOpenSkills(!openSkills);
+  //저장 Mutatation
+  const mutation = usePersonaSaveMutation();
+  //미리보기 이미지
+  const [previewImage, setPreviewImage] = useState<string | null>(profileImage);
+
+  //회사 이력
+  const [companies, setcompanies] = useState<CompanyEntry[]>(
+    defaultProfileData.companies,
+  );
+
+  //기술 이력
+  const [skills, setSkills] = useState<string[]>(defaultProfileData.skills);
+
+  //수상이력
+  const [awards, setAwards] = useState<string[]>(defaultProfileData.awards);
+
+  const formik = useFormik<PersonalInsertParam>({
+    initialValues: defaultProfileData,
+    validationSchema: Yup.object({
+      name: Yup.string().required('이름은 필수입니다.'),
+      job: Yup.string().required('직무는 필수입니다.'),
+    }),
+    onSubmit: values => {
+      const fullData = {
+        ...values,
+        previewImage,
+        skills,
+        awards,
+        companies,
+      };
+      mutation.mutate(fullData);
+      // TODO: 서버 API 연동
+    },
+  });
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    formik.setFieldValue('imageFile', file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => setPreviewImage(reader.result as string);
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewImage(profileImage);
+    }
+  };
+
+  const handleAddListItem = useCallback(
+    (field: 'awards' | 'skills', value: string) => {
+      if (!value) return;
+      if (field === 'awards') setAwards(prev => [...prev, value]);
+      if (field === 'skills') setSkills(prev => [...prev, value]);
+    },
+    [],
+  );
+
+  const handleRemoveListItem = useCallback(
+    (field: 'awards' | 'skills', index: number) => {
+      if (field === 'awards')
+        setAwards(prev => prev.filter((_, i) => i !== index));
+      if (field === 'skills')
+        setSkills(prev => prev.filter((_, i) => i !== index));
+    },
+    [],
+  );
+
+  const handleAddCompany = () => {
+    setcompanies(prev => [
+      ...prev,
+      { company: '', startDate: '', endDate: '' },
+    ]);
+  };
+  const handleRemoveCompany = (index: number) => {
+    setcompanies(prev => prev.filter((_, i) => i !== index));
+  };
+  const handleCompanyChange = (
+    index: number,
+    field: keyof CompanyEntry,
+    value: string,
+  ) => {
+    setcompanies(prev => {
+      const updated = [...prev];
+      updated[index][field] = value;
+      return updated;
+    });
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Grid container spacing={2} alignItems="center">
-        {/* 왼쪽 이미지 - 가운데 정렬 */}
-        <Grid item xs={12} sm={4} md={3} display="flex" justifyContent="center">
-          <Avatar
-            src={profileImage}
-            alt={profileData.name}
-            sx={{
-              width: '100%',
-              height: 'auto',
-              maxWidth: 150,
-              borderRadius: 2,
-            }}
-          />
+    <Box
+      sx={{
+        p: 3,
+        maxWidth: 900,
+        margin: '0 auto',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 3,
+      }}
+    >
+      {/* 기본 정보 */}
+      <Paper sx={{ p: 3 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          기본 정보
+        </Typography>
+        <Grid container spacing={2} alignItems="center">
+          <Grid
+            item
+            xs={12}
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+          >
+            <Avatar
+              src={previewImage || 'https://via.placeholder.com/150'}
+              sx={{ width: 120, height: 120, mb: 1 }}
+            />
+            <Button variant="contained" component="label">
+              이미지 선택
+              <input
+                type="file"
+                hidden
+                accept="image/*"
+                onChange={handleFileChange}
+              />
+            </Button>
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="이름"
+              name="name"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              error={!!formik.errors.name}
+              helperText={formik.errors.name}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="직무"
+              name="job"
+              value={formik.values.job}
+              onChange={formik.handleChange}
+              error={!!formik.errors.job}
+              helperText={formik.errors.job}
+            />
+          </Grid>
         </Grid>
+      </Paper>
 
-        {/* 오른쪽 텍스트 */}
-        <Grid item xs={12} sm={8} md={9}>
-          <Box>
-            <Box sx={{ mb: 2 }}>
-              <SjText text={profileData.name} variant="h5" component="div" />
-              <SjText text={profileData.job} variant="subtitle1" />
-              <SjText onClick={toggleSkills} text="(Skill)" renderType="link" />
-            </Box>
-
-            {/* 스킬 섹션 - Collapse로 숨기기 */}
-            <Collapse in={openSkills}>
-              <Box
-                sx={{
-                  mb: 2,
-                  backgroundColor: '#f0f0f0', // 배경 색
-                  borderRadius: '8px', // 모서리 둥글게
-                  padding: '16px', // 내부 여백
-                  boxShadow: 2, // 그림자 효과
-                  transition: 'all 0.3s ease', // 부드러운 전환 효과
-                  '&:hover': {
-                    // hover 시 효과
-                    boxShadow: 4, // hover 시 그림자 깊이 증가
-                  },
-                }}
+      {/* 회사 정보 */}
+      <Paper sx={{ p: 3 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          회사 정보
+        </Typography>
+        {companies.map((entry, idx) => (
+          <Grid
+            container
+            spacing={1}
+            key={idx}
+            alignItems="center"
+            sx={{ mb: 1 }}
+          >
+            <Grid item xs={4}>
+              <TextField
+                fullWidth
+                label="회사"
+                value={entry.company}
+                onChange={e =>
+                  handleCompanyChange(idx, 'company', e.target.value)
+                }
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <TextField
+                fullWidth
+                label="입사일 (YYYY.MM)"
+                value={entry.startDate}
+                onChange={e =>
+                  handleCompanyChange(idx, 'startDate', e.target.value)
+                }
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <TextField
+                fullWidth
+                label="퇴사일 (YYYY.MM)"
+                value={entry.endDate}
+                onChange={e =>
+                  handleCompanyChange(idx, 'endDate', e.target.value)
+                }
+              />
+            </Grid>
+            <Grid item xs={2}>
+              <IconButton
+                color="error"
+                onClick={() => handleRemoveCompany(idx)}
               >
-                <SjTitleAndSubTextList data={profileData.skill} />
-              </Box>
-            </Collapse>
-          </Box>
+                <DeleteIcon />
+              </IconButton>
+            </Grid>
+          </Grid>
+        ))}
+        <Button
+          startIcon={<AddIcon />}
+          onClick={handleAddCompany}
+          variant="outlined"
+        >
+          회사 추가
+        </Button>
+      </Paper>
 
-          {/* 추가 정보들 */}
-          <SjTitleAndSubTextList data={profileData.reference} />
-        </Grid>
-      </Grid>
+      {/* 수상 내역 */}
+      <Paper sx={{ p: 3 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          수상 내역
+        </Typography>
+        <TextField
+          fullWidth
+          label="수상 내역 추가"
+          onKeyDown={e => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleAddListItem('awards', (e.target as HTMLInputElement).value);
+              (e.target as HTMLInputElement).value = '';
+            }
+          }}
+        />
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
+          {awards.map((award, idx) => (
+            <Chip
+              key={idx}
+              label={award}
+              onDelete={() => handleRemoveListItem('awards', idx)}
+            />
+          ))}
+        </Box>
+      </Paper>
+
+      {/* 기술 */}
+      <Paper sx={{ p: 3 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          기술
+        </Typography>
+        <TextField
+          fullWidth
+          label="기술 추가"
+          onKeyDown={e => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleAddListItem('skills', (e.target as HTMLInputElement).value);
+              (e.target as HTMLInputElement).value = '';
+            }
+          }}
+        />
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
+          {skills.map((skill, idx) => (
+            <Chip
+              key={idx}
+              label={skill}
+              onDelete={() => handleRemoveListItem('skills', idx)}
+            />
+          ))}
+        </Box>
+      </Paper>
+
+      {/* 제출 버튼 */}
+      <Button
+        type="submit"
+        variant="contained"
+        fullWidth
+        onClick={formik.handleSubmit}
+      >
+        등록 / 수정
+      </Button>
     </Box>
   );
 };

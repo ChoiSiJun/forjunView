@@ -16,14 +16,35 @@ import Join from '@pages/auth/components/Join';
 import SjTextField from '@common/ui/elements/input/SjTextField';
 import { useFormik } from 'formik';
 
-import { useLoginMutation } from '@api/useLoginMutation';
+import { useLoginMutation } from '@api/module/auth/useLoginMutation';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@store/ReduxStoreConfig';
+import { useNavigate } from 'react-router-dom';
+import { authDelete } from '@store/slice/AuthSlice';
+import { useAppDispatch } from '@store/ReduxHooks';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function Auth() {
-  const loginMutation = useLoginMutation();
+  //JWT 발급여부로 상태제어
+  const status = useSelector((state: RootState) => state.Auth.status);
+  const exp = useSelector((state: RootState) => state.Auth.exp);
+  const dispatch = useAppDispatch();
 
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (status === 'success') {
+      const now = Date.now() / 1000; // 현재 시간 (초 단위)
+      if (exp && exp < now) {
+        dispatch(authDelete());
+      }
+      navigate('/forjun');
+    }
+  }, [dispatch, exp, navigate, status]);
+
+  const loginMutation = useLoginMutation();
   //회원가입폼
   const [joinOpen, setJoinOpen] = React.useState(false);
 
@@ -34,12 +55,12 @@ export default function Auth() {
 
   const loginForm = useFormik({
     initialValues: {
-      loginId: '',
-      loginPassword: '',
+      userId: '',
+      password: '',
     },
     validationSchema: Yup.object({
-      loginId: Yup.string().required('아이디는 필수 항목입니다.'),
-      loginPassword: Yup.string()
+      userId: Yup.string().required('아이디는 필수 항목입니다.'),
+      password: Yup.string()
         .required('비밀번호는 필수 항목입니다.')
         .matches(
           /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\\[\]{};':"\\|,.<>\\/?]).{8,}$/,
@@ -100,35 +121,33 @@ export default function Auth() {
               <Grid item xs={12} sm={12} md={12} margin={1}>
                 <SjTextField
                   label="ID"
-                  name="loginId"
+                  name="userId"
                   size="medium"
                   onChange={loginForm.handleChange}
                   onBlur={loginForm.handleBlur}
                   error={
-                    !!loginForm.errors.loginId && !!loginForm.touched.loginId
+                    !!loginForm.errors.userId && !!loginForm.touched.userId
                   }
                   helperText={
-                    loginForm.touched.loginId && loginForm.errors.loginId
-                      ? loginForm.errors.loginId
+                    loginForm.touched.userId && loginForm.errors.userId
+                      ? loginForm.errors.userId
                       : undefined
                   }
                 />
               </Grid>
               <Grid item xs={12} sm={12} md={12} margin={1}>
                 <SjTextField
-                  name="loginPassword"
+                  name="password"
                   label="Password"
                   type="password"
                   onChange={loginForm.handleChange}
                   onBlur={loginForm.handleBlur}
                   error={
-                    !!loginForm.errors.loginPassword &&
-                    !!loginForm.touched.loginPassword
+                    !!loginForm.errors.password && !!loginForm.touched.password
                   }
                   helperText={
-                    loginForm.touched.loginPassword &&
-                    loginForm.errors.loginPassword
-                      ? loginForm.errors.loginPassword
+                    loginForm.touched.password && loginForm.errors.password
+                      ? loginForm.errors.password
                       : undefined
                   }
                 />

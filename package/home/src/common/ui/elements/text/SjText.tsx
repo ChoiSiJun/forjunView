@@ -1,22 +1,52 @@
-import { Link, Typography } from '@mui/material';
+import { Link, Typography, TypographyProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { TypographyProps } from '@mui/material';
 
 export interface SjTextProps extends TypographyProps {
   text: string;
-  renderType?: 'text' | 'link';
+  renderType?: 'title' | 'subtitle' | 'text' | 'link';
   onClick?: () => void;
 }
 
-const StyledTypography = styled(Typography)<TypographyProps>(
-  ({ theme }) => ({}),
-);
+// renderType을 prop으로 받아서 스타일링에 사용하려면 타입에 포함시켜야 함
+interface StyledTypographyProps extends TypographyProps {
+  renderType?: 'title' | 'subtitle' | 'text';
+}
+
+const StyledTypography = styled((props: StyledTypographyProps) => (
+  <Typography {...props} />
+))(({ theme, renderType }) => {
+  switch (renderType) {
+    case 'title':
+      return {
+        fontSize: theme.typography.h5.fontSize,
+        fontWeight: theme.typography.fontWeightBold,
+        color: theme.palette.text.primary,
+      };
+    case 'subtitle':
+      return {
+        fontSize: theme.typography.subtitle1.fontSize,
+        fontWeight: theme.typography.fontWeightMedium,
+        color: theme.palette.text.secondary,
+      };
+    case 'text':
+      return {
+        fontSize: theme.typography.body1.fontSize,
+        fontWeight: theme.typography.fontWeightRegular,
+        color: theme.palette.text.primary,
+      };
+    default:
+      return {};
+  }
+});
 
 const StyledLink = styled(Link)(({ theme }) => ({
+  fontSize: theme.typography.body1.fontSize,
+  fontWeight: theme.typography.fontWeightMedium,
+  color: theme.palette.primary.main,
   cursor: 'pointer',
   textDecoration: 'none',
   '&:hover': {
-    textDecoration: 'underline', // 마우스 오버 시 밑줄 추가
+    textDecoration: 'underline',
   },
 }));
 
@@ -26,19 +56,22 @@ const SjText = ({
   component = 'span',
   renderType = 'text',
   onClick,
+  ...rest
 }: SjTextProps) => {
-  switch (renderType) {
-    case 'text':
-      return (
-        <StyledTypography variant={variant} component={component}>
-          {text}
-        </StyledTypography>
-      );
-    case 'link':
-      return <StyledLink onClick={onClick}>{text}</StyledLink>;
-    default:
-      break;
+  if (renderType === 'link') {
+    return <StyledLink onClick={onClick}>{text}</StyledLink>;
   }
+
+  return (
+    <StyledTypography
+      variant={variant}
+      component={component}
+      renderType={renderType} // 여기서 넘겨줌
+      {...rest}
+    >
+      {text}
+    </StyledTypography>
+  );
 };
 
 export default SjText;

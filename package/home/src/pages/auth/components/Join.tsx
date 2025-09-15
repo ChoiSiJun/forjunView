@@ -9,10 +9,11 @@ import {
   Typography,
 } from '@mui/material';
 import { useFormik } from 'formik';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import { useState } from 'react';
+import { useJoinMutation } from '@api/module/auth/useJoinMutation';
+import { idDuplicateCheck } from '@api/module/auth/idDuplicateCheck';
 
 interface JoinProps {
   joinOpen: boolean;
@@ -20,14 +21,17 @@ interface JoinProps {
 }
 
 export default function Join({ joinOpen, handleJoin }: JoinProps) {
+  //회원가입 Mutation
+  const joinMutation = useJoinMutation(handleJoin);
+
   //Id 중복체크 여부
-  const [idDuplicateCheck, setIdDuplicateCheck] = useState(false);
+  const [idDuplicateConfirm, setIdDuplicateConfirm] = useState(false);
 
   //Form 변경 이벤트 캐치
   const handelCustomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     joinForm.handleChange(e);
     if (e.target.name === 'userId') {
-      setIdDuplicateCheck(false);
+      setIdDuplicateConfirm(false);
     }
   };
 
@@ -55,25 +59,10 @@ export default function Join({ joinOpen, handleJoin }: JoinProps) {
     }),
 
     onSubmit: async values => {
-      try {
-        if (!idDuplicateCheck) {
-          toast.error('아이디 중복체크를 진행해주세요.');
-          return false;
-        }
-
-        // axios로 폼 데이터 비동기 전송
-        await axios.post(import.meta.env.VITE_REST_API + '/user/save', values);
-
-        toast.success('가입 되었습니다.');
-        handleJoin();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
-        // 에러 처리
-        if (error?.response?.data == '') {
-          toast.error(error.code);
-        } else {
-          toast.error(error.response.data);
-        }
+      if (idDuplicateConfirm) {
+        joinMutation.mutate(values);
+      } else {
+        toast.error('아이디 중복체크를 해주세요.');
       }
     },
     validateOnChange: true,
@@ -81,39 +70,17 @@ export default function Join({ joinOpen, handleJoin }: JoinProps) {
 
   //아이디 중복체크 핸들러.
   const duplicateCheck = async () => {
-    const requestData = new URLSearchParams();
-    if (
-      joinForm.values.userId === null ||
-      joinForm.values.userId === undefined ||
-      joinForm.values.userId === ''
-    ) {
+    if (!joinForm.values.userId) {
       toast.error('아이디를 입력해주세요.');
-      return false;
+      return;
     }
-    requestData.append('id', joinForm.values.userId);
-    try {
-      const result = await axios.post(
-        import.meta.env.VITE_REST_API + '/user/duplicate',
-        requestData,
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded', // JSON 형식으로 전송
-          },
-        },
-      );
-
-      if (result.data === true) {
+    const result = await idDuplicateCheck(joinForm.values.userId);
+    if (result !== 'error') {
+      if (result === true) {
         toast.error('중복된 아이디가 존재합니다');
       } else {
         toast.success('가입 가능한 아이디입니다.');
-        setIdDuplicateCheck(true);
-      }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      if (error?.response?.data == '') {
-        toast.error(error.code);
-      } else {
-        toast.error(error.response.data);
+        setIdDuplicateConfirm(true);
       }
     }
   };
