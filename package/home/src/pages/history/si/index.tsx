@@ -13,9 +13,9 @@ import SjButton from '@common/ui/elements/button/SjButton';
 import { useAppDispatch } from '@store/ReduxHooks';
 import { modalOpen } from '@store/slice/ModalSlice';
 import Register from '@pages/history/components/Register';
-import useHistoryQuery from '@api/module/history/useHistoyQuery';
+import useHistoryQuery from 'domain/history/api/useHistoyQuery';
 import SjText from '@common/ui/elements/text/SjText';
-import useHistoryDeleteMutation from '@api/module/history/useHistoryDeleteMutation';
+import useHistoryDeleteMutation from 'domain/history/api/useHistoryDeleteMutation';
 
 const formatDate = (dateStr: string) => {
   const date = new Date(dateStr);

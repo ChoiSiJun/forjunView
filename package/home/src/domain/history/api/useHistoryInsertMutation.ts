@@ -1,10 +1,10 @@
 import { AxiosError } from 'axios';
-import { useMutationWithLoading } from '../../config/hooks/useMutationWithLoading';
+import { useMutationWithLoading } from '../../../config/hooks/useMutationWithLoading';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import { useAppDispatch } from '@store/ReduxHooks';
 import { modalClose } from '@store/slice/ModalSlice';
-import axios from '@api/config/axios/axios';
+import axios from '@config/axios/axios';
 
 export interface HistoryInsertParma {
   category: string;
@@ -23,7 +23,7 @@ const useHistoryInsertMutation = () => {
   return useMutationWithLoading<void, AxiosError, HistoryInsertParma>({
     mutationFn: async (params: HistoryInsertParma) => {
       await axios.post<void>(
-        import.meta.env.VITE_REST_API + '/history',
+        import.meta.env.VITE_REST_API + '/histories',
         params,
         {
           timeout: 5000,

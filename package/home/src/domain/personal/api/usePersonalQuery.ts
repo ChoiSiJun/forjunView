@@ -1,5 +1,5 @@
-import axios from '@api/config/axios/axios';
-import { useQueryWithLoading } from '@api/config/hooks/useQueryWithLoading';
+import axios from '@config/axios/axios';
+import { useQueryWithLoading } from '@config/hooks/useQueryWithLoading';
 
 interface PersonalResponse {
   name: string;

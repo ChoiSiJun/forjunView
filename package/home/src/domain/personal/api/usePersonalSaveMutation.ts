@@ -1,5 +1,5 @@
-import axios from '@api/config/axios/axios';
-import { useMutationWithLoading } from '@api/config/hooks/useMutationWithLoading';
+import axios from '@config/axios/axios';
+import { useMutationWithLoading } from '@config/hooks/useMutationWithLoading';
 import { AxiosError } from 'axios';
 import { useQueryClient } from 'react-query';
 

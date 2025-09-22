@@ -15,7 +15,7 @@ import * as Yup from 'yup';
 import profileImage from '@asset/image/jun.jpg';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import usePersonaSaveMutation from '@api/module/personal/usePersonalSaveMutation';
+import usePersonaSaveMutation from 'domain/personal/api/usePersonalSaveMutation';
 
 interface CompanyEntry {
   company: string;

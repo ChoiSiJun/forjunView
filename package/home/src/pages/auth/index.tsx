@@ -1,4 +1,12 @@
 import * as React from 'react';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { toast } from 'react-toastify';
+
+// Material-UI 컴포넌트
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,48 +19,55 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import * as Yup from 'yup';
-import Join from '@pages/auth/components/Join';
+
+// 커스텀 컴포넌트 및 API
 import SjTextField from '@common/ui/elements/input/SjTextField';
-import { useFormik } from 'formik';
-
-import { useLoginMutation } from '@api/module/auth/useLoginMutation';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '@store/ReduxStoreConfig';
-import { useNavigate } from 'react-router-dom';
-import { authDelete } from '@store/slice/AuthSlice';
+import { useLoginMutation } from 'domain/auth/api/useLoginMutation';
 import { useAppDispatch } from '@store/ReduxHooks';
+import { RootState } from '@store/ReduxStoreConfig';
+import { authDelete, authInsert } from '@store/slice/AuthSlice';
+import Join from '@pages/auth/components/Join';
 
-// TODO remove, this demo shouldn't need to reset the theme.
+// 기본 테마 설정 (데모 목적)
 const defaultTheme = createTheme();
 
+/**
+ * @description 로그인 및 회원가입 페이지 컴포넌트
+ * 로그인 폼과 회원가입 드로어를 관리하며, JWT 상태에 따라 페이지를 제어합니다.
+ */
 export default function Auth() {
-  //JWT 발급여부로 상태제어
+  // Redux 상태 관리
   const status = useSelector((state: RootState) => state.Auth.status);
   const exp = useSelector((state: RootState) => state.Auth.exp);
   const dispatch = useAppDispatch();
-
   const navigate = useNavigate();
+
+  // 회원가입 드로어 상태 관리
+  const [joinOpen, setJoinOpen] = React.useState(false);
+
+  // JWT 토큰 상태에 따른 페이지 리다이렉션 및 만료 처리
   useEffect(() => {
+    // Redux의 status가 'success'이고
     if (status === 'success') {
       const now = Date.now() / 1000; // 현재 시간 (초 단위)
+      // 토큰이 만료되었다면 (exp가 현재 시간보다 작다면)
       if (exp && exp < now) {
-        dispatch(authDelete());
+        dispatch(authDelete()); // 토큰 삭제
       }
+      // 유효한 토큰이 있다면 홈 페이지로 리다이렉트
       navigate('/forjun');
     }
   }, [dispatch, exp, navigate, status]);
 
+  // 로그인 API 호출을 위한 뮤테이션 훅
   const loginMutation = useLoginMutation();
-  //회원가입폼
-  const [joinOpen, setJoinOpen] = React.useState(false);
 
-  //핸들러
+  // 회원가입 드로어 핸들러
   const handleJoin = () => {
     setJoinOpen(!joinOpen);
   };
 
+  // Formik을 이용한 로그인 폼 상태 관리 및 유효성 검사
   const loginForm = useFormik({
     initialValues: {
       userId: '',
@@ -64,12 +79,18 @@ export default function Auth() {
         .required('비밀번호는 필수 항목입니다.')
         .matches(
           /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\\[\]{};':"\\|,.<>\\/?]).{8,}$/,
-          '비밀번호는 최소 8자 이상이어야 하며, 영문 대소문자, 숫자, 특수문자를 모두 포함해야 합니다.',
+          '비밀번호는 최소 8자 이상이며, 영문, 숫자, 특수문자를 모두 포함해야 합니다.',
         ),
     }),
-
     onSubmit: async values => {
-      loginMutation.mutate(values);
+      // loginMutation 훅의 mutate 함수를 호출하고 성공 시 콜백을 전달
+      loginMutation.mutate(values, {
+        onSuccess: token => {
+          // API 성공 후 Redux 상태를 업데이트하고 토스트 메시지를 표시
+          dispatch(authInsert(token));
+          toast.success('로그인 되었습니다.');
+        },
+      });
     },
   });
 
@@ -115,9 +136,10 @@ export default function Auth() {
               onSubmit={loginForm.handleSubmit}
               sx={{
                 mt: 1,
-                width: '320px', // 폼 전체의 최소 너비
+                width: '320px',
               }}
             >
+              {/* 아이디 입력 필드 */}
               <Grid item xs={12} sm={12} md={12} margin={1}>
                 <SjTextField
                   label="ID"
@@ -135,6 +157,8 @@ export default function Auth() {
                   }
                 />
               </Grid>
+
+              {/* 비밀번호 입력 필드 */}
               <Grid item xs={12} sm={12} md={12} margin={1}>
                 <SjTextField
                   name="password"
@@ -152,6 +176,7 @@ export default function Auth() {
                   }
                 />
               </Grid>
+
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"

@@ -1,9 +1,8 @@
-import axios from '@api/config/axios/axios';
-import { useQueryWithLoading } from '@api/config/hooks/useQueryWithLoading';
+import axios from '@config/axios/axios';
+import { useQueryWithLoading } from '@config/hooks/useQueryWithLoading';
 
 interface HistoryParams {
   category: string;
-  userId?: string | undefined;
 }
 
 export interface HistoryListResponse {
@@ -21,21 +20,18 @@ const fetchHistory = async (
   params: HistoryParams,
 ): Promise<HistoryListResponse[]> => {
   return axios
-    .get<HistoryListResponse[]>(
-      import.meta.env.VITE_REST_API + '/web/histories',
-      {
-        params,
-      },
-    )
+    .get<HistoryListResponse[]>(import.meta.env.VITE_REST_API + '/histories', {
+      params,
+    })
 
     .then(res => res.data);
 };
 
-const useWebHistoryQuery = (params: HistoryParams) => {
+const useHistoryQuery = (params: HistoryParams) => {
   return useQueryWithLoading<HistoryListResponse[]>({
-    queryKey: ['web/history', params], // 고정된 key
+    queryKey: ['history', params], // 고정된 key
     queryFn: () => fetchHistory(params),
   });
 };
 
-export default useWebHistoryQuery;
+export default useHistoryQuery;

@@ -1,5 +1,9 @@
-import SjButton from '@common/ui/elements/button/SjButton';
-import SjTextField from '@common/ui/elements/input/SjTextField';
+import { useState } from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { toast } from 'react-toastify';
+
+// UI Components
 import {
   Box,
   Drawer,
@@ -8,34 +12,35 @@ import {
   Paper,
   Typography,
 } from '@mui/material';
-import { useFormik } from 'formik';
-import { toast } from 'react-toastify';
-import * as Yup from 'yup';
-import { useState } from 'react';
-import { useJoinMutation } from '@api/module/auth/useJoinMutation';
-import { idDuplicateCheck } from '@api/module/auth/idDuplicateCheck';
+import SjButton from '@common/ui/elements/button/SjButton';
+import SjTextField from '@common/ui/elements/input/SjTextField';
 
+// API
+import { useJoinMutation } from 'domain/auth/api/useJoinMutation';
+import { idDuplicateCheck } from 'domain/auth/api/idDuplicateCheck';
+
+// Props Interface
 interface JoinProps {
   joinOpen: boolean;
   handleJoin: () => void;
 }
 
+/**
+ * @description 회원가입 드로어 컴포넌트
+ * @param {boolean} joinOpen - 드로어의 열림/닫힘 상태
+ * @param {Function} handleJoin - 드로어를 닫는 함수
+ */
 export default function Join({ joinOpen, handleJoin }: JoinProps) {
-  //회원가입 Mutation
-  const joinMutation = useJoinMutation(handleJoin);
+  // 회원가입 API 호출을 담당하는 커스텀 훅
+  const joinMutation = useJoinMutation();
 
-  //Id 중복체크 여부
-  const [idDuplicateConfirm, setIdDuplicateConfirm] = useState(false);
+  // 아이디 중복 체크 상태:
+  // - true: 사용 가능
+  // - false: 중복
+  // - null: 아직 확인하지 않음 (초기 상태)
+  const [isIdAvailable, setIsIdAvailable] = useState<boolean | null>(null);
 
-  //Form 변경 이벤트 캐치
-  const handelCustomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    joinForm.handleChange(e);
-    if (e.target.name === 'userId') {
-      setIdDuplicateConfirm(false);
-    }
-  };
-
-  //회원가입 Form 관리
+  // Formik을 이용한 폼 데이터 및 유효성 검사 관리
   const joinForm = useFormik({
     initialValues: {
       userId: '',
@@ -43,45 +48,70 @@ export default function Join({ joinOpen, handleJoin }: JoinProps) {
       userName: '',
       email: '',
     },
-
     validationSchema: Yup.object({
       userId: Yup.string().required('아이디는 필수 항목입니다.'),
       password: Yup.string()
         .required('비밀번호는 필수 항목입니다.')
         .matches(
           /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/,
-          '비밀번호는 최소 8자 이상이어야 하며, 영문 대소문자, 숫자, 특수문자를 모두 포함해야 합니다.',
+          '비밀번호는 최소 8자 이상이며, 영문 대소문자, 숫자, 특수문자를 모두 포함해야 합니다.',
         ),
       userName: Yup.string().required('이름은 필수 항목입니다.'),
       email: Yup.string()
         .email('이메일 형식이 아닙니다.')
         .required('이메일은 필수 항목입니다.'),
     }),
-
     onSubmit: async values => {
-      if (idDuplicateConfirm) {
-        joinMutation.mutate(values);
+      // 아이디 중복 확인 상태에 따라 가입 진행
+      if (isIdAvailable) {
+        joinMutation.mutate(values, {
+          onSuccess: () => {
+            // 성공 시 토스트 메시지를 보여주고, 드로어를 닫는다.
+            toast.success('가입 되었습니다.');
+            handleJoin();
+          },
+        });
       } else {
-        toast.error('아이디 중복체크를 해주세요.');
+        toast.error(
+          isIdAvailable === null
+            ? '아이디 중복체크를 해주세요.'
+            : '중복된 아이디가 존재합니다.',
+        );
       }
     },
     validateOnChange: true,
   });
 
-  //아이디 중복체크 핸들러.
-  const duplicateCheck = async () => {
+  // 아이디 입력값이 변경될 때 호출되는 핸들러
+  const handleUserIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    joinForm.handleChange(e);
+    // 사용자가 아이디를 다시 입력했으므로 중복 확인 상태를 초기화
+    setIsIdAvailable(null);
+  };
+
+  // 아이디 중복 체크 버튼 클릭 핸들러
+  const handleDuplicateCheck = async () => {
+    // 아이디 입력 유효성 검사
     if (!joinForm.values.userId) {
       toast.error('아이디를 입력해주세요.');
       return;
     }
-    const result = await idDuplicateCheck(joinForm.values.userId);
-    if (result !== 'error') {
-      if (result === true) {
+
+    // API 호출 및 결과 처리
+    try {
+      const result = await idDuplicateCheck(joinForm.values.userId);
+
+      // API 응답에 따라 상태 및 토스트 메시지 업데이트
+      if (result) {
         toast.error('중복된 아이디가 존재합니다');
+        setIsIdAvailable(false);
       } else {
         toast.success('가입 가능한 아이디입니다.');
-        setIdDuplicateConfirm(true);
+        setIsIdAvailable(true);
       }
+    } catch (error) {
+      // API 핸들러에서 이미 에러 토스트를 띄워주므로 상태만 초기화
+      setIsIdAvailable(null);
     }
   };
 
@@ -97,7 +127,7 @@ export default function Join({ joinOpen, handleJoin }: JoinProps) {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          bgcolor: '#f9f9f9', // 부드러운 배경색
+          bgcolor: '#f9f9f9',
         },
       }}
     >
@@ -131,7 +161,7 @@ export default function Join({ joinOpen, handleJoin }: JoinProps) {
               <SjTextField
                 label="ID"
                 name="userId"
-                onChange={handelCustomChange}
+                onChange={handleUserIdChange}
                 onBlur={joinForm.handleBlur}
                 error={!!joinForm.errors.userId && !!joinForm.touched.userId}
                 helperText={
@@ -143,15 +173,12 @@ export default function Join({ joinOpen, handleJoin }: JoinProps) {
                   endAdornment: (
                     <InputAdornment
                       position="end"
-                      sx={{
-                        margin: 0,
-                        padding: 0,
-                      }}
+                      sx={{ margin: 0, padding: 0 }}
                     >
                       <SjButton
                         ButtonType={'input'}
                         buttonName={'중복체크'}
-                        onClick={duplicateCheck}
+                        onClick={handleDuplicateCheck}
                       />
                     </InputAdornment>
                   ),

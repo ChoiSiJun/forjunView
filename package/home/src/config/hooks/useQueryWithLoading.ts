@@ -2,7 +2,7 @@
 import { useQuery, UseQueryOptions, UseQueryResult } from 'react-query';
 import { useAppDispatch } from 'store/ReduxHooks';
 import { lodingOn, lodingOff } from '@store/slice/loadingSlice';
-import apiErrorHandler from '@api/config/handlers/apiErrorHandler';
+import apiErrorHandler from '@config/handlers/apiErrorHandler';
 import { useEffect } from 'react';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';

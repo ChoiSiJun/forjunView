@@ -6,7 +6,7 @@ import {
 } from 'react-query';
 import { useAppDispatch } from 'store/ReduxHooks';
 import { lodingOn, lodingOff } from '@store/slice/loadingSlice';
-import apiErrorHandler from '@api/config/handlers/apiErrorHandler';
+import apiErrorHandler from '@config/handlers/apiErrorHandler';
 import { AxiosError } from 'axios';
 
 export const useMutationWithLoading = <

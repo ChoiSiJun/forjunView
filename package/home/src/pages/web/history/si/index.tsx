@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import useWebHistoryQuery from '@api/module/history/useWebHistoyQuery';
+import useWebHistoryQuery from 'domain/history/api/useWebHistoyQuery';
 import { useParams } from 'react-router-dom';
 import HistoryItem from '@pages/web/components/HistoryItem';
 import WepContentBox from '@pages/web/components/WebContentBox';

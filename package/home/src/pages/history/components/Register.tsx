@@ -1,6 +1,6 @@
 import useHistoryInsertMutation, {
   HistoryInsertParma,
-} from '@api/module/history/useHistoryInsertMutation';
+} from 'domain/history/api/useHistoryInsertMutation';
 import SjSelectBox from '@common/ui/elements/input/SjSelectBox';
 import SjTextField from '@common/ui/elements/input/SjTextField';
 import SjDatePicker from '@common/ui/modules/SjDatePicker';
