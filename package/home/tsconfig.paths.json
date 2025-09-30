@@ -11,8 +11,8 @@
       //공통
       "@common/*": ["common/*"],
 
-      //API
-      "@api/*": ["api/*"],
+      //domain
+      "@domain/*": ["domain/*"],
 
       //페이지
       "@pages/*": ["pages/*"],

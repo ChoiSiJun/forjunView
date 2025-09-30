@@ -21,6 +21,7 @@ const StyledTypography = styled((props: StyledTypographyProps) => (
         fontSize: theme.typography.h5.fontSize,
         fontWeight: theme.typography.fontWeightBold,
         color: theme.palette.text.primary,
+        marginBottom: 15,
       };
     case 'subtitle':
       return {
@@ -53,7 +54,6 @@ const StyledLink = styled(Link)(({ theme }) => ({
 const SjText = ({
   text,
   variant = 'body1',
-  component = 'span',
   renderType = 'text',
   onClick,
   ...rest
@@ -62,10 +62,22 @@ const SjText = ({
     return <StyledLink onClick={onClick}>{text}</StyledLink>;
   }
 
+  if (renderType === 'title' || renderType === 'subtitle') {
+    return (
+      <StyledTypography
+        variant={variant}
+        component={'p'}
+        renderType={renderType} // 여기서 넘겨줌
+        {...rest}
+      >
+        {text}
+      </StyledTypography>
+    );
+  }
   return (
     <StyledTypography
       variant={variant}
-      component={component}
+      component={'span'}
       renderType={renderType} // 여기서 넘겨줌
       {...rest}
     >

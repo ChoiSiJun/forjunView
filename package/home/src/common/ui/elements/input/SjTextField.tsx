@@ -3,11 +3,12 @@ import MuiTextField, { TextFieldProps } from '@mui/material/TextField';
 
 export interface SjTextFieldProps {
   label: string;
-  name: string;
+  name?: string;
   type?: string;
   value?: string | number;
   textFieldType?: 'outlined-basic' | 'filled-basic' | 'standard-basic';
   InputRef?: React.RefObject<HTMLInputElement>;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   error?: boolean;
@@ -26,6 +27,7 @@ const SjTextField = ({
   InputProps,
   onChange,
   onBlur,
+  onKeyDown,
   error,
   size = 'small',
   sx,
@@ -38,6 +40,7 @@ const SjTextField = ({
       type={type}
       label={label}
       onChange={onChange}
+      onKeyDown={onKeyDown}
       onBlur={onBlur}
       error={error}
       value={value}

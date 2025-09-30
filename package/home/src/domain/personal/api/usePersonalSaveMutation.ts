@@ -1,43 +1,18 @@
 import axios from '@config/axios/axios';
 import { useMutationWithLoading } from '@config/hooks/useMutationWithLoading';
 import { AxiosError } from 'axios';
-import { useQueryClient } from 'react-query';
-
-interface PersonalParams {
-  name: string;
-  job: string;
-  profile_image_url: string;
-  awards: PersonalAwardsParams[];
-  companies: PersonalCompanyParams[];
-  skills: PersonalSkillParams[];
-}
-
-interface PersonalAwardsParams {
-  awardName: string;
-}
-
-interface PersonalCompanyParams {
-  companyName: string;
-  startDate: string;
-  endDate: string;
-}
-
-interface PersonalSkillParams {
-  skillName: string;
-}
+import { PersonalParams } from '@domain/personal/types';
+import { PERSONAL_API_ENDPOINTS } from './personalApi';
 
 const usePersonaSaveMutation = () => {
-  const queryClient = useQueryClient();
-
   return useMutationWithLoading<void, AxiosError, PersonalParams>({
     mutationFn: async (params: PersonalParams) => {
-      await axios.post<void>(
-        import.meta.env.VITE_REST_API + '/personal',
-        params,
-      );
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(['personal']);
+      const endpoint = PERSONAL_API_ENDPOINTS.save;
+      await axios({
+        method: endpoint.method,
+        url: endpoint.url,
+        params: { params },
+      });
     },
   });
 };
