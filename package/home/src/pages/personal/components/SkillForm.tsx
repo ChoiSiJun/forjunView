@@ -3,7 +3,7 @@
 import SjTextField from '@common/ui/elements/input/SjTextField';
 import SjText from '@common/ui/elements/text/SjText';
 import SjChipList from '@common/ui/modules/SjChipList';
-import { PersonalSkillParams } from '@domain/personal/types';
+import { PersonalSkillParams } from '@domain/personal/Personal';
 import { Paper } from '@mui/material';
 import React from 'react'; // React.KeyboardEvent를 위해 import
 

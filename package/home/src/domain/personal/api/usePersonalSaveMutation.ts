@@ -1,7 +1,7 @@
 import axios from '@config/axios/axios';
 import { useMutationWithLoading } from '@config/hooks/useMutationWithLoading';
 import { AxiosError } from 'axios';
-import { PersonalParams } from '@domain/personal/types';
+import { PersonalParams } from '@domain/personal/Personal';
 import { PERSONAL_API_ENDPOINTS } from './personalApi';
 
 const usePersonaSaveMutation = () => {

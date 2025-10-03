@@ -1,19 +1,19 @@
 import SjTextField from '@common/ui/elements/input/SjTextField';
 import SjText from '@common/ui/elements/text/SjText';
-import { PersonalCompanyParams } from '@domain/personal/types';
 import { Grid, IconButton, Paper } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SjButton from '@common/ui/elements/button/SjButton';
 import { useEffect } from 'react';
+import { PersonalCompanyFormValues } from '..';
 
 interface CompanyFormProps {
   /** 렌더링할 회사 정보 배열 */
-  companies: PersonalCompanyParams[];
+  companies: PersonalCompanyFormValues[];
 
   /** 필드 값 변경 핸들러: (index, fieldName, value) */
   handleCompanyChange: (
     index: number,
-    field: keyof PersonalCompanyParams,
+    field: keyof PersonalCompanyFormValues,
     value: string,
   ) => void;
 

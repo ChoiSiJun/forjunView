@@ -10,22 +10,31 @@ import {
 import { useState, useCallback } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import profileImage from '@asset/image/jun.jpg';
 import usePersonaSaveMutation from 'domain/personal/api/usePersonalSaveMutation';
-import {
-  PersonalAwardsParams,
-  PersonalCompanyParams,
-  PersonalParams,
-  PersonalSkillParams,
-} from '@domain/personal/types';
+import type {
+  Personal,
+  PersonalAwards,
+  PersonalCompany,
+  PersonalSkill,
+} from '@domain/personal/Personal';
 import SjButton from '@common/ui/elements/button/SjButton';
 import CompanyForm from './components/CompanyForm';
 import AwardForm from './components/AwardForm';
 import SkillForm from './components/SkillForm';
 import { useQueryClient } from 'react-query';
+import useFileUploadMutation from '@domain/upload/api/useFileUploadMutation';
+
+export interface PersonalFormValues extends Personal {
+  awards: PersonalAwardsFormValues[];
+  companies: PersonalCompanyFormValues[];
+  skills: PersonalSkillFormValues[];
+}
+export interface PersonalAwardsFormValues extends PersonalAwards {}
+export interface PersonalCompanyFormValues extends PersonalCompany {}
+export interface PersonalSkillFormValues extends PersonalSkill {}
 
 // Todo. 리액트 쿼리로 가져오기 필요.
-const defaultProfileData: PersonalParams = {
+const defaultProfileData: PersonalFormValues = {
   name: '최시준',
   job: 'Software Developer',
   companies: [
@@ -47,41 +56,47 @@ const defaultProfileData: PersonalParams = {
     { skillName: 'IntelliJ' },
   ],
 
-  profile_image: null,
+  profile_image_url: null,
 };
 
 const Personal = () => {
   const queryClient = useQueryClient();
-  const mutation = usePersonaSaveMutation();
-  const [previewImage, setPreviewImage] = useState<string | null>(profileImage);
+
+  const fileUploadMutation = useFileUploadMutation();
+  const personalSaveMutation = usePersonaSaveMutation();
+
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<File | null>(null);
 
   // 💡 초기 데이터 설정: defaultProfileData에서 배열을 가져와 초기화
-  const [companies, setcompanies] = useState<PersonalCompanyParams[]>(
+  const [companies, setcompanies] = useState<PersonalCompanyFormValues[]>(
     defaultProfileData.companies || [],
   );
-  const [skills, setSkills] = useState<PersonalSkillParams[]>(
+  const [skills, setSkills] = useState<PersonalSkillFormValues[]>(
     defaultProfileData.skills || [],
   );
-  const [awards, setAwards] = useState<PersonalAwardsParams[]>(
+  const [awards, setAwards] = useState<PersonalAwardsFormValues[]>(
     defaultProfileData.awards || [],
   );
 
-  const formik = useFormik<PersonalParams>({
+  const formik = useFormik<PersonalFormValues>({
     initialValues: defaultProfileData,
     validationSchema: Yup.object({
       name: Yup.string().required('이름은 필수입니다.'),
       job: Yup.string().required('직무는 필수입니다.'),
     }),
     onSubmit: values => {
+      //1. 파일 업로드 먼저 실행
+      fileUploadMutation.mutate(profileImage);
+
       // 💡 최종 제출 시, formik 데이터와 useState 데이터를 통합하여 전송
       const submitData = {
         ...values,
         companies,
         awards,
         skills,
-        previewImage,
       };
-      mutation.mutate(submitData, {
+      personalSaveMutation.mutate(submitData, {
         onSuccess: () => {
           queryClient.invalidateQueries(['personal']);
         },
@@ -89,17 +104,18 @@ const Personal = () => {
     },
   });
 
-  //프로필 이미지 변경
+  //프로필 미리보기 이미지 변경
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-    formik.setFieldValue('profile_image', file);
-
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => setPreviewImage(reader.result as string);
+      reader.onloadend = () => {
+        setPreviewImage(reader.result as string);
+        setProfileImage(file);
+      };
       reader.readAsDataURL(file);
     } else {
-      setPreviewImage(profileImage);
+      setPreviewImage(null);
     }
   };
 
@@ -110,14 +126,14 @@ const Personal = () => {
 
       if (field === 'awards') {
         // 💡 객체 배열에 객체 형태로 변환하여 추가
-        const newAwardObject: PersonalAwardsParams = {
+        const newAwardObject: PersonalAwardsFormValues = {
           awardName: value,
         };
         setAwards(prev => [...prev, newAwardObject]);
       }
       if (field === 'skills') {
         // 💡 객체 배열에 객체 형태로 변환하여 추가
-        const newSkill: PersonalSkillParams = { skillName: value };
+        const newSkill: PersonalSkillFormValues = { skillName: value };
         setSkills(prev => [...prev, newSkill]);
       }
     },
@@ -164,7 +180,7 @@ const Personal = () => {
 
   // 💡 회사 수정 이벤트
   const handleCompanyChange = useCallback(
-    (index: number, field: keyof PersonalCompanyParams, value: string) => {
+    (index: number, field: keyof PersonalCompanyFormValues, value: string) => {
       setcompanies(prev => {
         const updated = [...prev];
         updated[index] = { ...updated[index], [field]: value };
