@@ -1,15 +1,15 @@
-const authApiBase = '/personal';
+import { defineEndpoint } from '@common/type/ApiEndPoint';
+import { Personal } from '../Personal';
+
+const apiBase = '/personal';
+
+export interface PersonalSaveRequest extends Personal {}
+export interface PersonalDetailResponse extends Personal {}
 
 export const PERSONAL_API_ENDPOINTS = {
   //자기 소개서 저장
-  save: {
-    url: authApiBase,
+  save: defineEndpoint<PersonalSaveRequest, void>({
+    url: apiBase,
     method: 'POST',
-  },
-
-  //프로필 이미지 저장
-  saveProfileImage: {
-    url: '/profile-image',
-    method: 'POST',
-  },
+  }),
 };

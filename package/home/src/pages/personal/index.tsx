@@ -62,19 +62,26 @@ const defaultProfileData: PersonalFormValues = {
 const Personal = () => {
   const queryClient = useQueryClient();
 
-  const fileUploadMutation = useFileUploadMutation();
-  const personalSaveMutation = usePersonaSaveMutation();
+  const { mutateAsync: fileUploadMutation } = useFileUploadMutation();
+  const { mutate: personalSaveMutation } = usePersonaSaveMutation();
 
+  //미리보기
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+
+  //프로필 이미지
   const [profileImage, setProfileImage] = useState<File | null>(null);
 
-  // 💡 초기 데이터 설정: defaultProfileData에서 배열을 가져와 초기화
+  //회사이력
   const [companies, setcompanies] = useState<PersonalCompanyFormValues[]>(
     defaultProfileData.companies || [],
   );
+
+  //스킬
   const [skills, setSkills] = useState<PersonalSkillFormValues[]>(
     defaultProfileData.skills || [],
   );
+
+  //수상
   const [awards, setAwards] = useState<PersonalAwardsFormValues[]>(
     defaultProfileData.awards || [],
   );
@@ -86,17 +93,25 @@ const Personal = () => {
       job: Yup.string().required('직무는 필수입니다.'),
     }),
     onSubmit: values => {
+      let profile_image_url = values.profile_image_url;
       //1. 파일 업로드 먼저 실행
-      fileUploadMutation.mutate(profileImage);
-
+      if (profileImage !== null) {
+        fileUploadMutation(profileImage, {
+          onSuccess: response => {
+            profile_image_url = response.url;
+          },
+        });
+      }
       // 💡 최종 제출 시, formik 데이터와 useState 데이터를 통합하여 전송
       const submitData = {
         ...values,
+        profile_image_url,
         companies,
         awards,
         skills,
       };
-      personalSaveMutation.mutate(submitData, {
+
+      personalSaveMutation(submitData, {
         onSuccess: () => {
           queryClient.invalidateQueries(['personal']);
         },

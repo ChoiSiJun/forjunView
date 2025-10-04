@@ -1,17 +1,21 @@
 import axios from '@config/axios/axios';
 import { useMutationWithLoading } from '@config/hooks/useMutationWithLoading';
 import { AxiosError } from 'axios';
-import { PersonalParams } from '@domain/personal/Personal';
 import { PERSONAL_API_ENDPOINTS } from './personalApi';
+import { GetRequestType, GetResponseType } from '@common/utill/type-utils';
+
+const END_POINT = PERSONAL_API_ENDPOINTS.save;
+
+type UploadReq = GetRequestType<typeof END_POINT>;
+type UploadRes = GetResponseType<typeof END_POINT>;
 
 const usePersonaSaveMutation = () => {
-  return useMutationWithLoading<void, AxiosError, PersonalParams>({
-    mutationFn: async (params: PersonalParams) => {
-      const endpoint = PERSONAL_API_ENDPOINTS.save;
+  return useMutationWithLoading<UploadRes, AxiosError, UploadReq>({
+    mutationFn: async params => {
       await axios({
-        method: endpoint.method,
-        url: endpoint.url,
-        params: { params },
+        method: END_POINT.method,
+        url: END_POINT.url,
+        data: params,
       });
     },
   });

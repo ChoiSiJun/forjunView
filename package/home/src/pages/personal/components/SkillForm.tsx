@@ -3,12 +3,12 @@
 import SjTextField from '@common/ui/elements/input/SjTextField';
 import SjText from '@common/ui/elements/text/SjText';
 import SjChipList from '@common/ui/modules/SjChipList';
-import { PersonalSkillParams } from '@domain/personal/Personal';
 import { Paper } from '@mui/material';
 import React from 'react'; // React.KeyboardEvent를 위해 import
+import { PersonalSkillFormValues } from '..';
 
 interface SkillFormProps {
-  skills: PersonalSkillParams[];
+  skills: PersonalSkillFormValues[];
   handleAddListItem: (value: string) => void;
   handleRemoveListItem: (idx: number) => void;
   // 💡 onKeyDown: (e: React.KeyboardEvent) => void; <-- 이 Props를 제거
