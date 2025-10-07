@@ -14,7 +14,7 @@ export const FILE_UPLOAD_API_ENDPOINTS = {
   }),
 
   //파일 삭제
-  delete: defineEndpoint<string, { success: boolean }>({
+  delete: defineEndpoint<string, void>({
     url: `${apiBase}/:fileId`,
     method: 'DELETE',
   }),

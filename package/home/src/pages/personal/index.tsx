@@ -23,6 +23,7 @@ import AwardForm from './components/AwardForm';
 import SkillForm from './components/SkillForm';
 import { useQueryClient } from 'react-query';
 import useFileUploadMutation from '@domain/upload/api/useFileUploadMutation';
+import useFileDeleteMutation from '@domain/upload/api/useFileDeleteMutation';
 
 export interface PersonalFormValues extends Personal {
   awards: PersonalAwardsFormValues[];
@@ -63,7 +64,8 @@ const Personal = () => {
   const queryClient = useQueryClient();
 
   const { mutateAsync: fileUploadMutation } = useFileUploadMutation();
-  const { mutate: personalSaveMutation } = usePersonaSaveMutation();
+  const { mutateAsync: fileDeleteMutation } = useFileDeleteMutation();
+  const { mutateAsync: personalSaveMutation } = usePersonaSaveMutation();
 
   //미리보기
   const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -92,15 +94,15 @@ const Personal = () => {
       name: Yup.string().required('이름은 필수입니다.'),
       job: Yup.string().required('직무는 필수입니다.'),
     }),
-    onSubmit: values => {
+    onSubmit: async values => {
       let profile_image_url = values.profile_image_url;
+      let uploadedFileId = null;
+
       //1. 파일 업로드 먼저 실행
       if (profileImage !== null) {
-        fileUploadMutation(profileImage, {
-          onSuccess: response => {
-            profile_image_url = response.url;
-          },
-        });
+        const response = await fileUploadMutation(profileImage);
+        profile_image_url = response.url;
+        uploadedFileId = response.fileId;
       }
       // 💡 최종 제출 시, formik 데이터와 useState 데이터를 통합하여 전송
       const submitData = {
@@ -111,11 +113,14 @@ const Personal = () => {
         skills,
       };
 
-      personalSaveMutation(submitData, {
-        onSuccess: () => {
-          queryClient.invalidateQueries(['personal']);
-        },
-      });
+      try {
+        await personalSaveMutation(submitData);
+        queryClient.invalidateQueries(['personal']);
+      } catch (error) {
+        if (uploadedFileId !== null) {
+          await fileDeleteMutation(uploadedFileId);
+        }
+      }
     },
   });
 
