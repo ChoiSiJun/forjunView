@@ -9,13 +9,13 @@ const apiBase = '/api/system/files';
 export const FILE_UPLOAD_API_ENDPOINTS = {
   //파일 업로드
   upload: defineEndpoint<FileUploadRequest, FileUploadResponse>({
-    url: apiBase + '/upload',
+    url: apiBase,
     method: 'POST',
   }),
 
   //파일 삭제
   delete: defineEndpoint<string, void>({
-    url: `${apiBase}/:fileId`,
+    url: apiBase,
     method: 'DELETE',
   }),
 };

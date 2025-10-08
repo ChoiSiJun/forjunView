@@ -24,6 +24,7 @@ import SkillForm from './components/SkillForm';
 import { useQueryClient } from 'react-query';
 import useFileUploadMutation from '@domain/upload/api/useFileUploadMutation';
 import useFileDeleteMutation from '@domain/upload/api/useFileDeleteMutation';
+import { toast } from 'react-toastify';
 
 export interface PersonalFormValues extends Personal {
   awards: PersonalAwardsFormValues[];
@@ -116,6 +117,7 @@ const Personal = () => {
       try {
         await personalSaveMutation(submitData);
         queryClient.invalidateQueries(['personal']);
+        toast.success('등록되었습니다.');
       } catch (error) {
         if (uploadedFileId !== null) {
           await fileDeleteMutation(uploadedFileId);

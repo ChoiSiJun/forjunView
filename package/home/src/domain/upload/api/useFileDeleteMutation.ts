@@ -19,8 +19,7 @@ const useFileDeleteMutation = () => {
 
       await axios<DeleteRes>({
         method: END_POINT.method,
-        url: END_POINT.url,
-        params: { fileId },
+        url: END_POINT.url + `/${fileId}`,
       });
     },
   });
