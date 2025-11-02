@@ -14,6 +14,7 @@ import { useMediaQuery } from '@mui/material';
 
 // 라우터 Import
 import { Outlet } from 'react-router-dom';
+import GlobalQueryLoadingWrapper from '@common/ui/template/GlobalQueryLoadingWrapper';
 
 // 헤더바 높이
 const headerBarHeight: number = 70;
@@ -66,7 +67,9 @@ export default function AppContainer() {
               mt: `${headerBarHeight + 10}px`,
             }}
           >
-            <Outlet />
+            <GlobalQueryLoadingWrapper>
+              <Outlet />
+            </GlobalQueryLoadingWrapper>
           </Container>
         </Box>
       </Box>

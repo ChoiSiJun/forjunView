@@ -1,25 +1,39 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+// LoadingState (개선)
 export interface LoadingState {
-  [key: string]: boolean;
+  globalCount: number; //폼 렌더링을 막아야 하는 치명적인 로딩 (주로 데이터 조회)
+  mutationCount: number; //저장, 수정 등 가벼운 로딩 (주로 버튼이나 컴포넌트 내부에서 처리)
 }
 
 const initialState: LoadingState = {
-  isLoading: false, // 기본값은 로딩 없음
+  globalCount: 0,
+  mutationCount: 0,
 };
 
-const loadingSlice = createSlice({
+const LoadingSlice = createSlice({
   name: 'loading',
   initialState,
   reducers: {
-    lodingOn(state) {
-      state.isLoading = true;
+    globalLoadingOn: state => {
+      state.globalCount += 1;
     },
-    lodingOff(state) {
-      state.isLoading = false;
+    globalLoadingOff: state => {
+      state.globalCount -= 1;
+    },
+    mutationLoadingOn: state => {
+      state.mutationCount += 1;
+    },
+    mutationLoadingOff: state => {
+      state.mutationCount -= 1;
     },
   },
 });
 
-export const { lodingOn, lodingOff } = loadingSlice.actions;
-export default loadingSlice.reducer;
+export const {
+  globalLoadingOn,
+  globalLoadingOff,
+  mutationLoadingOn,
+  mutationLoadingOff,
+} = LoadingSlice.actions;
+export default LoadingSlice.reducer;

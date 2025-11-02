@@ -10,7 +10,8 @@ import Toast from '@common/ui/elements/feedback/ReactToast';
 
 import { QueryClientProvider, QueryClient } from 'react-query';
 import Modal from '@common/ui/modules/Modal';
-// import useApiError from "@module/common/hook/useApiError";
+import GlobalMutationLoading from '@common/ui/template/GlobalMutationLoading';
+import GlobalQueryLoadingWrapper from '@common/ui/template/GlobalQueryLoadingWrapper';
 
 const persistor = persistStore(store);
 
@@ -28,10 +29,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
     <QueryClientProvider client={queryClient}>
       <PersistGate loading={null} persistor={persistor}>
-        <ForjunRouter />
+        <GlobalQueryLoadingWrapper>
+          <ForjunRouter />
+        </GlobalQueryLoadingWrapper>
       </PersistGate>
       <Toast />
       <Modal />
+      <GlobalMutationLoading />
     </QueryClientProvider>
   </Provider>,
 );

@@ -5,7 +5,10 @@ import {
   UseMutationResult,
 } from 'react-query';
 import { useAppDispatch } from 'store/ReduxHooks';
-import { lodingOn, lodingOff } from '@store/slice/loadingSlice';
+import {
+  mutationLoadingOn,
+  mutationLoadingOff,
+} from '@store/slice/LoadingSlice';
 import apiErrorHandler from '@config/handlers/apiErrorHandler';
 import { AxiosError } from 'axios';
 
@@ -20,7 +23,7 @@ export const useMutationWithLoading = <
   return useMutation({
     ...(options ?? {}), // options가 없으면 빈 객체를 대입
     onMutate: async variables => {
-      dispatch(lodingOn());
+      dispatch(mutationLoadingOn());
       if (options?.onMutate) {
         await options.onMutate(variables);
       }
@@ -36,13 +39,13 @@ export const useMutationWithLoading = <
       return failureCount < 3; // 기본 3회 재시도
     },
     onSuccess: (data, variables, context) => {
-      dispatch(lodingOff());
+      dispatch(mutationLoadingOff());
       if (options?.onSuccess) {
         options.onSuccess(data, variables, context);
       }
     },
     onError: (error, variables, context) => {
-      dispatch(lodingOff());
+      dispatch(mutationLoadingOff());
       if (options?.onError) {
         options.onError(error, variables, context);
       } else if (error) {
@@ -50,7 +53,7 @@ export const useMutationWithLoading = <
       }
     },
     onSettled: (data, error, variables, context) => {
-      dispatch(lodingOff());
+      dispatch(mutationLoadingOff());
       if (options?.onSettled) {
         options.onSettled(data, error, variables, context);
       }

@@ -1,37 +1,24 @@
+// personalApi.ts 파일에 정의된 EndPoint 객체와 타입 가져오기
 import axios from '@config/axios/axios';
 import { useQueryWithLoading } from '@config/hooks/useQueryWithLoading';
+import { PERSONAL_API_ENDPOINTS } from './personalApi';
+import { GetResponseType } from '@common/utill/type-utils';
 
-interface PersonalResponse {
-  name: string;
-  job: string;
-  profile_image_url: string;
-  awards: PersonalAwardsParams[];
-  companies: PersonalCompanyParams[];
-  skills: PersonalSkillParams[];
-}
-interface PersonalAwardsParams {
-  awardName: string;
-}
+const END_POINT = PERSONAL_API_ENDPOINTS.get;
 
-interface PersonalCompanyParams {
-  companyName: string;
-  startDate: string;
-  endDate: string;
-}
+type PersonalResponse = GetResponseType<typeof END_POINT>;
 
-interface PersonalSkillParams {
-  skillName: string;
-}
 const fetchPersonal = async (): Promise<PersonalResponse> => {
-  return axios
-    .get<PersonalResponse>(import.meta.env.VITE_REST_API + '/personal')
-
-    .then(res => res.data);
+  const response = await axios({
+    method: END_POINT.method,
+    url: END_POINT.url,
+  });
+  return response.data;
 };
 
 const usePersonalQuery = () => {
   return useQueryWithLoading<PersonalResponse>({
-    queryKey: ['personal'], // 고정된 key
+    queryKey: ['personal'],
     queryFn: () => fetchPersonal(),
   });
 };

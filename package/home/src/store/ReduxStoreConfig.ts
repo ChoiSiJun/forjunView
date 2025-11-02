@@ -5,10 +5,12 @@ import AuthSlice from 'store/slice/AuthSlice';
 import { persistReducer } from 'redux-persist';
 import sessionStorage from 'redux-persist/lib/storage/session';
 import ModalSlice from 'store/slice/ModalSlice';
+import LoadingSlice from 'store/slice/LoadingSlice';
 const reducers = combineReducers({
   Menu: MenuSlice,
   Auth: AuthSlice,
   Modal: ModalSlice,
+  Loading: LoadingSlice,
 });
 
 const persistConfig = {

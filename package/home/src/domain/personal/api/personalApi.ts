@@ -12,4 +12,10 @@ export const PERSONAL_API_ENDPOINTS = {
     url: apiBase,
     method: 'POST',
   }),
+
+  //자기소개서 정보 가져오기
+  get: defineEndpoint<number, PersonalDetailResponse>({
+    url: apiBase,
+    method: 'GET',
+  }),
 };

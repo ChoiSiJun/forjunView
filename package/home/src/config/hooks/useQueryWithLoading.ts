@@ -1,7 +1,6 @@
-// hooks/useQueryWithLoading.ts
 import { useQuery, UseQueryOptions, UseQueryResult } from 'react-query';
 import { useAppDispatch } from 'store/ReduxHooks';
-import { lodingOn, lodingOff } from '@store/slice/loadingSlice';
+import { globalLoadingOn, globalLoadingOff } from '@store/slice/LoadingSlice';
 import apiErrorHandler from '@config/handlers/apiErrorHandler';
 import { useEffect } from 'react';
 import { AxiosError } from 'axios';
@@ -32,8 +31,6 @@ export const useQueryWithLoading = <
     },
 
     onError: error => {
-      dispatch(lodingOff());
-
       if (
         error instanceof AxiosError &&
         [403].includes(error.response?.status ?? 0)
@@ -58,21 +55,20 @@ export const useQueryWithLoading = <
     },
 
     onSuccess: data => {
-      dispatch(lodingOff());
       options.onSuccess?.(data);
     },
 
     onSettled: (data, error) => {
-      dispatch(lodingOff());
       options.onSettled?.(data, error);
+      dispatch(globalLoadingOff());
     },
   });
 
   useEffect(() => {
-    if (queryResult.isFetching) {
-      dispatch(lodingOn());
+    if (queryResult.isLoading) {
+      dispatch(globalLoadingOn());
     }
-  }, [queryResult.isFetching, dispatch]);
+  }, [queryResult.isLoading, dispatch]);
 
   return queryResult;
 };

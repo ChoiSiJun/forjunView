@@ -3,38 +3,18 @@ import SjText from '@common/ui/elements/text/SjText';
 import { Grid, IconButton, Paper } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SjButton from '@common/ui/elements/button/SjButton';
-import { useEffect } from 'react';
-import { PersonalCompanyFormValues } from '..';
 
-interface CompanyFormProps {
-  /** 렌더링할 회사 정보 배열 */
-  companies: PersonalCompanyFormValues[];
+// 💡 usePersonal 훅 임포트 (경로는 프로젝트 구조에 맞게 조정하세요)
+import { usePersonal } from '../usePersonal';
 
-  /** 필드 값 변경 핸들러: (index, fieldName, value) */
-  handleCompanyChange: (
-    index: number,
-    field: keyof PersonalCompanyFormValues,
-    value: string,
-  ) => void;
-
-  /** 항목 제거 핸들러: (index) */
-  handleRemoveCompany: (index: number) => void;
-
-  /** 항목 추가 핸들러 */
-  handleAddCompany: () => void;
-}
-const CompanyForm = ({
-  companies,
-  handleCompanyChange,
-  handleRemoveCompany,
-  handleAddCompany,
-}: CompanyFormProps) => {
-  // companies가 비어있으면 1개 기본 row 추가
-  useEffect(() => {
-    if (companies.length === 0) {
-      handleAddCompany();
-    }
-  }, []);
+const CompanyForm = () => {
+  // 💡 [핵심 수정] 필요한 상태와 핸들러를 훅에서 직접 가져옵니다.
+  const {
+    companies,
+    handleCompanyChange,
+    handleRemoveCompany,
+    handleAddCompany,
+  } = usePersonal();
 
   return (
     <Paper sx={{ p: 3 }}>
