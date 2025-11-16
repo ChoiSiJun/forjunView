@@ -5,11 +5,14 @@ import SjText from '@common/ui/elements/text/SjText';
 import SjChipList from '@common/ui/modules/SjChipList';
 import { Paper } from '@mui/material';
 import React, { useState } from 'react';
-import { usePersonal } from '../usePersonal';
+import { usePersonal } from '@domain/personal/hooks/usePersonal';
 
-const AwardForm = () => {
-  // 💡 [핵심 수정] 필요한 상태와 핸들러를 훅에서 직접 가져옵니다.
-  const { awards, handleAddListItem, handleRemoveListItem } = usePersonal();
+interface AwardFormProps {
+  personalHook: ReturnType<typeof usePersonal>;
+}
+
+const AwardForm = ({ personalHook }: AwardFormProps) => {
+  const { awards, handleAddListItem, handleRemoveListItem } = personalHook;
 
   // 입력 필드의 현재 상태를 관리하기 위한 로컬 state를 추가합니다.
   // 기존의 onKeyDown 로직은 input value를 가져올 수 없으므로, useState를 사용합니다.

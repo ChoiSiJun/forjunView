@@ -3,18 +3,19 @@ import SjText from '@common/ui/elements/text/SjText';
 import { Grid, IconButton, Paper } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SjButton from '@common/ui/elements/button/SjButton';
+import { usePersonal } from '@domain/personal/hooks/usePersonal';
 
-// 💡 usePersonal 훅 임포트 (경로는 프로젝트 구조에 맞게 조정하세요)
-import { usePersonal } from '../usePersonal';
+interface CompanyFormProps {
+  personalHook: ReturnType<typeof usePersonal>;
+}
 
-const CompanyForm = () => {
-  // 💡 [핵심 수정] 필요한 상태와 핸들러를 훅에서 직접 가져옵니다.
+const CompanyForm = ({ personalHook }: CompanyFormProps) => {
   const {
     companies,
     handleCompanyChange,
     handleRemoveCompany,
     handleAddCompany,
-  } = usePersonal();
+  } = personalHook;
 
   return (
     <Paper sx={{ p: 3 }}>

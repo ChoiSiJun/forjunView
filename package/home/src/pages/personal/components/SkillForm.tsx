@@ -4,17 +4,15 @@ import SjTextField from '@common/ui/elements/input/SjTextField';
 import SjText from '@common/ui/elements/text/SjText';
 import SjChipList from '@common/ui/modules/SjChipList';
 import { Paper } from '@mui/material';
-import React, { useState } from 'react'; // 💡 useState 임포트
+import React, { useState } from 'react';
+import { usePersonal } from '@domain/personal/hooks/usePersonal';
 
-// 💡 usePersonal 훅 임포트 (경로는 프로젝트 구조에 맞게 조정하세요)
-import { usePersonal } from '../usePersonal';
+interface SkillFormProps {
+  personalHook: ReturnType<typeof usePersonal>;
+}
 
-/**
- * [수정] Props가 필요 없는 독립적인 컴포넌트로 변경되었습니다.
- */
-const SkillForm = () => {
-  // 💡 [핵심 수정] 필요한 상태와 핸들러를 훅에서 직접 가져옵니다.
-  const { skills, handleAddListItem, handleRemoveListItem } = usePersonal();
+const SkillForm = ({ personalHook }: SkillFormProps) => {
+  const { skills, handleAddListItem, handleRemoveListItem } = personalHook;
 
   // 입력 필드의 현재 상태를 관리하기 위한 로컬 state를 추가합니다.
   const [inputValue, setInputValue] = useState('');

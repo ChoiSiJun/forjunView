@@ -53,7 +53,6 @@ export const usePersonal = () => {
   const personalData = usePersonalQuery().data;
 
   //API 데이터를 Form 형식으로 파싱
-
   const loadedData = useMemo(() => {
     return FormValuesConvert(personalData);
   }, [personalData]);
@@ -71,11 +70,12 @@ export const usePersonal = () => {
   const { mutateAsync: personalSaveMutation } = usePersonaSaveMutation();
 
   //상태관리
+
+  //미리보기 이미지 상태
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+
+  //실제 파일 이미지 상태
   const [profileImage, setProfileImage] = useState<File | null>(null);
-  const [companies, setCompanies] = useState<PersonalCompanyFormValues[]>([]);
-  const [skills, setSkills] = useState<PersonalSkillFormValues[]>([]);
-  const [awards, setAwards] = useState<PersonalAwardsFormValues[]>([]);
 
   //formik
   const formik = useFormik<PersonalFormValues>({
@@ -85,8 +85,10 @@ export const usePersonal = () => {
       name: Yup.string().required('이름은 필수입니다.'),
       job: Yup.string().required('직무는 필수입니다.'),
     }),
-    onSubmit: async values => {
-      let profile_image_url = values.profile_image_url;
+    onSubmit: async () => {
+      // formik의 현재 values를 직접 사용하여 최신 상태 보장
+      const currentValues = formik.values;
+      let profile_image_url = null;
       let uploadedFileId = null;
 
       if (profileImage) {
@@ -96,11 +98,8 @@ export const usePersonal = () => {
       }
 
       const submitData = {
-        ...values,
+        ...currentValues,
         profile_image_url,
-        companies,
-        awards,
-        skills,
       };
 
       try {
@@ -134,61 +133,69 @@ export const usePersonal = () => {
   const handleAddListItem = useCallback(
     (field: 'awards' | 'skills', value: string) => {
       if (!value) return;
-      if (field === 'awards')
-        setAwards(prev => [...prev, { awardName: value }]);
-      if (field === 'skills')
-        setSkills(prev => [...prev, { skillName: value }]);
+      const newItem =
+        field === 'awards' ? { awardName: value } : { skillName: value };
+
+      const currentList =
+        field === 'awards' ? formik.values.awards : formik.values.skills;
+      const updatedList = [...currentList, newItem];
+
+      formik.setFieldValue(field, updatedList);
     },
-    [],
+    [formik],
   );
 
   const handleRemoveListItem = useCallback(
     (field: 'awards' | 'skills', index: number) => {
-      if (field === 'awards')
-        setAwards(prev => prev.filter((_, i) => i !== index));
-      if (field === 'skills')
-        setSkills(prev => prev.filter((_, i) => i !== index));
+      const currentList =
+        field === 'awards' ? formik.values.awards : formik.values.skills;
+      const updatedList = currentList.filter((_, i) => i !== index);
+
+      formik.setFieldValue(field, updatedList);
     },
-    [],
+    [formik],
   );
 
   // 회사 관리
   const handleAddCompany = useCallback(() => {
-    setCompanies(prev => [
-      ...prev,
+    const updatedCompanies = [
+      ...formik.values.companies,
       { companyName: '', startDate: '', endDate: '' },
-    ]);
-  }, []);
+    ];
+    formik.setFieldValue('companies', updatedCompanies);
+  }, [formik]);
 
-  const handleRemoveCompany = (index: number) => {
-    setCompanies(prev => {
-      const updated = [...prev];
-      if (index === 0)
-        updated[0] = { companyName: '', startDate: '', endDate: '' };
-      else return prev.filter((_, i) => i !== index);
-      return updated;
-    });
-  };
+  const handleRemoveCompany = useCallback(
+    (index: number) => {
+      const currentCompanies = formik.values.companies;
+      let updatedCompanies: PersonalCompanyFormValues[];
+
+      if (index === 0) {
+        updatedCompanies = [...currentCompanies];
+        updatedCompanies[0] = { companyName: '', startDate: '', endDate: '' };
+      } else {
+        updatedCompanies = currentCompanies.filter((_, i) => i !== index);
+      }
+
+      formik.setFieldValue('companies', updatedCompanies);
+    },
+    [formik],
+  );
 
   const handleCompanyChange = useCallback(
     (index: number, field: keyof PersonalCompanyFormValues, value: string) => {
-      setCompanies(prev => {
-        const updated = [...prev];
-        updated[index] = { ...updated[index], [field]: value };
-        return updated;
-      });
+      const currentCompanies = formik.values.companies;
+      const updatedCompanies = [...currentCompanies];
+      updatedCompanies[index] = { ...updatedCompanies[index], [field]: value };
+
+      formik.setFieldValue('companies', updatedCompanies);
     },
-    [],
+    [formik],
   );
 
   useEffect(() => {
     if (loadedData) {
-      setCompanies(loadedData.companies || []);
-      setSkills(loadedData.skills || []);
-      setAwards(loadedData.awards || []);
       setPreviewImage(loadedData.profile_image_url || null);
-
-      console.log(loadedData.profile_image_url);
     }
   }, [loadedData]);
 
@@ -196,9 +203,9 @@ export const usePersonal = () => {
     formik,
     previewImage,
     handleFileChange,
-    companies,
-    skills,
-    awards,
+    companies: formik.values.companies,
+    skills: formik.values.skills,
+    awards: formik.values.awards,
     handleAddListItem,
     handleRemoveListItem,
     handleAddCompany,

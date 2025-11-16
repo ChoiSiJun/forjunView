@@ -6,10 +6,14 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { usePersonal } from '../usePersonal';
+import { usePersonal } from '@domain/personal/hooks/usePersonal';
 
-const BasicForm = () => {
-  const { formik, previewImage, handleFileChange } = usePersonal();
+interface BasicFormProps {
+  personalHook: ReturnType<typeof usePersonal>;
+}
+
+const BasicForm = ({ personalHook }: BasicFormProps) => {
+  const { formik, previewImage, handleFileChange } = personalHook;
 
   return (
     <Paper sx={{ p: 3 }}>
