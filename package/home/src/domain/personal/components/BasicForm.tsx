@@ -5,7 +5,13 @@ import {
   Paper,
   TextField,
   Typography,
+  Dialog,
+  DialogContent,
+  IconButton,
+  Box,
 } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { useState } from 'react';
 import { usePersonal } from '@domain/personal/hooks/usePersonal';
 
 interface BasicFormProps {
@@ -14,6 +20,17 @@ interface BasicFormProps {
 
 const BasicForm = ({ personalHook }: BasicFormProps) => {
   const { formik, previewImage, handleFileChange } = personalHook;
+  const [imageDialogOpen, setImageDialogOpen] = useState(false);
+
+  const handleImageClick = () => {
+    if (previewImage) {
+      setImageDialogOpen(true);
+    }
+  };
+
+  const handleCloseDialog = () => {
+    setImageDialogOpen(false);
+  };
 
   return (
     <Paper sx={{ p: 3 }}>
@@ -30,7 +47,14 @@ const BasicForm = ({ personalHook }: BasicFormProps) => {
         >
           <Avatar
             src={previewImage || 'https://via.placeholder.com/150'}
-            sx={{ width: 120, height: 120, mb: 1 }}
+            sx={{
+              width: 120,
+              height: 120,
+              mb: 1,
+              cursor: previewImage ? 'pointer' : 'default',
+              '&:hover': previewImage ? { opacity: 0.8 } : {},
+            }}
+            onClick={handleImageClick}
           />
           <Button variant="contained" component="label">
             이미지 선택
@@ -65,6 +89,50 @@ const BasicForm = ({ personalHook }: BasicFormProps) => {
           />
         </Grid>
       </Grid>
+
+      {/* 이미지 확대 Dialog */}
+      <Dialog
+        open={imageDialogOpen}
+        onClose={handleCloseDialog}
+        maxWidth="md"
+        fullWidth
+        PaperProps={{
+          sx: {
+            backgroundColor: 'transparent',
+            boxShadow: 'none',
+          },
+        }}
+      >
+        <IconButton
+          aria-label="close"
+          onClick={handleCloseDialog}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            zIndex: 1,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            color: 'white',
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            },
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <DialogContent sx={{ p: 0, display: 'flex', justifyContent: 'center' }}>
+          <Box
+            component="img"
+            src={previewImage || ''}
+            alt="프로필 이미지"
+            sx={{
+              maxWidth: '100%',
+              maxHeight: '90vh',
+              objectFit: 'contain',
+            }}
+          />
+        </DialogContent>
+      </Dialog>
     </Paper>
   );
 };

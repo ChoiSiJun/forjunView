@@ -1,11 +1,11 @@
 import { Box } from '@mui/material';
 
 import SjButton from '@common/ui/elements/button/SjButton';
-import CompanyForm from './components/CompanyForm';
-import AwardForm from './components/AwardForm';
-import SkillForm from './components/SkillForm';
+import CompanyForm from '../../domain/personal/components/CompanyForm';
+import AwardForm from '../../domain/personal/components/AwardForm';
+import SkillForm from '../../domain/personal/components/SkillForm';
 import { usePersonal } from '../../domain/personal/hooks/usePersonal';
-import BasicForm from './components/BasicForm';
+import BasicForm from '../../domain/personal/components/BasicForm';
 
 const Personal = () => {
   const personalHook = usePersonal();
