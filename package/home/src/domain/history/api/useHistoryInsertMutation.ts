@@ -1,41 +1,23 @@
 import { AxiosError } from 'axios';
-import { useMutationWithLoading } from '../../../config/hooks/useMutationWithLoading';
-import { useQueryClient } from 'react-query';
-import { toast } from 'react-toastify';
-import { useAppDispatch } from '@store/ReduxHooks';
-import { modalClose } from '@store/slice/ModalSlice';
+import { useMutationWithLoading } from '@config/hooks/useMutationWithLoading';
 import axios from '@config/axios/axios';
+import { GetRequestType } from '@common/utill/type-utils';
+import { HISTORY_API_ENDPOINTS } from '@domain/history/api/HistoryApi';
 
-export interface HistoryInsertParma {
-  category: string;
-  project: string;
-  subject: string;
-  description: string;
-  historySkill: string[];
-  historyStartDate: string;
-  historyEndDate: string;
-}
+type HistorySaveParma = GetRequestType<typeof HISTORY_API_ENDPOINTS.save>;
 
 const useHistoryInsertMutation = () => {
-  const queryClient = useQueryClient();
-  const dispatch = useAppDispatch();
+  const fetchHistorySave = async (params: HistorySaveParma) => {
+    const response = await axios({
+      method: HISTORY_API_ENDPOINTS.save.method,
+      url: HISTORY_API_ENDPOINTS.save.url,
+      data: params,
+    });
+    return response.data;
+  };
 
-  return useMutationWithLoading<void, AxiosError, HistoryInsertParma>({
-    mutationFn: async (params: HistoryInsertParma) => {
-      await axios.post<void>(
-        import.meta.env.VITE_REST_API + '/histories',
-        params,
-        {
-          timeout: 5000,
-        },
-      );
-    },
-
-    onSuccess: () => {
-      queryClient.invalidateQueries(['history']);
-      toast.success('History 등록되었습니다.');
-      dispatch(modalClose());
-    },
+  return useMutationWithLoading<void, AxiosError, HistorySaveParma>({
+    mutationFn: async (params: HistorySaveParma) => fetchHistorySave(params),
   });
 };
 

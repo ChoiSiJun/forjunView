@@ -1,23 +1,24 @@
 import { AxiosError } from 'axios';
-import { useMutationWithLoading } from '../../../config/hooks/useMutationWithLoading';
-import { useQueryClient } from 'react-query';
-import { toast } from 'react-toastify';
+import { useMutationWithLoading } from '@config/hooks/useMutationWithLoading';
 import axios from '@config/axios/axios';
+import { HISTORY_API_ENDPOINTS } from '@domain/history/api/HistoryApi';
+import { GetRequestType } from '@common/utill/type-utils';
 
 const useHistoryDeleteMutation = () => {
-  const queryClient = useQueryClient();
+  type HistoryDeleteParma = GetRequestType<typeof HISTORY_API_ENDPOINTS.delete>;
 
-  return useMutationWithLoading<void, AxiosError, number>({
-    mutationFn: async (id: number) => {
-      await axios.delete<void>(
-        import.meta.env.VITE_REST_API + '/histories/' + id,
-      );
-    },
+  const fetchDeleteHistory = async (params: HistoryDeleteParma) => {
+    const response = await axios({
+      method: HISTORY_API_ENDPOINTS.delete.method,
+      url: HISTORY_API_ENDPOINTS.delete.url,
+      data: params,
+    });
+    return response.data;
+  };
 
-    onSuccess: () => {
-      queryClient.invalidateQueries(['history']);
-      toast.success('History 삭제되었습니다.');
-    },
+  return useMutationWithLoading<void, AxiosError, HistoryDeleteParma>({
+    mutationFn: async (params: HistoryDeleteParma) =>
+      fetchDeleteHistory(params),
   });
 };
 

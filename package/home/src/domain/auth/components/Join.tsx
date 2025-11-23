@@ -16,8 +16,8 @@ import SjButton from '@common/ui/elements/button/SjButton';
 import SjTextField from '@common/ui/elements/input/SjTextField';
 
 // API
-import { useJoinMutation } from 'domain/auth/api/useJoinMutation';
-import { idDuplicateCheck } from 'domain/auth/api/idDuplicateCheck';
+import { useJoinMutation } from '@domain/auth/api/useJoinMutation';
+import { idDuplicateCheck } from '@domain/auth/api/idDuplicateCheck';
 
 // Props Interface
 interface JoinProps {
@@ -245,7 +245,7 @@ export default function Join({ joinOpen, handleJoin }: JoinProps) {
             <SjButton
               ButtonType={'confirm'}
               buttonName={'가입'}
-              onClick={joinForm.handleSubmit}
+              onClick={() => joinForm.handleSubmit()}
             />
           </Box>
         </Paper>

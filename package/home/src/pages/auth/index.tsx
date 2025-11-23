@@ -26,7 +26,7 @@ import { useLoginMutation } from 'domain/auth/api/useLoginMutation';
 import { useAppDispatch } from '@store/ReduxHooks';
 import { RootState } from '@store/ReduxStoreConfig';
 import { authDelete, authInsert } from '@store/slice/AuthSlice';
-import Join from '@pages/auth/components/Join';
+import Join from '@domain/auth/components/Join';
 
 // 기본 테마 설정
 const defaultTheme = createTheme();

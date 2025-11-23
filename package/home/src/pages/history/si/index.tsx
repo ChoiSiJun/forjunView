@@ -12,33 +12,26 @@ import {
 import SjButton from '@common/ui/elements/button/SjButton';
 import { useAppDispatch } from '@store/ReduxHooks';
 import { modalOpen } from '@store/slice/ModalSlice';
-import Register from '@pages/history/components/Register';
-import useHistoryQuery from 'domain/history/api/useHistoyQuery';
+import Register from '@domain/history/components/Register';
 import SjText from '@common/ui/elements/text/SjText';
-import useHistoryDeleteMutation from 'domain/history/api/useHistoryDeleteMutation';
-
-const formatDate = (dateStr: string) => {
-  const date = new Date(dateStr);
-  return isNaN(date.getTime()) ? '-' : date.toLocaleDateString();
-};
+import useHistory from '@domain/history/hooks/useHistory';
 
 export const SiHistory = () => {
-  const historyList = useHistoryQuery({ category: 'SI' }).data;
   const dispatch = useAppDispatch();
+
+  /** Hook */
+  const { historyList, insertHistory, deleteHistory, formatDate } =
+    useHistory('SI');
+
+  /** 확장 상태 */
   const [expandedId, setExpandedId] = useState<number | null>(null);
 
-  const deleteMutation = useHistoryDeleteMutation();
-
   const openRegister = () => {
-    dispatch(modalOpen(<Register />));
+    dispatch(modalOpen(<Register onClick={insertHistory} />));
   };
 
   const toggleExpand = (id: number) => {
     setExpandedId(prev => (prev === id ? null : id));
-  };
-
-  const deleteHistory = (id: number) => {
-    deleteMutation.mutate(id);
   };
 
   return (
@@ -95,12 +88,12 @@ export const SiHistory = () => {
           }}
         >
           <Box textAlign={'right'}>
-            <SjButton ButtonType={'update'} buttonName={'수정'} />
+            <SjButton ButtonType={'confirm'} buttonName={'수정'} />
             <SjButton
               ButtonType={'delete'}
               buttonName={'삭제'}
               onClick={() => {
-                deleteHistory(history.id);
+                deleteHistory({ id: history.id });
               }}
             />
           </Box>

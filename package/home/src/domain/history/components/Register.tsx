@@ -1,6 +1,3 @@
-import useHistoryInsertMutation, {
-  HistoryInsertParma,
-} from 'domain/history/api/useHistoryInsertMutation';
 import SjSelectBox from '@common/ui/elements/input/SjSelectBox';
 import SjTextField from '@common/ui/elements/input/SjTextField';
 import SjDatePicker from '@common/ui/modules/SjDatePicker';
@@ -10,11 +7,17 @@ import { Dayjs } from 'dayjs';
 import { useFormik } from 'formik';
 import { useCallback } from 'react';
 import * as Yup from 'yup';
+import { HISTORY_API_ENDPOINTS } from '@domain/history/api/HistoryApi';
+import { GetRequestType } from '@common/utill/type-utils';
 
-const Register = () => {
-  const Insertmutation = useHistoryInsertMutation();
+type HistorySaveParma = GetRequestType<typeof HISTORY_API_ENDPOINTS.save>;
 
-  const registerForm = useFormik<HistoryInsertParma>({
+interface RegisterParams {
+  onClick: (params: HistorySaveParma) => void;
+}
+
+const Register = ({ onClick }: RegisterParams) => {
+  const registerForm = useFormik<HistorySaveParma>({
     initialValues: {
       category: 'SI',
       project: '',
@@ -31,7 +34,7 @@ const Register = () => {
     }),
 
     onSubmit: async values => {
-      Insertmutation.mutate(values);
+      onClick(values);
     },
   });
 

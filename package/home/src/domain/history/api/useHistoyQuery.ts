@@ -1,35 +1,26 @@
-import axios from '@config/axios/axios';
+import { HISTORY_API_ENDPOINTS } from '@domain/history/api/HistoryApi';
 import { useQueryWithLoading } from '@config/hooks/useQueryWithLoading';
+import { GetResponseType, GetRequestType } from '@common/utill/type-utils';
+import axios from '@config/axios/axios';
 
-interface HistoryParams {
-  category: string;
-}
-
-export interface HistoryListResponse {
-  id: number;
-  category: string;
-  description: string;
-  historyEndDate: string;
-  historySkill: string[];
-  historyStartDate: string;
-  project: string;
-  subject: string;
-}
+type HistoryListRequest = GetRequestType<typeof HISTORY_API_ENDPOINTS.get>;
+type HistoryListResponse = GetResponseType<typeof HISTORY_API_ENDPOINTS.get>;
 
 const fetchHistory = async (
-  params: HistoryParams,
+  params: HistoryListRequest,
 ): Promise<HistoryListResponse[]> => {
-  return axios
-    .get<HistoryListResponse[]>(import.meta.env.VITE_REST_API + '/histories', {
-      params,
-    })
+  const response = await axios({
+    method: HISTORY_API_ENDPOINTS.get.method,
+    params: params,
+    url: HISTORY_API_ENDPOINTS.get.url,
+  });
 
-    .then(res => res.data);
+  return response.data;
 };
 
-const useHistoryQuery = (params: HistoryParams) => {
+const useHistoryQuery = (params: HistoryListRequest) => {
   return useQueryWithLoading<HistoryListResponse[]>({
-    queryKey: ['history', params], // 고정된 key
+    queryKey: ['history', params],
     queryFn: () => fetchHistory(params),
   });
 };

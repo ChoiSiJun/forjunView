@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Card,
@@ -12,22 +12,22 @@ import {
 import SjButton from '@common/ui/elements/button/SjButton';
 import { useAppDispatch } from '@store/ReduxHooks';
 import { modalOpen } from '@store/slice/ModalSlice';
-import Register from '@pages/history/components/Register';
-import useHistoryQuery from 'domain/history/api/useHistoyQuery';
+import Register from '@domain/history/components/Register';
 import SjText from '@common/ui/elements/text/SjText';
-
-const formatDate = (dateStr: string) => {
-  const date = new Date(dateStr);
-  return isNaN(date.getTime()) ? '-' : date.toLocaleDateString();
-};
+import useHistory from '@domain/history/hooks/useHistory';
 
 export const SmHistory = () => {
-  const historyList = useHistoryQuery({ category: 'SM' }).data;
   const dispatch = useAppDispatch();
+
+  /** Hook */
+  const { historyList, insertHistory, deleteHistory, formatDate } =
+    useHistory('SM');
+
+  /** 확장 상태 */
   const [expandedId, setExpandedId] = useState<number | null>(null);
 
   const openRegister = () => {
-    dispatch(modalOpen(<Register />));
+    dispatch(modalOpen(<Register onClick={insertHistory} />));
   };
 
   const toggleExpand = (id: number) => {
@@ -44,10 +44,23 @@ export const SmHistory = () => {
         bgcolor: 'background.default',
       }}
     >
-      <Box mb={3}>
+      {/* 상단 제목 + 등록 버튼 영역 */}
+      <Box
+        mb={2}
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <SjText renderType="title" text="SM History" />
         <SjButton ButtonType="input" buttonName="등록" onClick={openRegister} />
       </Box>
 
+      {/* 구분선 */}
+      <Divider sx={{ mb: 3 }} />
+
+      {/* 리스트 */}
       {historyList?.map(history => (
         <Card
           key={history.id}
@@ -74,6 +87,17 @@ export const SmHistory = () => {
             }
           }}
         >
+          <Box textAlign={'right'}>
+            <SjButton ButtonType={'confirm'} buttonName={'수정'} />
+            <SjButton
+              ButtonType={'delete'}
+              buttonName={'삭제'}
+              onClick={() => {
+                deleteHistory({ id: history.id });
+              }}
+            />
+          </Box>
+
           <CardContent
             sx={{
               px: 3,

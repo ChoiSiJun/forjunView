@@ -1,5 +1,5 @@
 import { defineEndpoint } from '@common/type/ApiEndPoint';
-import { Personal } from '../Personal';
+import { Personal } from '@domain/personal/Personal';
 
 const apiBase = '/personal';
 
