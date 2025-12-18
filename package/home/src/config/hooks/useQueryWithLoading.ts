@@ -6,12 +6,7 @@ import { useEffect } from 'react';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-export const useQueryWithLoading = <
-  TQueryFnData = unknown,
-  TError = unknown,
-  TData = TQueryFnData,
-  TQueryKey extends readonly unknown[] = unknown[],
->(
+export const useQueryWithLoading = <TQueryFnData = unknown, TError = unknown, TData = TQueryFnData, TQueryKey extends readonly unknown[] = unknown[]>(
   options: UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
 ): UseQueryResult<TData, TError> => {
   const dispatch = useAppDispatch();
@@ -20,10 +15,7 @@ export const useQueryWithLoading = <
     ...options,
 
     retry: (failureCount, error) => {
-      if (
-        error instanceof AxiosError &&
-        [401, 403].includes(error.response?.status ?? 0)
-      ) {
+      if (error instanceof AxiosError && [401, 403].includes(error.response?.status ?? 0)) {
         return false;
       }
 
@@ -31,18 +23,12 @@ export const useQueryWithLoading = <
     },
 
     onError: error => {
-      if (
-        error instanceof AxiosError &&
-        [403].includes(error.response?.status ?? 0)
-      ) {
+      if (error instanceof AxiosError && [403].includes(error.response?.status ?? 0)) {
         navigate('/error');
         return false;
       }
 
-      if (
-        error instanceof AxiosError &&
-        [401].includes(error.response?.status ?? 0)
-      ) {
+      if (error instanceof AxiosError && [401].includes(error.response?.status ?? 0)) {
         navigate('/');
         return false;
       }
@@ -60,7 +46,7 @@ export const useQueryWithLoading = <
 
     onSettled: (data, error) => {
       options.onSettled?.(data, error);
-      dispatch(globalLoadingOff());
+      // dispatch(globalLoadingOff());
     },
   });
 

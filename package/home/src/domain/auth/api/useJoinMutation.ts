@@ -1,7 +1,7 @@
 import axios from '@config/axios/axios';
 import { useMutationWithLoading } from '@config/hooks/useMutationWithLoading';
 import { AxiosError } from 'axios';
-import { USER_API_ENDPOINTS } from './authApi';
+import { USER_API_ENDPOINTS } from '@domain/auth/api/authApi';
 
 export interface joinMutationParams {
   userId: string;

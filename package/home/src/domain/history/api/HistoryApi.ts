@@ -12,19 +12,19 @@ export interface HistoryListResponse extends History {}
 export const HISTORY_API_ENDPOINTS = {
   //히스토리 저장
   save: defineEndpoint<HistorySaveRequest, void>({
-    url: apiBase,
+    url: '/api/v1' + apiBase,
     method: 'POST',
   }),
 
   //히스토리 삭제
   delete: defineEndpoint<HistoryDeleteRequest, void>({
-    url: apiBase,
+    url: '/api/v1' + apiBase,
     method: 'DELETE',
   }),
 
   //히스토리 리스트 정보가져오기
   get: defineEndpoint<HistoryListRequest, HistoryListResponse>({
-    url: apiBase + '/list',
+    url: '/api/v1' + apiBase + '/list',
     method: 'GET',
   }),
 };

@@ -3,18 +3,18 @@ const authApiBase = '/user';
 export const USER_API_ENDPOINTS = {
   //ID 중복 체크
   duplicateCheckId: {
-    url: authApiBase + '/duplicate',
+    url: '/api/v1' + authApiBase + '/duplicate',
     method: 'GET',
   },
 
   //회원가입
   join: {
-    url: authApiBase,
+    url: '/api/v1' + authApiBase,
     method: 'POST',
   },
 
   login: {
-    url: authApiBase + '/login',
+    url: '/api/v1' + authApiBase + '/login',
     method: 'POST',
   },
 };
