@@ -66,6 +66,41 @@ const BasicForm = ({ personalHook }: BasicFormProps) => {
             helperText={formik.touched.job && formik.errors.job}
           />
         </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
+            label="학력"
+            name="education"
+            value={formik.values.education || ''}
+            onChange={formik.handleChange}
+            error={!!(formik.touched.education && formik.errors.education)}
+            helperText={formik.touched.education && formik.errors.education}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
+            label="학점"
+            name="gradePointAverage"
+            value={formik.values.gradePointAverage || ''}
+            onChange={formik.handleChange}
+            error={!!(formik.touched.gradePointAverage && formik.errors.gradePointAverage)}
+            helperText={formik.touched.gradePointAverage && formik.errors.gradePointAverage}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="자기소개"
+            name="introduction"
+            value={formik.values.introduction || ''}
+            onChange={formik.handleChange}
+            error={!!(formik.touched.introduction && formik.errors.introduction)}
+            helperText={formik.touched.introduction && formik.errors.introduction}
+            multiline
+            rows={4}
+          />
+        </Grid>
       </Grid>
 
       {/* 이미지 확대 Dialog */}

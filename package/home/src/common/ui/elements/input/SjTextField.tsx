@@ -4,6 +4,7 @@ import MuiTextField, { TextFieldProps } from '@mui/material/TextField';
 export interface SjTextFieldProps {
   label: string;
   name?: string;
+  id?: string;
   type?: string;
   value?: string | number;
   textFieldType?: 'outlined-basic' | 'filled-basic' | 'standard-basic';
@@ -16,11 +17,15 @@ export interface SjTextFieldProps {
   InputProps?: TextFieldProps['InputProps'];
   size?: 'small' | 'medium';
   sx?: SxProps<Theme> | undefined;
+  multiline?: boolean;
+  rows?: number;
+  placeholder?: string;
 }
 
 const SjTextField = ({
   label,
   name,
+  id,
   type,
   value,
   textFieldType = 'outlined-basic',
@@ -32,13 +37,27 @@ const SjTextField = ({
   size = 'small',
   sx,
   helperText,
+  multiline,
+  rows,
+  placeholder,
 }: SjTextFieldProps) => {
+  // textFieldType을 MUI variant로 변환
+  const getVariant = (): 'outlined' | 'filled' | 'standard' => {
+    if (textFieldType === 'filled-basic') return 'filled';
+    if (textFieldType === 'standard-basic') return 'standard';
+    return 'outlined'; // 기본값은 outlined
+  };
+
+  // id는 prop으로 받거나 name을 사용하거나 자동 생성
+  const fieldId = id || name || `sj-textfield-${label}`;
+
   return (
     <MuiTextField
-      id={textFieldType}
+      id={fieldId}
       name={name}
       type={type}
       label={label}
+      variant={getVariant()}
       onChange={onChange}
       onKeyDown={onKeyDown}
       onBlur={onBlur}
@@ -49,6 +68,9 @@ const SjTextField = ({
       size={size}
       fullWidth
       sx={sx}
+      multiline={multiline}
+      rows={rows}
+      placeholder={placeholder}
     />
   );
 };

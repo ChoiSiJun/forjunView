@@ -2,6 +2,9 @@ export interface Personal {
   name: string;
   job: string;
   profileImageUrl: string | null;
+  education?: string;
+  gradePointAverage?: string;
+  introduction?: string;
   awards?: PersonalAwards[];
   companies?: PersonalCompany[];
   skills?: PersonalSkill[];
