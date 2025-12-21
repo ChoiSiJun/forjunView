@@ -4,6 +4,7 @@ import SjButton from '@common/ui/elements/button/SjButton';
 import CompanyForm from '../../domain/personal/components/CompanyForm';
 import AwardForm from '../../domain/personal/components/AwardForm';
 import SkillForm from '../../domain/personal/components/SkillForm';
+import CertificateForm from '../../domain/personal/components/CertificateForm';
 import { usePersonal } from '../../domain/personal/hooks/usePersonal';
 import BasicForm from '../../domain/personal/components/BasicForm';
 
@@ -28,11 +29,14 @@ const Personal = () => {
         {/* 회사 정보 */}
         <CompanyForm personalHook={personalHook} />
 
-        {/* 수상 내역 */}
-        <AwardForm personalHook={personalHook} />
-
         {/* 기술 */}
         <SkillForm personalHook={personalHook} />
+
+        {/* 자격증 정보 */}
+        <CertificateForm personalHook={personalHook} />
+
+        {/* 수상 내역 */}
+        <AwardForm personalHook={personalHook} />
 
         {/* 제출 버튼 */}
         <SjButton ButtonType={'submit'} buttonName={'등록 수정'} />

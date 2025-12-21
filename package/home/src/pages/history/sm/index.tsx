@@ -1,14 +1,5 @@
 import { useState } from 'react';
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Stack,
-  Chip,
-  Collapse,
-  Divider,
-} from '@mui/material';
+import { Box, Card, CardContent, Typography, Stack, Chip, Collapse, Divider } from '@mui/material';
 import SjButton from '@common/ui/elements/button/SjButton';
 import { useAppDispatch } from '@store/ReduxHooks';
 import { modalOpen } from '@store/slice/ModalSlice';
@@ -20,14 +11,13 @@ export const SmHistory = () => {
   const dispatch = useAppDispatch();
 
   /** Hook */
-  const { historyList, insertHistory, deleteHistory, formatDate } =
-    useHistory('SM');
+  const { historyList, insertHistory, deleteHistory, formatDate } = useHistory('SM');
 
   /** 확장 상태 */
   const [expandedId, setExpandedId] = useState<number | null>(null);
 
   const openRegister = () => {
-    dispatch(modalOpen(<Register onClick={insertHistory} />));
+    dispatch(modalOpen(<Register onClick={insertHistory} catagory="SM" />));
   };
 
   const toggleExpand = (id: number) => {
@@ -154,8 +144,7 @@ export const SmHistory = () => {
                 textAlign: 'right',
               }}
             >
-              {formatDate(history.historyStartDate)} ~{' '}
-              {formatDate(history.historyEndDate)}
+              {formatDate(history.historyStartDate)} ~ {formatDate(history.historyEndDate)}
             </Typography>
           </CardContent>
 
@@ -176,12 +165,7 @@ export const SmHistory = () => {
                 boxShadow: 'inset 0 0 8px rgba(0,0,0,0.05)',
               }}
             >
-              <Stack
-                direction="row"
-                spacing={1}
-                flexWrap="wrap"
-                sx={{ mt: 3, mb: 3 }}
-              >
+              <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mt: 3, mb: 3 }}>
                 {history.historySkill.map((skill, idx) => (
                   <Chip
                     key={idx}
@@ -199,11 +183,7 @@ export const SmHistory = () => {
 
               <Divider sx={{ mb: 2 }} />
 
-              <SjText
-                renderType="text"
-                text={history.description || '설명이 없습니다.'}
-                sx={{ color: 'text.secondary' }}
-              />
+              <SjText renderType="text" text={history.description || '설명이 없습니다.'} sx={{ color: 'text.secondary' }} />
             </Box>
           </Collapse>
         </Card>

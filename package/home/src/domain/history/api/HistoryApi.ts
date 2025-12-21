@@ -5,7 +5,6 @@ const apiBase = '/history';
 
 export interface HistorySaveRequest extends Omit<History, 'id'> {}
 export interface HistoryDeleteRequest extends Pick<History, 'id'> {}
-
 export interface HistoryListRequest extends Pick<History, 'category'> {}
 export interface HistoryListResponse extends History {}
 

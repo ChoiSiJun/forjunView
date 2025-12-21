@@ -9,34 +9,40 @@ import usePersonaSaveMutation from '@domain/personal/api/usePersonalSaveMutation
 import useFileUploadMutation from '@domain/upload/api/useFileUploadMutation';
 import useFileDeleteMutation from '@domain/upload/api/useFileDeleteMutation';
 
-import {
-  Personal,
-  PersonalAwards,
-  PersonalCompany,
-  PersonalSkill,
-} from '@domain/personal/Personal';
+import { Personal, PersonalAwards, PersonalCompany, PersonalSkill, PersonalCertificate } from '@domain/personal/Personal';
 import { PersonalDetailResponse } from '@domain/personal/api/personalApi';
 
+/** Form 형식 */
 export interface PersonalFormValues extends Personal {
   awards: PersonalAwardsFormValues[];
   companies: PersonalCompanyFormValues[];
   skills: PersonalSkillFormValues[];
+  certificates: PersonalCertificateFormValues[];
 }
+
+/** Form 형식 */
 export interface PersonalAwardsFormValues extends PersonalAwards {}
+
+/** Form 형식 */
 export interface PersonalCompanyFormValues extends PersonalCompany {}
+
+/** Form 형식 */
 export interface PersonalSkillFormValues extends PersonalSkill {}
 
-const FormValuesConvert = (
-  personalData: PersonalDetailResponse | undefined,
-) => {
+/** Form 형식 */
+export interface PersonalCertificateFormValues extends PersonalCertificate {}
+
+/** Form 형식으로 파싱 */
+const FormValuesConvert = (personalData: PersonalDetailResponse | undefined) => {
   if (!personalData) {
     return {
       name: '',
       job: '',
-      profile_image_url: null,
+      profileImageUrl: null,
       companies: [],
       awards: [],
       skills: [],
+      certificates: [],
     } as PersonalFormValues;
   }
 
@@ -45,6 +51,7 @@ const FormValuesConvert = (
     companies: personalData.companies || [],
     awards: personalData.awards || [],
     skills: personalData.skills || [],
+    certificates: personalData.certificates || [],
   } as PersonalFormValues;
 };
 
@@ -60,6 +67,8 @@ export const usePersonal = () => {
   //Query Client
   const queryClient = useQueryClient();
 
+  /** API Mutation */
+
   //파일 업로드 Mutation
   const { mutateAsync: fileUploadMutation } = useFileUploadMutation();
 
@@ -69,7 +78,7 @@ export const usePersonal = () => {
   //자기소개서 저장 Mutation
   const { mutateAsync: personalSaveMutation } = usePersonaSaveMutation();
 
-  //상태관리
+  /** 상태관리 */
 
   //미리보기 이미지 상태
   const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -77,7 +86,7 @@ export const usePersonal = () => {
   //실제 파일 이미지 상태
   const [profileImage, setProfileImage] = useState<File | null>(null);
 
-  //formik
+  //Form
   const formik = useFormik<PersonalFormValues>({
     initialValues: loadedData,
     enableReinitialize: true,
@@ -131,24 +140,27 @@ export const usePersonal = () => {
 
   // 리스트 추가/삭제
   const handleAddListItem = useCallback(
-    (field: 'awards' | 'skills', value: string) => {
-      if (!value) return;
-      const newItem =
-        field === 'awards' ? { awardName: value } : { skillName: value };
-
-      const currentList =
-        field === 'awards' ? formik.values.awards : formik.values.skills;
-      const updatedList = [...currentList, newItem];
-
-      formik.setFieldValue(field, updatedList);
+    (field: 'awards' | 'skills', value: string | { skillCategory: string; skillName: string }) => {
+      if (field === 'awards') {
+        if (typeof value !== 'string' || !value) return;
+        const newItem = { awardName: value };
+        const updatedList = [...formik.values.awards, newItem];
+        formik.setFieldValue(field, updatedList);
+      } else {
+        // skills
+        if (typeof value === 'string' || !value || typeof value !== 'object') return;
+        if (!value.skillCategory || !value.skillName) return;
+        const newItem = { skillCategory: value.skillCategory, skillName: value.skillName };
+        const updatedList = [...formik.values.skills, newItem];
+        formik.setFieldValue(field, updatedList);
+      }
     },
     [formik],
   );
 
   const handleRemoveListItem = useCallback(
     (field: 'awards' | 'skills', index: number) => {
-      const currentList =
-        field === 'awards' ? formik.values.awards : formik.values.skills;
+      const currentList = field === 'awards' ? formik.values.awards : formik.values.skills;
       const updatedList = currentList.filter((_, i) => i !== index);
 
       formik.setFieldValue(field, updatedList);
@@ -156,15 +168,13 @@ export const usePersonal = () => {
     [formik],
   );
 
-  // 회사 관리
+  // 회사 추가
   const handleAddCompany = useCallback(() => {
-    const updatedCompanies = [
-      ...formik.values.companies,
-      { companyName: '', startDate: '', endDate: '' },
-    ];
+    const updatedCompanies = [...formik.values.companies, { companyName: '', startDate: '', endDate: '' }];
     formik.setFieldValue('companies', updatedCompanies);
   }, [formik]);
 
+  // 회사 삭제
   const handleRemoveCompany = useCallback(
     (index: number) => {
       const currentCompanies = formik.values.companies;
@@ -182,6 +192,7 @@ export const usePersonal = () => {
     [formik],
   );
 
+  // 회사 변경
   const handleCompanyChange = useCallback(
     (index: number, field: keyof PersonalCompanyFormValues, value: string) => {
       const currentCompanies = formik.values.companies;
@@ -193,9 +204,49 @@ export const usePersonal = () => {
     [formik],
   );
 
+  // 자격증 추가
+  const handleAddCertificate = useCallback(() => {
+    const updatedCertificates = [...formik.values.certificates, { certificateName: '', certificateAcquisitionOrganization: '', certificateAcquisitionDate: '' }];
+    formik.setFieldValue('certificates', updatedCertificates);
+  }, [formik]);
+
+  // 자격증 삭제
+  const handleRemoveCertificate = useCallback(
+    (index: number) => {
+      const currentCertificates = formik.values.certificates;
+      let updatedCertificates: PersonalCertificateFormValues[];
+
+      if (index === 0) {
+        updatedCertificates = [...currentCertificates];
+        updatedCertificates[0] = {
+          certificateName: '',
+          certificateAcquisitionOrganization: '',
+          certificateAcquisitionDate: '',
+        };
+      } else {
+        updatedCertificates = currentCertificates.filter((_, i) => i !== index);
+      }
+
+      formik.setFieldValue('certificates', updatedCertificates);
+    },
+    [formik],
+  );
+
+  // 자격증 변경
+  const handleCertificateChange = useCallback(
+    (index: number, field: keyof PersonalCertificateFormValues, value: string) => {
+      const currentCertificates = formik.values.certificates;
+      const updatedCertificates = [...currentCertificates];
+      updatedCertificates[index] = { ...updatedCertificates[index], [field]: value };
+
+      formik.setFieldValue('certificates', updatedCertificates);
+    },
+    [formik],
+  );
+
   useEffect(() => {
     if (loadedData) {
-      setPreviewImage(loadedData.profile_image_url || null);
+      setPreviewImage(loadedData.profileImageUrl || null);
     }
   }, [loadedData]);
 
@@ -206,10 +257,14 @@ export const usePersonal = () => {
     companies: formik.values.companies,
     skills: formik.values.skills,
     awards: formik.values.awards,
+    certificates: formik.values.certificates,
     handleAddListItem,
     handleRemoveListItem,
     handleAddCompany,
     handleRemoveCompany,
     handleCompanyChange,
+    handleAddCertificate,
+    handleRemoveCertificate,
+    handleCertificateChange,
   };
 };

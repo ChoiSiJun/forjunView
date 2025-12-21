@@ -14,12 +14,13 @@ type HistorySaveParma = GetRequestType<typeof HISTORY_API_ENDPOINTS.save>;
 
 interface RegisterParams {
   onClick: (params: HistorySaveParma) => void;
+  catagory: 'SI' | 'SM';
 }
 
-const Register = ({ onClick }: RegisterParams) => {
+const Register = ({ onClick, catagory }: RegisterParams) => {
   const registerForm = useFormik<HistorySaveParma>({
     initialValues: {
-      category: 'SI',
+      category: catagory,
       project: '',
       subject: '',
       description: '',
@@ -68,27 +69,15 @@ const Register = ({ onClick }: RegisterParams) => {
           />
         </Grid>
         <Grid item xs={12} sm={12} md={12} margin={1}>
-          <SjTextField
-            label={'프로젝트'}
-            name={'project'}
-            onChange={registerForm.handleChange}
-          />
+          <SjTextField label={'프로젝트'} name={'project'} onChange={registerForm.handleChange} />
         </Grid>
 
         <Grid item xs={12} sm={12} md={12} margin={1}>
-          <SjTextField
-            label={'주제'}
-            name={'subject'}
-            onChange={registerForm.handleChange}
-          />
+          <SjTextField label={'주제'} name={'subject'} onChange={registerForm.handleChange} />
         </Grid>
 
         <Grid item xs={12} sm={12} md={12} margin={1}>
-          <SjTextField
-            label={'설명'}
-            name={'description'}
-            onChange={registerForm.handleChange}
-          />
+          <SjTextField label={'설명'} name={'description'} onChange={registerForm.handleChange} />
         </Grid>
 
         <Grid item xs={12} sm={12} md={12} margin={1}>
@@ -100,21 +89,11 @@ const Register = ({ onClick }: RegisterParams) => {
         </Grid>
 
         <Grid item xs={12} sm={12} md={12} margin={1}>
-          <SjInputList
-            label={'SKill'}
-            name={'skill'}
-            listHeight={90}
-            onChangeList={skillList}
-          />
+          <SjInputList label={'SKill'} name={'skill'} listHeight={90} onChangeList={skillList} />
         </Grid>
 
         <Grid item xs={12} sm={12} md={12} margin={1}>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
+          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             등록
           </Button>
         </Grid>

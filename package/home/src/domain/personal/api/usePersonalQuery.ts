@@ -13,6 +13,7 @@ const fetchPersonal = async (): Promise<PersonalResponse> => {
     method: END_POINT.method,
     url: END_POINT.url,
   });
+
   return response.data;
 };
 

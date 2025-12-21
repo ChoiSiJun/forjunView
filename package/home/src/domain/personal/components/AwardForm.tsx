@@ -59,20 +59,11 @@ const AwardForm = ({ personalHook }: AwardFormProps) => {
           />
         </Grid>
         <Grid item xs={2}>
-          <SjButton
-            ButtonType={'input'}
-            buttonName={'추가'}
-            onClick={handleAddItem}
-          />
+          <SjButton ButtonType={'input'} buttonName={'추가'} onClick={handleAddItem} />
         </Grid>
       </Grid>
 
-      <SjChipList
-        dataList={dataList}
-        // 💡 handleRemoveListItem 함수는 이미 필드를 인수로 받으므로,
-        // idx에 'awards'를 추가하여 호출합니다.
-        onDelete={idx => handleRemoveListItem('awards', idx)}
-      />
+      <SjChipList dataList={dataList} onDelete={idx => handleRemoveListItem('awards', idx)} />
     </Paper>
   );
 };

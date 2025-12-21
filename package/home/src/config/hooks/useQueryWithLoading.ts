@@ -46,15 +46,17 @@ export const useQueryWithLoading = <TQueryFnData = unknown, TError = unknown, TD
 
     onSettled: (data, error) => {
       options.onSettled?.(data, error);
-      // dispatch(globalLoadingOff());
+      setTimeout(() => {
+        dispatch(globalLoadingOff());
+      }, 400);
     },
   });
 
   useEffect(() => {
-    if (queryResult.isLoading) {
+    if (queryResult.isFetching) {
       dispatch(globalLoadingOn());
     }
-  }, [queryResult.isLoading, dispatch]);
+  }, [queryResult.isFetching, dispatch]);
 
   return queryResult;
 };

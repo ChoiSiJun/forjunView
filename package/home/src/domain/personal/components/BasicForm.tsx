@@ -1,15 +1,4 @@
-import {
-  Avatar,
-  Button,
-  Grid,
-  Paper,
-  TextField,
-  Typography,
-  Dialog,
-  DialogContent,
-  IconButton,
-  Box,
-} from '@mui/material';
+import { Avatar, Button, Grid, Paper, TextField, Typography, Dialog, DialogContent, IconButton, Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
 import { usePersonal } from '@domain/personal/hooks/usePersonal';
@@ -38,13 +27,7 @@ const BasicForm = ({ personalHook }: BasicFormProps) => {
         기본 정보
       </Typography>
       <Grid container spacing={2} alignItems="center">
-        <Grid
-          item
-          xs={12}
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-        >
+        <Grid item xs={12} display="flex" flexDirection="column" alignItems="center">
           <Avatar
             src={previewImage || 'https://via.placeholder.com/150'}
             sx={{
@@ -58,12 +41,7 @@ const BasicForm = ({ personalHook }: BasicFormProps) => {
           />
           <Button variant="contained" component="label">
             이미지 선택
-            <input
-              type="file"
-              hidden
-              accept="image/*"
-              onChange={handleFileChange}
-            />
+            <input type="file" hidden accept="image/*" onChange={handleFileChange} />
           </Button>
         </Grid>
         <Grid item xs={12} sm={6}>

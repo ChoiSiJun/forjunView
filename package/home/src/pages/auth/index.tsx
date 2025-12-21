@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { toast } from 'react-toastify';
 
 // Material-UI 컴포넌트
 import Avatar from '@mui/material/Avatar';
@@ -22,11 +21,14 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 // 커스텀 컴포넌트 및 API
 import SjTextField from '@common/ui/elements/input/SjTextField';
-import { useLoginMutation } from 'domain/auth/api/useLoginMutation';
 import { useAppDispatch } from '@store/ReduxHooks';
 import { RootState } from '@store/ReduxStoreConfig';
-import { authDelete, authInsert } from '@store/slice/AuthSlice';
-import Join from '@domain/auth/components/Join';
+import { authDelete } from '@store/slice/AuthSlice';
+import Join from '@domain/user/components/Join';
+import useUser from '@domain/user/hooks/useUser';
+
+//Types
+import { LoginUserRequest } from '@domain/user/api/userApi';
 
 // 기본 테마 설정
 const defaultTheme = createTheme();
@@ -45,6 +47,9 @@ export default function Auth() {
   // 회원가입 드로어 상태 관리
   const [joinOpen, setJoinOpen] = React.useState(false);
 
+  // User 관련 기능을 담당하는 커스텀 훅
+  const { login } = useUser();
+
   // JWT 토큰 상태에 따른 페이지 리다이렉션 및 만료 처리
   useEffect(() => {
     // Redux의 status가 'success'이고
@@ -59,16 +64,13 @@ export default function Auth() {
     }
   }, [dispatch, exp, navigate, status]);
 
-  // 로그인 API 호출을 위한 뮤테이션 훅
-  const loginMutation = useLoginMutation();
-
   // 회원가입 드로어 핸들러
   const handleJoin = () => {
     setJoinOpen(!joinOpen);
   };
 
   // Formik을 이용한 로그인 폼 상태 관리 및 유효성 검사
-  const loginForm = useFormik({
+  const loginForm = useFormik<LoginUserRequest>({
     initialValues: {
       userId: '',
       password: '',
@@ -77,20 +79,11 @@ export default function Auth() {
       userId: Yup.string().required('아이디는 필수 항목입니다.'),
       password: Yup.string()
         .required('비밀번호는 필수 항목입니다.')
-        .matches(
-          /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\\[\]{};':"\\|,.<>\\/?]).{8,}$/,
-          '비밀번호는 최소 8자 이상이며, 영문, 숫자, 특수문자를 모두 포함해야 합니다.',
-        ),
+        .matches(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\\[\]{};':"\\|,.<>\\/?]).{8,}$/, '비밀번호는 최소 8자 이상이며, 영문, 숫자, 특수문자를 모두 포함해야 합니다.'),
     }),
     onSubmit: async values => {
-      // loginMutation 훅의 mutate 함수를 호출하고 성공 시 콜백을 전달
-      loginMutation.mutate(values, {
-        onSuccess: token => {
-          // API 성공 후 Redux 상태를 업데이트하고 토스트 메시지를 표시
-          dispatch(authInsert(token));
-          toast.success('로그인 되었습니다.');
-        },
-      });
+      // useUser의 login 핸들러 사용 (Redux 저장 및 토스트는 내부에서 처리)
+      await login(values);
     },
   });
 
@@ -106,10 +99,7 @@ export default function Auth() {
           sx={{
             backgroundImage: 'url(/asset/loginbanner.jpg)',
             backgroundRepeat: 'no-repeat',
-            backgroundColor: t =>
-              t.palette.mode === 'light'
-                ? t.palette.grey[50]
-                : t.palette.grey[900],
+            backgroundColor: t => (t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900]),
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
@@ -147,14 +137,8 @@ export default function Auth() {
                   size="medium"
                   onChange={loginForm.handleChange}
                   onBlur={loginForm.handleBlur}
-                  error={
-                    !!loginForm.errors.userId && !!loginForm.touched.userId
-                  }
-                  helperText={
-                    loginForm.touched.userId && loginForm.errors.userId
-                      ? loginForm.errors.userId
-                      : undefined
-                  }
+                  error={!!loginForm.errors.userId && !!loginForm.touched.userId}
+                  helperText={loginForm.touched.userId && loginForm.errors.userId ? loginForm.errors.userId : undefined}
                 />
               </Grid>
 
@@ -166,27 +150,13 @@ export default function Auth() {
                   type="password"
                   onChange={loginForm.handleChange}
                   onBlur={loginForm.handleBlur}
-                  error={
-                    !!loginForm.errors.password && !!loginForm.touched.password
-                  }
-                  helperText={
-                    loginForm.touched.password && loginForm.errors.password
-                      ? loginForm.errors.password
-                      : undefined
-                  }
+                  error={!!loginForm.errors.password && !!loginForm.touched.password}
+                  helperText={loginForm.touched.password && loginForm.errors.password ? loginForm.errors.password : undefined}
                 />
               </Grid>
 
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
+              <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
+              <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                 Sign In
               </Button>
               <Grid container justifyContent="center">

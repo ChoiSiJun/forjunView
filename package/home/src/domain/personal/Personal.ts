@@ -1,10 +1,11 @@
 export interface Personal {
   name: string;
   job: string;
-  profile_image_url: string | null;
+  profileImageUrl: string | null;
   awards?: PersonalAwards[];
   companies?: PersonalCompany[];
   skills?: PersonalSkill[];
+  certificates?: PersonalCertificate[];
 }
 
 export interface PersonalCompany {
@@ -18,5 +19,12 @@ export interface PersonalAwards {
 }
 
 export interface PersonalSkill {
+  skillCategory: string;
   skillName: string;
+}
+
+export interface PersonalCertificate {
+  certificateName: string;
+  certificateAcquisitionOrganization: string;
+  certificateAcquisitionDate: string;
 }

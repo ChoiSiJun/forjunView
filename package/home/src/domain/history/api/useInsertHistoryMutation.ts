@@ -4,10 +4,10 @@ import axios from '@config/axios/axios';
 import { GetRequestType } from '@common/utill/type-utils';
 import { HISTORY_API_ENDPOINTS } from '@domain/history/api/HistoryApi';
 
-type HistorySaveParma = GetRequestType<typeof HISTORY_API_ENDPOINTS.save>;
+type InsertHistoryRequest = GetRequestType<typeof HISTORY_API_ENDPOINTS.save>;
 
-const useHistoryInsertMutation = () => {
-  const fetchHistorySave = async (params: HistorySaveParma) => {
+export const useInsertHistoryMutation = () => {
+  const fetchHistorySave = async (params: InsertHistoryRequest) => {
     const response = await axios({
       method: HISTORY_API_ENDPOINTS.save.method,
       url: HISTORY_API_ENDPOINTS.save.url,
@@ -16,9 +16,7 @@ const useHistoryInsertMutation = () => {
     return response.data;
   };
 
-  return useMutationWithLoading<void, AxiosError, HistorySaveParma>({
-    mutationFn: async (params: HistorySaveParma) => fetchHistorySave(params),
+  return useMutationWithLoading<void, AxiosError, InsertHistoryRequest>({
+    mutationFn: async (params: InsertHistoryRequest) => fetchHistorySave(params),
   });
 };
-
-export default useHistoryInsertMutation;

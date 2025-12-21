@@ -6,9 +6,7 @@ import axios from '@config/axios/axios';
 type HistoryListRequest = GetRequestType<typeof HISTORY_API_ENDPOINTS.get>;
 type HistoryListResponse = GetResponseType<typeof HISTORY_API_ENDPOINTS.get>;
 
-const fetchHistory = async (
-  params: HistoryListRequest,
-): Promise<HistoryListResponse[]> => {
+const fetchHistoryList = async (params: HistoryListRequest): Promise<HistoryListResponse[]> => {
   const response = await axios({
     method: HISTORY_API_ENDPOINTS.get.method,
     params: params,
@@ -18,11 +16,9 @@ const fetchHistory = async (
   return response.data;
 };
 
-const useHistoryQuery = (params: HistoryListRequest) => {
+export const useHistoryListQuery = (params: HistoryListRequest) => {
   return useQueryWithLoading<HistoryListResponse[]>({
     queryKey: ['history', params],
-    queryFn: () => fetchHistory(params),
+    queryFn: () => fetchHistoryList(params),
   });
 };
-
-export default useHistoryQuery;

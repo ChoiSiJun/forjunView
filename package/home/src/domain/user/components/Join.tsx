@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
@@ -8,9 +7,11 @@ import { Box, Drawer, Grid, InputAdornment, Paper, Typography } from '@mui/mater
 import SjButton from '@common/ui/elements/button/SjButton';
 import SjTextField from '@common/ui/elements/input/SjTextField';
 
-// API
-import { useJoinMutation } from '@domain/auth/api/useJoinMutation';
-import useIdDuplicateCheckQuery from '@domain/auth/api/useIdDuplicateCheckQuery';
+// Hooks
+import useUser from '@domain/user/hooks/useUser';
+
+//Types
+import { JoinUserRequest } from '@domain/user/api/userApi';
 
 // Props Interface
 interface JoinProps {
@@ -24,22 +25,17 @@ interface JoinProps {
  * @param {Function} handleJoin - 드로어를 닫는 함수
  */
 export default function Join({ joinOpen, handleJoin }: JoinProps) {
-  // 회원가입 API 호출을 담당하는 커스텀 훅
+  // User 관련 기능을 담당하는 커스텀 훅
+  const { join, duplicateIdCheck, isDuplicateIdChecking, isIdAvailable, setIsIdAvailable } = useUser();
 
-  // 중복 체크할 아이디
-  const [duplicateId, setDuplicateId] = useState<string>('');
-
-  // 회원가입 API 호출을 담당하는 커스텀 훅
-  const joinMutation = useJoinMutation();
-
-  // 중복 체크 API 호출을 담당하는 커스텀 훅
-  const { refetch, isFetching } = useIdDuplicateCheckQuery(duplicateId);
-
-  // 아이디 중복 체크 상태
-  const [isIdAvailable, setIsIdAvailable] = useState<boolean | null>(null);
+  // 아이디 입력값이 변경될 때 호출되는 핸들러
+  const handleUserIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    joinForm.handleChange(e);
+    setIsIdAvailable(null);
+  };
 
   // Formik을 이용한 폼 데이터 및 유효성 검사 관리
-  const joinForm = useFormik({
+  const joinForm = useFormik<JoinUserRequest>({
     initialValues: {
       userId: '',
       password: '',
@@ -57,47 +53,13 @@ export default function Join({ joinOpen, handleJoin }: JoinProps) {
     onSubmit: async values => {
       // 아이디 중복 확인 상태에 따라 가입 진행
       if (isIdAvailable) {
-        joinMutation.mutate(values, {
-          onSuccess: () => {
-            // 성공 시 토스트 메시지를 보여주고, 드로어를 닫는다.
-            toast.success('가입 되었습니다.');
-            handleJoin();
-          },
-        });
+        await join(values, handleJoin);
       } else {
         toast.error(isIdAvailable === null ? '아이디 중복체크를 해주세요.' : '중복된 아이디가 존재합니다.');
       }
     },
     validateOnChange: true,
   });
-
-  // 아이디 입력값이 변경될 때 호출되는 핸들러
-  const handleUserIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    joinForm.handleChange(e);
-    setDuplicateId(e.target.value);
-    setIsIdAvailable(null);
-  };
-
-  // 아이디 중복 체크 버튼 클릭 핸들러
-  const handleDuplicateCheck = async () => {
-    // 아이디 입력 유효성 검사
-    if (!joinForm.values.userId) {
-      toast.error('아이디를 입력해주세요.');
-      return;
-    }
-    // 💡 refetch()의 실행 결과(data)를 직접 받아옵니다.
-    const { data } = await refetch();
-
-    if (typeof data === 'boolean') {
-      setIsIdAvailable(!data);
-
-      if (data) {
-        toast.error('중복된 아이디가 존재합니다');
-      } else {
-        toast.success('가입 가능한 아이디입니다.');
-      }
-    }
-  };
 
   return (
     <Drawer
@@ -150,7 +112,7 @@ export default function Join({ joinOpen, handleJoin }: JoinProps) {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end" sx={{ margin: 0, padding: 0 }}>
-                      <SjButton ButtonType={'input'} buttonName={'중복체크'} onClick={handleDuplicateCheck} disabled={isFetching} />
+                      <SjButton ButtonType={'input'} buttonName={'중복체크'} onClick={() => duplicateIdCheck({ userId: joinForm.values.userId })} disabled={isDuplicateIdChecking} />
                     </InputAdornment>
                   ),
                 }}

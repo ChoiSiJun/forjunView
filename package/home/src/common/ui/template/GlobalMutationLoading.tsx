@@ -4,7 +4,7 @@ import { useAppSelector } from 'store/ReduxHooks'; // Redux 상태 가져오는 
 const GlobalMutationLoading = () => {
   // 💡 Redux store에서 전역 로딩 상태를 가져옵니다.
   const mutationCount = useAppSelector(state => state.Loading.mutationCount);
-
+  console.log(mutationCount);
   const isLoading = mutationCount > 0 ? true : false;
 
   if (!isLoading) return null; // 로딩 상태가 아니면 아무것도 렌더링하지 않음
