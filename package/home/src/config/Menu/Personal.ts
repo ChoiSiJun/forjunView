@@ -26,6 +26,11 @@ export const personal = [
         menuName: 'SM History',
         menuPath: '/forjun/history/sm',
       },
+      {
+        menuCode: 'PERSONAL_HISTORY_RND',
+        menuName: 'R&D History',
+        menuPath: '/forjun/history/rnd',
+      },
     ],
   },
 ];

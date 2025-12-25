@@ -78,7 +78,7 @@ const SkillForm = ({ personalHook }: SkillFormProps) => {
 
       <Grid container spacing={1} alignItems="center" sx={{ mb: 2 }}>
         <Grid item xs={4}>
-          <SjTextField label={'기술 카테고리'} value={skillCategory} onChange={handleCategoryChange} onKeyDown={handleCategoryKeyDown} placeholder="예: 프론트엔드" />
+          <SjTextField id="skill-category-input" label={'기술 카테고리'} value={skillCategory} onChange={handleCategoryChange} onKeyDown={handleCategoryKeyDown} placeholder="예: 프론트엔드" />
         </Grid>
         <Grid item xs={6}>
           <SjTextField
@@ -98,7 +98,26 @@ const SkillForm = ({ personalHook }: SkillFormProps) => {
       {/* skillCategory별로 그룹화하여 표시 */}
       {Object.entries(groupedSkills).map(([category, skillList]) => (
         <Box key={category} sx={{ mb: 3 }}>
-          <SjText renderType="subtitle" text={category} sx={{ mb: 1 }} />
+          <SjText
+            renderType="subtitle"
+            text={category}
+            sx={{
+              mb: 1,
+              cursor: 'pointer',
+              '&:hover': {
+                color: 'primary.main',
+                textDecoration: 'underline',
+              },
+            }}
+            onClick={() => {
+              setSkillCategory(category);
+              // 입력 필드에 포커스 이동
+              const categoryInput = document.getElementById('skill-category-input');
+              if (categoryInput) {
+                categoryInput.focus();
+              }
+            }}
+          />
           <SjChipList
             dataList={skillList.map(item => item.skillName)}
             onDelete={chipIndex => {

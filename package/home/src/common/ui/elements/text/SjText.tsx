@@ -68,6 +68,7 @@ const SjText = ({
         variant={variant}
         component={'p'}
         renderType={renderType} // 여기서 넘겨줌
+        onClick={onClick}
         {...rest}
       >
         {text}
@@ -79,6 +80,7 @@ const SjText = ({
       variant={variant}
       component={'span'}
       renderType={renderType} // 여기서 넘겨줌
+      onClick={onClick}
       {...rest}
     >
       {text}

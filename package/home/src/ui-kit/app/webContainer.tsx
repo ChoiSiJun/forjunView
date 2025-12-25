@@ -1,17 +1,28 @@
 // WebContainer.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import { Outlet, useNavigate, useParams } from 'react-router-dom';
+import { Outlet, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { appTheme } from '@ui-kit/app/themes/appTheme';
 
 export default function WebContainer() {
   const { userId } = useParams();
-  const [activeTab, setActiveTab] = useState<'SI' | 'SM'>('SI');
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState<'SI' | 'SM' | 'RND'>('SI');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (location.pathname.includes('/history/si')) {
+      setActiveTab('SI');
+    } else if (location.pathname.includes('/history/sm')) {
+      setActiveTab('SM');
+    } else if (location.pathname.includes('/history/rnd')) {
+      setActiveTab('RND');
+    }
+  }, [location.pathname]);
 
   return (
     <ThemeProvider theme={appTheme}>
@@ -87,6 +98,30 @@ export default function WebContainer() {
               }}
             >
               SM History
+            </Button>
+
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setActiveTab('RND');
+                navigate(`/web/${userId}/profile/history/rnd`);
+              }}
+              sx={{
+                borderColor: activeTab === 'RND' ? '#1976d2' : '#ccc',
+                color: activeTab === 'RND' ? '#1976d2' : '#555',
+                fontWeight: 500,
+                px: 2.5,
+                py: 0.7,
+                borderRadius: 2,
+                textTransform: 'none',
+                backgroundColor: 'transparent',
+                '&:hover': {
+                  bgcolor: 'rgba(25,118,210,0.08)',
+                  borderColor: '#1976d2',
+                },
+              }}
+            >
+              RND History
             </Button>
           </Stack>
         </Box>
