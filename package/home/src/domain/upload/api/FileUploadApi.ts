@@ -1,7 +1,11 @@
 import { defineEndpoint } from '@common/type/ApiEndPoint';
 import { UploadFile } from '../UploadFile';
 
-export type FileUploadRequest = File | null;
+export type FileUploadRequest = {
+  uploadFile: File;
+  directory?: string;
+};
+
 export interface FileUploadResponse extends UploadFile {}
 
 //파일 업로드 관련 API

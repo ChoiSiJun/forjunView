@@ -101,7 +101,7 @@ const Register = ({ onClick, catagory }: RegisterParams) => {
         </Grid>
 
         <Grid item xs={12} sm={12} md={12} margin={1}>
-          <BoardEditor value={description} setValue={setDescription} />
+          <BoardEditor value={description} setValue={setDescription} directory={'history'} />
         </Grid>
 
         <Grid item xs={12} sm={12} md={12} margin={1}>
