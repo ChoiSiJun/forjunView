@@ -10,8 +10,7 @@ export const useDeleteHistoryMutation = () => {
   const fetchDeleteHistory = async (params: DeleteHistoryRequest) => {
     const response = await axios({
       method: HISTORY_API_ENDPOINTS.delete.method,
-      url: HISTORY_API_ENDPOINTS.delete.url,
-      data: params,
+      url: HISTORY_API_ENDPOINTS.delete.url + '/' + params.id,
     });
     return response.data;
   };

@@ -6,11 +6,13 @@ import { persistReducer } from 'redux-persist';
 import sessionStorage from 'redux-persist/lib/storage/session';
 import ModalSlice from 'store/slice/ModalSlice';
 import LoadingSlice from 'store/slice/LoadingSlice';
+import ConfirmDialogSlice from 'store/slice/ConfirmDialogSlice';
 const reducers = combineReducers({
   Menu: MenuSlice,
   Auth: AuthSlice,
   Modal: ModalSlice,
   Loading: LoadingSlice,
+  ConfirmDialog: ConfirmDialogSlice,
 });
 
 const persistConfig = {

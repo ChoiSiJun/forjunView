@@ -2,7 +2,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Dayjs } from 'dayjs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface SjDatePickerProps {
   label: string;
@@ -10,11 +10,11 @@ interface SjDatePickerProps {
   onDateChange?: (value: Dayjs | null) => void;
 }
 
-const SjDatePicker = ({
-  label,
-  onDateChange,
-  initialDate = null,
-}: SjDatePickerProps) => {
+const SjDatePicker = ({ label, onDateChange, initialDate = null }: SjDatePickerProps) => {
+  useEffect(() => {
+    setSelectedDate(initialDate);
+  }, [initialDate]);
+
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(initialDate);
 
   const handleChange = (newValue: Dayjs | null) => {
@@ -26,14 +26,7 @@ const SjDatePicker = ({
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DatePicker
-      name=''
-        label={label}
-        value={selectedDate}
-        onChange={handleChange}
-        format="YYYY-MM-DD"
-        slotProps={{ textField: { fullWidth: true } }}
-      />
+      <DatePicker name="" label={label} value={selectedDate} onChange={handleChange} format="YYYY-MM-DD" slotProps={{ textField: { fullWidth: true } }} />
     </LocalizationProvider>
   );
 };

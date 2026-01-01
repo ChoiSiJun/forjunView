@@ -1,6 +1,6 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Editor } from '@toast-ui/react-editor';
-import '@toast-ui/editor/dist/toastui-editor.css'; // 에디터 디자인을 위한 필수 CSS
+import '@toast-ui/editor/dist/toastui-editor.css';
 
 interface BoardEditorProps {
   value?: string;
@@ -10,25 +10,26 @@ interface BoardEditorProps {
 const BoardEditor = ({ value = '', setValue }: BoardEditorProps) => {
   const editorRef = useRef<Editor>(null);
 
-  const handleChange = (value: string) => {
-    console.log(value);
-    setValue(value ?? '');
+  // 서버에서 데이터가 로드되어 value가 바뀌면 에디터에 주입
+  useEffect(() => {
+    const editorInstance = editorRef.current?.getInstance();
+    if (editorInstance) {
+      if (editorInstance.getMarkdown() !== value) {
+        editorInstance.setMarkdown(value || '');
+      }
+    }
+  }, [value]);
+
+  // 에디터 수정 시 호출 (인자를 사용하지 않고 ref에서 직접 추출)
+  const handleChange = () => {
+    const editorInstance = editorRef.current?.getInstance();
+    if (editorInstance) {
+      const markdown = editorInstance.getMarkdown();
+      setValue(markdown);
+    }
   };
 
-  return (
-    <div>
-      <Editor
-        ref={editorRef}
-        initialValue="내용을 입력해주세요."
-        previewStyle="vertical" // 미리보기 스타일 (tab, vertical)
-        height="500px"
-        initialEditType="wysiwyg" // 초기 에디터 모드 (markdown, wysiwyg)
-        useCommandShortcut={true} // 단축키 사용 여부
-        onChange={handleChange}
-        value={value}
-      />
-    </div>
-  );
+  return <Editor ref={editorRef} initialValue={value || '내용을 입력해주세요.'} previewStyle="vertical" height="400px" initialEditType="wysiwyg" useCommandShortcut={true} onChange={handleChange} />;
 };
 
 export default BoardEditor;

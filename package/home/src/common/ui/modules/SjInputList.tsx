@@ -28,6 +28,11 @@ const SjInputList = ({
   const [valueList, setValueList] = useState<string[]>(initialList); // 초기값 적용
   const [value, setValue] = useState<string>('');
 
+  // initialList가 변경되면 valueList 업데이트
+  useEffect(() => {
+    setValueList(initialList);
+  }, [initialList]);
+
   useEffect(() => {
     onChangeList(valueList);
   }, [valueList, onChangeList]);

@@ -50,6 +50,8 @@ export const useQueryWithLoading = <TQueryFnData = unknown, TError = unknown, TD
         dispatch(globalLoadingOff());
       }, 400);
     },
+
+    enabled: options.enabled,
   });
 
   useEffect(() => {

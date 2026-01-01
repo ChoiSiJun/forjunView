@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import AppContainer from '@ui-kit/app/appContainer';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import Auth from 'pages/auth';
@@ -16,25 +16,23 @@ import { OpenRndHistory } from '@pages/web/history/rnd';
 function ForjunRouter() {
   return (
     <>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Auth />} />
-          <Route path="login" element={<Auth />} />
-          <Route path="forjun/*" element={<AppContainer />}>
-            <Route index element={<Personal />} />
-            <Route path="personal" element={<Personal />} />
-            <Route path="history/si" element={<SiHistory />} />
-            <Route path="history/sm" element={<SmHistory />} />
-            <Route path="history/rnd" element={<RndHistory />} />
-          </Route>
-          <Route path="web/:userId?/profile" element={<WebContainer />}>
-            <Route path="history/si" element={<OpenSiHistory />} />
-            <Route path="history/sm" element={<OpenSmHistory />} />
-            <Route path="history/rnd" element={<OpenRndHistory />} />
-          </Route>
-          <Route path="error" element={<PrivatePage />} />
-        </Routes>
-      </Router>
+      <Routes>
+        <Route path="/" element={<Auth />} />
+        <Route path="login" element={<Auth />} />
+        <Route path="forjun/*" element={<AppContainer />}>
+          <Route index element={<Personal />} />
+          <Route path="personal" element={<Personal />} />
+          <Route path="history/si" element={<SiHistory />} />
+          <Route path="history/sm" element={<SmHistory />} />
+          <Route path="history/rnd" element={<RndHistory />} />
+        </Route>
+        <Route path="web/:userId?/profile" element={<WebContainer />}>
+          <Route path="history/si" element={<OpenSiHistory />} />
+          <Route path="history/sm" element={<OpenSmHistory />} />
+          <Route path="history/rnd" element={<OpenRndHistory />} />
+        </Route>
+        <Route path="error" element={<PrivatePage />} />
+      </Routes>
       <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
     </>
   );

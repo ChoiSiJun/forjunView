@@ -3,28 +3,37 @@ import SjTextField from '@common/ui/elements/input/SjTextField';
 import SjDatePicker from '@common/ui/modules/SjDatePicker';
 import SjInputList from '@common/ui/modules/SjInputList';
 import { Box, Button, Grid } from '@mui/material';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { useFormik } from 'formik';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { HISTORY_API_ENDPOINTS } from '@domain/history/api/HistoryApi';
 import { GetRequestType } from '@common/utill/type-utils';
 import BoardEditor from '@common/ui/template/BoardEditor';
+import useHistoryQuery from '@domain/history/api/useHistoryQuery';
 
 type HistorySaveParma = GetRequestType<typeof HISTORY_API_ENDPOINTS.save>;
+type HistoryUpdateParma = GetRequestType<typeof HISTORY_API_ENDPOINTS.update>;
 
 interface RegisterParams {
-  onClick: (params: HistorySaveParma) => void;
+  onClick: (params: HistorySaveParma | HistoryUpdateParma) => void | Promise<void>;
   catagory: 'SI' | 'SM' | 'RND';
+  id?: number; // 수정 모드일 때 history id
 }
 
-const Register = ({ onClick, catagory }: RegisterParams) => {
+const Register = ({ onClick, catagory, id }: RegisterParams) => {
   /** 상태 */
+  const isEditMode = !!id && id > 0;
+  const { data } = useHistoryQuery({ id: isEditMode ? id : 0 });
   const [description, setDescription] = useState<string>('');
+  const [startDate, setStartDate] = useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<Dayjs | null>(null);
+  const [skillList, setSkillList] = useState<string[]>([]);
 
   /** Hook */
-  const registerForm = useFormik<HistorySaveParma>({
+  const registerForm = useFormik<HistorySaveParma | HistoryUpdateParma>({
     initialValues: {
+      ...(isEditMode && id ? { id: id } : {}),
       category: catagory,
       project: '',
       subject: '',
@@ -40,25 +49,49 @@ const Register = ({ onClick, catagory }: RegisterParams) => {
     }),
 
     onSubmit: async values => {
-      values.description = description;
-      onClick(values);
+      const submitValues = { ...values };
+      submitValues.description = description;
+      onClick(submitValues);
     },
   });
 
   const { setFieldValue } = registerForm;
 
+  // 수정 모드일 때 데이터가 로드되면 폼 값 업데이트
+  useEffect(() => {
+    if (isEditMode && data) {
+      setFieldValue('id', data.id);
+      setFieldValue('category', data.category);
+      setFieldValue('project', data.project);
+      setFieldValue('subject', data.subject);
+      setFieldValue('description', data.description);
+      setFieldValue('historyStartDate', dayjs(data.historyStartDate));
+      setFieldValue('historyEndDate', dayjs(data.historyEndDate));
+      setFieldValue('historySkill', data.historySkill || []);
+
+      // 상태값도 업데이트
+      setDescription(data.description || '');
+      setStartDate(data.historyStartDate ? dayjs(data.historyStartDate) : null);
+      setEndDate(data.historyEndDate ? dayjs(data.historyEndDate) : null);
+      setSkillList(data.historySkill || []);
+    }
+  }, [isEditMode, data, setFieldValue]);
+
   const onChangeStartDate = (value: Dayjs | null) => {
+    setStartDate(value);
     const historyStartDate = value?.format('YYYY-MM-DD');
-    setFieldValue('historyStartDate', historyStartDate);
+    setFieldValue('historyStartDate', historyStartDate || '');
   };
 
   const onChangeEndDate = (value: Dayjs | null) => {
+    setEndDate(value);
     const historyEndDate = value?.format('YYYY-MM-DD');
-    setFieldValue('historyEndDate', historyEndDate);
+    setFieldValue('historyEndDate', historyEndDate || '');
   };
 
-  const skillList = useCallback(
+  const onChangeSkillList = useCallback(
     (valueList: string[]) => {
+      setSkillList(valueList);
       setFieldValue('historySkill', valueList);
     },
     [setFieldValue],
@@ -81,23 +114,23 @@ const Register = ({ onClick, catagory }: RegisterParams) => {
           />
         </Grid>
         <Grid item xs={12} sm={12} md={12} margin={1}>
-          <SjTextField label={'프로젝트'} name={'project'} onChange={registerForm.handleChange} />
+          <SjTextField label={'프로젝트'} name={'project'} value={registerForm.values.project} onChange={registerForm.handleChange} />
         </Grid>
 
         <Grid item xs={12} sm={12} md={12} margin={1}>
-          <SjTextField label={'주제'} name={'subject'} onChange={registerForm.handleChange} />
+          <SjTextField label={'주제'} name={'subject'} value={registerForm.values.subject} onChange={registerForm.handleChange} />
         </Grid>
 
         <Grid item xs={12} sm={12} md={12} margin={1}>
-          <SjDatePicker label={'시작날짜'} onDateChange={onChangeStartDate} />
+          <SjDatePicker label={'시작날짜'} onDateChange={onChangeStartDate} initialDate={startDate} />
         </Grid>
 
         <Grid item xs={12} sm={12} md={12} margin={1}>
-          <SjDatePicker label={'종료날짜'} onDateChange={onChangeEndDate} />
+          <SjDatePicker label={'종료날짜'} onDateChange={onChangeEndDate} initialDate={endDate} />
         </Grid>
 
         <Grid item xs={12} sm={12} md={12} margin={1}>
-          <SjInputList label={'SKill'} name={'skill'} listHeight={90} onChangeList={skillList} />
+          <SjInputList label={'SKill'} name={'skill'} listHeight={90} onChangeList={onChangeSkillList} initialList={skillList} />
         </Grid>
 
         <Grid item xs={12} sm={12} md={12} margin={1}>
@@ -106,7 +139,7 @@ const Register = ({ onClick, catagory }: RegisterParams) => {
 
         <Grid item xs={12} sm={12} md={12} margin={1}>
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            등록
+            {isEditMode ? '수정' : '등록'}
           </Button>
         </Grid>
       </Grid>

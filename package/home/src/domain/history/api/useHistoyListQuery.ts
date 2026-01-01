@@ -18,7 +18,7 @@ const fetchHistoryList = async (params: HistoryListRequest): Promise<HistoryList
 
 export const useHistoryListQuery = (params: HistoryListRequest) => {
   return useQueryWithLoading<HistoryListResponse[]>({
-    queryKey: ['history', params],
+    queryKey: ['history', params.category],
     queryFn: () => fetchHistoryList(params),
   });
 };
