@@ -104,7 +104,7 @@ export const usePersonal = () => {
       let uploadedFileId = null;
 
       if (profileImage) {
-        const response = await fileUploadMutation(profileImage);
+        const response = await fileUploadMutation({ uploadFile: profileImage, directory: 'profile' });
         profile_image_url = response.url;
         uploadedFileId = response.fileId;
       }
