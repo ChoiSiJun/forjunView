@@ -9,8 +9,8 @@ type UpdateHistoryRequest = GetRequestType<typeof HISTORY_API_ENDPOINTS.update>;
 export const useUpdateHistoryMutation = () => {
   const fetchHistoryUpdate = async (params: UpdateHistoryRequest) => {
     const response = await axios({
-      method: HISTORY_API_ENDPOINTS.update.method + '/' + params.id,
-      url: HISTORY_API_ENDPOINTS.update.url,
+      method: HISTORY_API_ENDPOINTS.update.method,
+      url: HISTORY_API_ENDPOINTS.update.url + '/' + params.id,
       data: params,
     });
     return response.data;

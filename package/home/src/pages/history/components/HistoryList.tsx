@@ -7,6 +7,8 @@ import { modalOpen } from '@store/slice/ModalSlice';
 import useHistory from '@domain/history/hooks/useHistory';
 import { useState } from 'react';
 import Register from '@domain/history/components/Register';
+import '@toast-ui/editor/dist/toastui-editor-viewer.css'; // 뷰어 전용 CSS
+import { Viewer } from '@toast-ui/react-editor';
 
 interface HistoryListProps {
   category: 'SI' | 'SM' | 'RND';
@@ -25,6 +27,10 @@ const HistoryList = ({ category }: HistoryListProps) => {
   /** 등록 버튼 클릭 핸들러 */
   const openRegister = () => {
     dispatch(modalOpen(<Register onClick={insertHistory} catagory={category} />));
+  };
+  /** 수정 버튼 클릭 핸들러 */
+  const openUpdate = (id: number) => {
+    dispatch(modalOpen(<Register onClick={updateHistory} catagory={category} id={id} />));
   };
 
   const toggleExpand = (id: number) => {
@@ -96,7 +102,7 @@ const HistoryList = ({ category }: HistoryListProps) => {
                     confirmText: '수정',
                     cancelText: '취소',
                     onConfirm: () => {
-                      dispatch(modalOpen(<Register onClick={params => updateHistory(params as Parameters<typeof updateHistory>[0])} catagory={category} id={history.id} />));
+                      openUpdate(history.id);
                     },
                   }),
                 );
@@ -216,8 +222,7 @@ const HistoryList = ({ category }: HistoryListProps) => {
               </Stack>
 
               <Divider sx={{ mb: 2 }} />
-
-              <SjText renderType="text" text={history.description || '설명이 없습니다.'} sx={{ color: 'text.secondary' }} />
+              <Viewer initialValue={history.description || '설명이 없습니다.'} />
             </Box>
           </Collapse>
         </Card>

@@ -7,21 +7,17 @@ import dayjs, { Dayjs } from 'dayjs';
 import { useFormik } from 'formik';
 import { useCallback, useEffect, useState } from 'react';
 import * as Yup from 'yup';
-import { HISTORY_API_ENDPOINTS } from '@domain/history/api/HistoryApi';
-import { GetRequestType } from '@common/utill/type-utils';
+import { HistorySaveRequest, HistoryUpdateRequest } from '@domain/history/api/HistoryApi';
 import BoardEditor from '@common/ui/template/BoardEditor';
 import useHistoryQuery from '@domain/history/api/useHistoryQuery';
 
-type HistorySaveParma = GetRequestType<typeof HISTORY_API_ENDPOINTS.save>;
-type HistoryUpdateParma = GetRequestType<typeof HISTORY_API_ENDPOINTS.update>;
-
-interface RegisterParams {
-  onClick: (params: HistorySaveParma | HistoryUpdateParma) => void | Promise<void>;
+interface RegisterProps<T> {
+  onClick: (params: T) => void | Promise<void>;
   catagory: 'SI' | 'SM' | 'RND';
   id?: number; // 수정 모드일 때 history id
 }
 
-const Register = ({ onClick, catagory, id }: RegisterParams) => {
+const Register = <T extends HistorySaveRequest | HistoryUpdateRequest>({ onClick, catagory, id }: RegisterProps<T>) => {
   /** 상태 */
   const isEditMode = !!id && id > 0;
   const { data } = useHistoryQuery({ id: isEditMode ? id : 0 });
@@ -31,7 +27,7 @@ const Register = ({ onClick, catagory, id }: RegisterParams) => {
   const [skillList, setSkillList] = useState<string[]>([]);
 
   /** Hook */
-  const registerForm = useFormik<HistorySaveParma | HistoryUpdateParma>({
+  const registerForm = useFormik<HistorySaveRequest | HistoryUpdateRequest>({
     initialValues: {
       ...(isEditMode && id ? { id: id } : {}),
       category: catagory,
@@ -51,7 +47,7 @@ const Register = ({ onClick, catagory, id }: RegisterParams) => {
     onSubmit: async values => {
       const submitValues = { ...values };
       submitValues.description = description;
-      onClick(submitValues);
+      onClick(submitValues as T);
     },
   });
 
