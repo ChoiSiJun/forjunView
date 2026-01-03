@@ -1,41 +1,24 @@
-import axios from '@config/axios/axios';
+import { HISTORY_API_ENDPOINTS } from '@domain/history/api/HistoryApi';
 import { useQueryWithLoading } from '@config/hooks/useQueryWithLoading';
+import { GetResponseType, GetRequestType } from '@common/utill/type-utils';
+import axios from '@config/axios/axios';
 
-interface HistoryParams {
-  category: string;
-  userId?: string | undefined;
-}
+type HistoryWebListRequest = GetRequestType<typeof HISTORY_API_ENDPOINTS.getPublicList>;
+type HistoryWebListResponse = GetResponseType<typeof HISTORY_API_ENDPOINTS.getPublicList>;
 
-export interface HistoryListResponse {
-  id: number;
-  category: string;
-  description: string;
-  historyEndDate: string;
-  historySkill: string[];
-  historyStartDate: string;
-  project: string;
-  subject: string;
-}
+const fetchHistoryList = async (params: HistoryWebListRequest): Promise<HistoryWebListResponse[]> => {
+  const response = await axios({
+    method: HISTORY_API_ENDPOINTS.getPublicList.method,
+    params: params,
+    url: HISTORY_API_ENDPOINTS.getPublicList.url,
+  });
 
-const fetchHistory = async (
-  params: HistoryParams,
-): Promise<HistoryListResponse[]> => {
-  return axios
-    .get<HistoryListResponse[]>(
-      import.meta.env.VITE_REST_API + '/histories/web',
-      {
-        params,
-      },
-    )
-
-    .then(res => res.data);
+  return response.data;
 };
 
-const useWebHistoryQuery = (params: HistoryParams) => {
-  return useQueryWithLoading<HistoryListResponse[]>({
-    queryKey: ['history', params], // 고정된 key
-    queryFn: () => fetchHistory(params),
+export const useWebHistoryListQuery = (params: HistoryWebListRequest) => {
+  return useQueryWithLoading<HistoryWebListResponse[]>({
+    queryKey: ['history', params.userId, params.category],
+    queryFn: () => fetchHistoryList(params),
   });
 };
-
-export default useWebHistoryQuery;

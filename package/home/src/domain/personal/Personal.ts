@@ -1,4 +1,5 @@
 export interface Personal {
+  userId?: string;
   name: string;
   job: string;
   profileImageUrl: string | null;

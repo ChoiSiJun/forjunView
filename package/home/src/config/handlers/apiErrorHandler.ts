@@ -5,9 +5,6 @@ import { toast } from 'react-toastify';
 const apiErrorHandler = (error: unknown) => {
   if (error instanceof AxiosError) {
     const message = error.response?.data?.message || error.message;
-    if (error.response?.status == 401) {
-      location.href = '/';
-    }
     toast.error(message);
     return;
   } else {

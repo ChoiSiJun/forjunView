@@ -1,5 +1,6 @@
 export interface History {
   id: number;
+  userId?: string;
   category: string;
   project: string;
   subject: string;
