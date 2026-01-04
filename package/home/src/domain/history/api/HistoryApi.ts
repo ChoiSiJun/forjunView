@@ -12,7 +12,7 @@ export interface HistoryListResponse extends History {}
 export interface HistoryDetailRequest extends Pick<History, 'id'> {}
 export interface HistoryDetailResponse extends History {}
 export interface HistoryPublicListRequest extends Pick<History, 'userId' | 'category'> {}
-export interface HistoryPublicListResponse extends Omit<History, 'id' | 'userId'> {}
+export interface HistoryPublicListResponse extends Omit<History, 'userId'> {}
 
 export const HISTORY_API_ENDPOINTS = {
   //히스토리 저장

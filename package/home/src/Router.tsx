@@ -12,6 +12,7 @@ import WebContainer from '@ui-kit/app/webContainer';
 import { OpenSiHistory } from '@pages/web/history/si';
 import { OpenSmHistory } from '@pages/web/history/sm';
 import { OpenRndHistory } from '@pages/web/history/rnd';
+import UserEdit from '@pages/user/edit';
 
 function ForjunRouter() {
   return (
@@ -22,6 +23,7 @@ function ForjunRouter() {
         <Route path="forjun/*" element={<AppContainer />}>
           <Route index element={<Personal />} />
           <Route path="personal" element={<Personal />} />
+          <Route path="user/edit" element={<UserEdit />} />
           <Route path="history/si" element={<SiHistory />} />
           <Route path="history/sm" element={<SmHistory />} />
           <Route path="history/rnd" element={<RndHistory />} />

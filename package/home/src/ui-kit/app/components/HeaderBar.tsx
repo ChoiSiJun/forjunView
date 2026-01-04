@@ -5,8 +5,10 @@ import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import EditIcon from '@mui/icons-material/Edit';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { styled } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 
 //Mui AppBar Type
 interface AppBarProps extends MuiAppBarProps {
@@ -45,15 +47,10 @@ interface HeaderBarProps {
 }
 
 //Liberty HeaderBar 컴포넌트
-const HeaderBar = ({
-  title,
-  headerBarHeight,
-  sidebarWidth,
-  setSidebarOpen,
-  isSidebarOpen,
-}: HeaderBarProps) => {
+const HeaderBar = ({ title, headerBarHeight, sidebarWidth, setSidebarOpen, isSidebarOpen }: HeaderBarProps) => {
   const currentTheme = useTheme(); // 현재 테마 객체 가져오기
   const lgUp = useMediaQuery(currentTheme.breakpoints.up('lg'));
+  const navigate = useNavigate();
 
   const HandleMobileSideOpen = () => {
     if (isSidebarOpen == false) {
@@ -63,13 +60,12 @@ const HeaderBar = ({
     }
   };
 
+  const handleEditClick = () => {
+    navigate('/forjun/user/edit');
+  };
+
   return (
-    <AppBar
-      position="absolute"
-      open={isSidebarOpen}
-      sidebarWidth={lgUp ? sidebarWidth : 0}
-      headerBarHeight={headerBarHeight}
-    >
+    <AppBar position="absolute" open={isSidebarOpen} sidebarWidth={lgUp ? sidebarWidth : 0} headerBarHeight={headerBarHeight}>
       <Toolbar
         sx={{
           minHeight: `${headerBarHeight}px`, // Toolbar 높이 설정
@@ -92,15 +88,12 @@ const HeaderBar = ({
         >
           <MenuIcon />
         </IconButton>
-        <Typography
-          component="h1"
-          variant="h4"
-          color="inherit"
-          noWrap
-          sx={{ flexGrow: 1 }}
-        >
+        <Typography component="h1" variant="h4" color="inherit" noWrap sx={{ flexGrow: 1 }}>
           {title}
         </Typography>
+        <IconButton color="inherit" onClick={handleEditClick} aria-label="개인정보 수정">
+          <EditIcon />
+        </IconButton>
         <IconButton color="inherit">
           <Badge badgeContent={4} color="secondary">
             <NotificationsIcon />
