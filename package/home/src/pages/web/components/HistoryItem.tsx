@@ -1,4 +1,5 @@
 import { Box, Typography, Stack, Chip, Collapse, Divider } from '@mui/material';
+import { Viewer } from '@toast-ui/react-editor';
 import { RefObject } from 'react';
 
 interface HistoryItemProps {
@@ -18,14 +19,7 @@ interface HistoryItemProps {
   contentRef?: RefObject<HTMLDivElement>; // 중앙 스크롤용
 }
 
-const HistoryItem = ({
-  id,
-  history,
-  expanded,
-  onToggle,
-  formatDate,
-  contentRef,
-}: HistoryItemProps) => {
+const HistoryItem = ({ id, history, expanded, onToggle, formatDate, contentRef }: HistoryItemProps) => {
   // Collapse가 열렸을 때 중앙 스크롤
   const handleCollapseEntered = () => {
     if (id && contentRef?.current) {
@@ -34,12 +28,7 @@ const HistoryItem = ({
       if (item) {
         const containerRect = container.getBoundingClientRect();
         const itemRect = item.getBoundingClientRect();
-        const scrollTop =
-          container.scrollTop +
-          itemRect.top -
-          containerRect.top -
-          containerRect.height / 2 +
-          itemRect.height / 2;
+        const scrollTop = container.scrollTop + itemRect.top - containerRect.top - containerRect.height / 2 + itemRect.height / 2;
         container.scrollTo({ top: scrollTop, behavior: 'smooth' });
       }
     }
@@ -53,21 +42,21 @@ const HistoryItem = ({
         scrollSnapAlign: 'center',
         width: expanded ? '100%' : { xs: '90%', sm: '70%', md: '50%' },
         minHeight: expanded ? 'calc(100vh - 64px)' : 300,
+        maxHeight: expanded ? 'calc(100vh - 64px)' : 'none',
         px: expanded ? 6 : 3,
         py: expanded ? 6 : 4,
         mb: 4,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
+        justifyContent: expanded ? 'flex-start' : 'center',
         alignItems: 'center',
         bgcolor: expanded ? '#ffffff' : '#f8f9fa',
         borderRadius: expanded ? 0 : 3,
-        boxShadow: expanded
-          ? '0 0 0 rgba(0,0,0,0)'
-          : '0 6px 20px rgba(0,0,0,0.1)',
+        boxShadow: expanded ? '0 0 0 rgba(0,0,0,0)' : '0 6px 20px rgba(0,0,0,0.1)',
         transition: 'all 0.3s ease',
         cursor: 'pointer',
-        overflow: 'hidden',
+        overflowY: expanded ? 'auto' : 'hidden',
+        overflowX: 'hidden',
       }}
     >
       {/* 헤더 */}
@@ -75,8 +64,7 @@ const HistoryItem = ({
         {history.project}
       </Typography>
       <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 1 }}>
-        {formatDate(history.historyStartDate)} ~{' '}
-        {formatDate(history.historyEndDate)}
+        {formatDate(history.historyStartDate)} ~ {formatDate(history.historyEndDate)}
       </Typography>
       <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 2 }}>
         {history.subject}
@@ -89,20 +77,14 @@ const HistoryItem = ({
         unmountOnExit
         onEntered={handleCollapseEntered} // 중앙 스크롤
       >
-        <Stack
-          direction="row"
-          spacing={1}
-          flexWrap="wrap"
-          justifyContent="flex-start"
-          sx={{ mb: 2 }}
-        >
+        <Stack direction="row" spacing={1} flexWrap="wrap" justifyContent="flex-start" sx={{ mb: 2 }}>
           {history.historySkill.map(skill => (
             <Chip key={skill} label={skill} color="primary" />
           ))}
         </Stack>
         <Divider sx={{ mb: 2 }} />
         <Typography variant="body1" color="text.secondary">
-          {history.description || '설명이 없습니다.'}
+          <Viewer initialValue={history.description || '설명이 없습니다.'} />
         </Typography>
       </Collapse>
     </Box>
