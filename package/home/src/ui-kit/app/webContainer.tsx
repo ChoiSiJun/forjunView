@@ -1,5 +1,5 @@
 // WebContainer.tsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -13,6 +13,9 @@ export default function WebContainer() {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState<'SI' | 'SM' | 'RND'>('SI');
   const navigate = useNavigate();
+
+  // 현재 경로가 /forjun/web으로 시작하는지 확인
+  const basePath = location.pathname.startsWith('/forjun/web') ? '/forjun/web' : '/web';
 
   useEffect(() => {
     if (location.pathname.includes('/history/si')) {
@@ -56,7 +59,7 @@ export default function WebContainer() {
               variant="outlined"
               onClick={() => {
                 setActiveTab('SI');
-                navigate(`/web/${userId}/profile/history/si`);
+                navigate(`${basePath}/${userId}/profile/history/si`);
               }}
               sx={{
                 borderColor: activeTab === 'SI' ? '#1976d2' : '#ccc',
@@ -80,7 +83,7 @@ export default function WebContainer() {
               variant="outlined"
               onClick={() => {
                 setActiveTab('SM');
-                navigate(`/web/${userId}/profile/history/sm`);
+                navigate(`${basePath}/${userId}/profile/history/sm`);
               }}
               sx={{
                 borderColor: activeTab === 'SM' ? '#1976d2' : '#ccc',
@@ -104,7 +107,7 @@ export default function WebContainer() {
               variant="outlined"
               onClick={() => {
                 setActiveTab('RND');
-                navigate(`/web/${userId}/profile/history/rnd`);
+                navigate(`${basePath}/${userId}/profile/history/rnd`);
               }}
               sx={{
                 borderColor: activeTab === 'RND' ? '#1976d2' : '#ccc',

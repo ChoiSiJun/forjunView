@@ -8,7 +8,7 @@ import SjButton from '@common/ui/elements/button/SjButton';
 import SjTextField from '@common/ui/elements/input/SjTextField';
 
 // Hooks
-import useUser from '@domain/user/hooks/useUser';
+import useAuth from '@domain/user/hooks/useAuth';
 
 //Types
 import { JoinUserRequest } from '@domain/user/api/userApi';
@@ -25,8 +25,8 @@ interface JoinProps {
  * @param {Function} handleJoin - 드로어를 닫는 함수
  */
 export default function Join({ joinOpen, handleJoin }: JoinProps) {
-  // User 관련 기능을 담당하는 커스텀 훅
-  const { join, duplicateIdCheck, isDuplicateIdChecking, isIdAvailable, setIsIdAvailable } = useUser();
+  // 인증 관련 기능을 담당하는 커스텀 훅
+  const { join, duplicateIdCheck, isDuplicateIdChecking, isIdAvailable, setIsIdAvailable } = useAuth();
 
   // 아이디 입력값이 변경될 때 호출되는 핸들러
   const handleUserIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {

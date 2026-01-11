@@ -16,10 +16,11 @@ const fetchUser = async (): Promise<UserResponse> => {
   return response.data;
 };
 
-const useUserQuery = () => {
+const useUserQuery = (enabled: boolean = true) => {
   return useQueryWithLoading<UserResponse>({
     queryKey: ['user'],
     queryFn: () => fetchUser(),
+    enabled,
   });
 };
 

@@ -25,7 +25,7 @@ import { useAppDispatch } from '@store/ReduxHooks';
 import { RootState } from '@store/ReduxStoreConfig';
 import { authDelete } from '@store/slice/AuthSlice';
 import Join from '@domain/user/components/Join';
-import useUser from '@domain/user/hooks/useUser';
+import useAuth from '@domain/user/hooks/useAuth';
 
 //Types
 import { LoginUserRequest } from '@domain/user/api/userApi';
@@ -47,8 +47,8 @@ export default function Auth() {
   // 회원가입 드로어 상태 관리
   const [joinOpen, setJoinOpen] = React.useState(false);
 
-  // User 관련 기능을 담당하는 커스텀 훅
-  const { login } = useUser();
+  // 인증 관련 기능을 담당하는 커스텀 훅
+  const { login } = useAuth();
 
   // JWT 토큰 상태에 따른 페이지 리다이렉션 및 만료 처리
   useEffect(() => {
