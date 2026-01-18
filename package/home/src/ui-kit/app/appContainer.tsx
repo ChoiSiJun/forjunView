@@ -24,10 +24,11 @@ const sidebarWidth: number = 270;
 
 export default function AppContainer() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const isDesktop = useMediaQuery(appTheme.breakpoints.up('lg'));
 
   return (
     <ThemeProvider theme={appTheme}>
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', width: '100%', position: 'relative' }}>
         <CssBaseline />
 
         <SideBar
@@ -44,13 +45,12 @@ export default function AppContainer() {
                 ? 'white'
                 : theme.palette.grey[900],
             flexGrow: 1,
+            minWidth: 0,
             height: '100vh',
             overflow: 'auto',
-            transition: 'margin-left 0.3s',
-            marginLeft:
-              useMediaQuery(appTheme.breakpoints.up('lg')) && isSidebarOpen
-                ? `${sidebarWidth}px`
-                : '0',
+            transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            marginLeft: isDesktop && isSidebarOpen ? `${sidebarWidth}px` : '0',
+            width: '100%',
           }}
         >
           <HeaderBar

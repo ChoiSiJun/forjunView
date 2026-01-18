@@ -10,8 +10,19 @@ const ItemContainer = () => {
   const PackageInfo = MenuInfo.packageList[MenuInfo.accessPackageIndex];
 
   return (
-    <Box sx={{ px: 3 }}>
-      <List sx={{ pt: 0 }} className="sidebarNav">
+    <Box sx={{ px: 2, py: 1 }}>
+      <List 
+        sx={{ 
+          pt: 0,
+          pb: 2,
+          '& .MuiListItem-root': {
+            borderRadius: '8px',
+            mx: 0.5,
+            mb: 0.5,
+          },
+        }} 
+        className="sidebarNav"
+      >
         {PackageInfo.moduleList?.map(moduleItem => (
           <React.Fragment key={moduleItem.moduleCode}>
             <Group name={moduleItem.moduleName} key={moduleItem.moduleCode} />
