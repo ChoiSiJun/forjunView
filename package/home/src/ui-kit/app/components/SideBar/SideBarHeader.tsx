@@ -1,15 +1,7 @@
 import { Link } from 'react-router-dom';
-import {
-  Box,
-  Typography,
-  styled,
-  useTheme,
-  Popover,
-  MenuItem,
-  MenuList,
-  Paper,
-} from '@mui/material';
-import mirlogo from '/asset/mirlogo.png';
+import { Box, Typography, styled, useTheme, Popover, MenuItem, MenuList, Paper } from '@mui/material';
+import forjunlogo from '/asset/forjuncloud-logo.svg';
+
 import Button from '@mui/material/Button';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import AccessibilityIcon from '@mui/icons-material/Accessibility';
@@ -18,7 +10,6 @@ import packageInfo from '@config/Menu/Package';
 import React from 'react';
 import { useAppDispatch, useAppSelector } from 'store/ReduxHooks';
 import { packageAccess } from 'store/slice/MenuSlice';
-import { start } from 'repl';
 
 //**************************컴포넌트 스타일 재설정
 // Link 스타일 컴포넌트 재정의
@@ -107,9 +98,7 @@ const SideBarHeader = () => {
   //*******************************컴포넌트 이벤트 정의
 
   //패키지 선택박스 열기 이벤트
-  const handlePackageSelectOpen = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
+  const handlePackageSelectOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -136,7 +125,7 @@ const SideBarHeader = () => {
           justifyContent: 'center',
         }}
       >
-        <img src={mirlogo} alt="Logo" width={'50%'} height={'50%'} />
+        <img src={forjunlogo} alt="Logo" style={{ width: '100%', height: 'auto', maxWidth: '180px' }} />
       </LinkStyled>
 
       <Box sx={{ display: 'flex', alignItems: 'center', width: '220px' }}>
@@ -179,11 +168,7 @@ const SideBarHeader = () => {
             <PaperStyled>
               <MenuList id="split-button-menu" autoFocusItem>
                 {packageInfo.map((item, index) => (
-                  <MenuItem
-                    key={item.packageCode}
-                    selected={index === packageIndex}
-                    onClick={() => handlePackageItemClick(index)}
-                  >
+                  <MenuItem key={item.packageCode} selected={index === packageIndex} onClick={() => handlePackageItemClick(index)}>
                     {item.packageName}
                   </MenuItem>
                 ))}

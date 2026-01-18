@@ -11,8 +11,7 @@ type PersonalResponse = GetResponseType<typeof END_POINT>;
 const fetchPersonal = async (params: PersonalPublicDetailRequest): Promise<PersonalResponse> => {
   const response = await axios({
     method: END_POINT.method,
-    url: END_POINT.url,
-    params: params,
+    url: END_POINT.url + '/' + params.userId,
   });
 
   return response.data;

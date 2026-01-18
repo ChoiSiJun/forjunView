@@ -1,0 +1,53 @@
+<svg width="300" height="80" viewBox="0 0 300 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 클라우드 그라데이션 -->
+    <linearGradient id="cloudGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#5B9BD5;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4A90E2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#357ABD;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- 텍스트 그라데이션 -->
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#2C3E50;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#34495E;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- 그림자 효과 -->
+    <filter id="cloudShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.25"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- 메인 클라우드 아이콘 -->
+  <g filter="url(#cloudShadow)">
+    <!-- 큰 클라우드 -->
+    <path d="M20 48C13.3726 48 8 42.6274 8 36C8 29.3726 13.3726 24 20 24C21.5 21.5 24.5 20 28 20C33.5 20 38 23.5 40 28C42.5 26.5 45.5 25.5 49 25.5C55.5 25.5 60.5 30.5 60.5 37C60.5 43.5 55.5 48.5 49 48.5H20V48Z" fill="url(#cloudGradient)"/>
+    
+    <!-- 작은 클라우드 (깊이감) -->
+    <path d="M15 42C12.7909 42 11 40.2091 11 38C11 35.7909 12.7909 34 15 34C15.5 33 16.5 32.5 17.5 32.5C19 32.5 20 33.5 20.5 35C21.5 34.5 22.5 34.2 23.5 34.2C25.5 34.2 27 35.7 27 37.7C27 39.7 25.5 41.2 23.5 41.2H15V42Z" fill="white" opacity="0.3"/>
+  </g>
+  
+  <!-- 텍스트: Forjun -->
+  <text x="75" y="38" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="-0.5" fill="url(#textGradient)">
+    Forjun
+  </text>
+  
+  <!-- 텍스트: Cloud -->
+  <text x="75" y="58" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="20" font-weight="300" letter-spacing="1" fill="#7F8C8D">
+    Cloud
+  </text>
+  
+  <!-- 장식용 작은 점들 -->
+  <circle cx="165" cy="30" r="2" fill="#5B9BD5" opacity="0.5"/>
+  <circle cx="170" cy="32" r="1.5" fill="#5B9BD5" opacity="0.4"/>
+  <circle cx="175" cy="30" r="1" fill="#5B9BD5" opacity="0.3"/>
+</svg>

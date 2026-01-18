@@ -31,7 +31,6 @@ const Personal = () => {
 
         {/* 기술 */}
         <SkillForm personalHook={personalHook} />
-
         {/* 자격증 정보 */}
         <CertificateForm personalHook={personalHook} />
 

@@ -11,14 +11,16 @@ import { appTheme } from '@ui-kit/app/themes/appTheme';
 export default function WebContainer() {
   const { userId } = useParams();
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState<'SI' | 'SM' | 'RND'>('SI');
+  const [activeTab, setActiveTab] = useState<'PERSONAL' | 'SI' | 'SM' | 'RND'>('PERSONAL');
   const navigate = useNavigate();
 
   // 현재 경로가 /forjun/web으로 시작하는지 확인
   const basePath = location.pathname.startsWith('/forjun/web') ? '/forjun/web' : '/web';
 
   useEffect(() => {
-    if (location.pathname.includes('/history/si')) {
+    if (location.pathname.includes('/personal')) {
+      setActiveTab('PERSONAL');
+    } else if (location.pathname.includes('/history/si')) {
       setActiveTab('SI');
     } else if (location.pathname.includes('/history/sm')) {
       setActiveTab('SM');
@@ -55,6 +57,29 @@ export default function WebContainer() {
           }}
         >
           <Stack direction="row" spacing={2}>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setActiveTab('PERSONAL');
+                navigate(`${basePath}/${userId}/profile/personal`);
+              }}
+              sx={{
+                borderColor: activeTab === 'PERSONAL' ? '#1976d2' : '#ccc',
+                color: activeTab === 'PERSONAL' ? '#1976d2' : '#555',
+                fontWeight: 500,
+                px: 2.5,
+                py: 0.7,
+                borderRadius: 2,
+                textTransform: 'none',
+                backgroundColor: 'transparent',
+                '&:hover': {
+                  bgcolor: 'rgba(25,118,210,0.08)',
+                  borderColor: '#1976d2',
+                },
+              }}
+            >
+              Profile
+            </Button>
             <Button
               variant="outlined"
               onClick={() => {
