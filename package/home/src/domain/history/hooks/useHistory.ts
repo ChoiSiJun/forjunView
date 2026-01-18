@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import { modalClose } from '@store/slice/ModalSlice';
 import { useAppDispatch } from '@store/ReduxHooks';
 
-const useHistory = (category: 'SI' | 'SM' | 'RND') => {
+const useHistory = (category: 'SI' | 'SM' | 'RND' | 'TOY') => {
   /** Types */
   type HistorySaveRequest = GetRequestType<typeof HISTORY_API_ENDPOINTS.save>;
   type HistoryUpdateRequest = GetRequestType<typeof HISTORY_API_ENDPOINTS.update>;

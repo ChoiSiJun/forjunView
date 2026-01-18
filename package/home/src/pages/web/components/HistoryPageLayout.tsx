@@ -12,7 +12,7 @@ const formatDate = (dateStr: string) => {
 };
 
 interface HistoryPageLayoutProps {
-  category: 'RND' | 'SI' | 'SM';
+  category: 'RND' | 'SI' | 'SM' | 'TOY';
 }
 
 export const HistoryPageLayout: React.FC<HistoryPageLayoutProps> = ({ category }) => {

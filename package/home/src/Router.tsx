@@ -7,11 +7,13 @@ import { SiHistory } from 'pages/history/si';
 import Personal from 'pages/personal';
 import { SmHistory } from '@pages/history/sm';
 import { RndHistory } from '@pages/history/rnd';
+import { ToyHistory } from '@pages/history/toy';
 import PrivatePage from '@pages/error';
 import WebContainer from '@ui-kit/app/webContainer';
 import { OpenSiHistory } from '@pages/web/history/si';
 import { OpenSmHistory } from '@pages/web/history/sm';
 import { OpenRndHistory } from '@pages/web/history/rnd';
+import { OpenToyHistory } from '@pages/web/history/toy';
 import OpenPersonal from '@pages/web/personal';
 import UserEdit from '@pages/user/edit';
 
@@ -28,6 +30,7 @@ function ForjunRouter() {
           <Route path="history/si" element={<SiHistory />} />
           <Route path="history/sm" element={<SmHistory />} />
           <Route path="history/rnd" element={<RndHistory />} />
+          <Route path="history/toy" element={<ToyHistory />} />
         </Route>
         <Route path="web/:userId?/profile" element={<WebContainer />}>
           <Route index element={<OpenPersonal />} />
@@ -35,6 +38,7 @@ function ForjunRouter() {
           <Route path="history/si" element={<OpenSiHistory />} />
           <Route path="history/sm" element={<OpenSmHistory />} />
           <Route path="history/rnd" element={<OpenRndHistory />} />
+          <Route path="history/toy" element={<OpenToyHistory />} />
         </Route>
         <Route path="error" element={<PrivatePage />} />
       </Routes>

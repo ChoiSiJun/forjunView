@@ -11,7 +11,7 @@ import '@toast-ui/editor/dist/toastui-editor-viewer.css'; // 뷰어 전용 CSS
 import { Viewer } from '@toast-ui/react-editor';
 
 interface HistoryListProps {
-  category: 'SI' | 'SM' | 'RND';
+  category: 'SI' | 'SM' | 'RND' | 'TOY';
 }
 
 const HistoryList = ({ category }: HistoryListProps) => {

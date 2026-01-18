@@ -13,7 +13,7 @@ import useHistoryQuery from '@domain/history/api/useHistoryQuery';
 
 interface RegisterProps<T> {
   onClick: (params: T) => void | Promise<void>;
-  catagory: 'SI' | 'SM' | 'RND';
+  catagory: 'SI' | 'SM' | 'RND' | 'TOY';
   id?: number; // 수정 모드일 때 history id
 }
 
@@ -102,6 +102,7 @@ const Register = <T extends HistorySaveRequest | HistoryUpdateRequest>({ onClick
               { name: 'SI', value: 'SI' },
               { name: 'SM', value: 'SM' },
               { name: 'RND', value: 'RND' },
+              { name: 'TOY', value: 'TOY' },
             ]}
             defaultValue={registerForm.values.category}
             label={'유형'}

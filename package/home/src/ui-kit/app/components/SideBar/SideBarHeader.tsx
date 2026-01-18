@@ -13,14 +13,22 @@ import { packageAccess } from 'store/slice/MenuSlice';
 
 //**************************컴포넌트 스타일 재설정
 // Link 스타일 컴포넌트 재정의
-const LinkStyled = styled(Link)(() => ({
+const LinkStyled = styled(Link)(({ theme }) => ({
   height: '90px',
   width: '180px',
   overflow: 'hidden',
-  display: 'block',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
   transition: 'transform 0.2s ease',
+  padding: '8px',
   '&:hover': {
     transform: 'scale(1.02)',
+  },
+  '& img': {
+    width: '100%',
+    height: 'auto',
+    objectFit: 'contain',
   },
 }));
 

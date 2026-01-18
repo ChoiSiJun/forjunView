@@ -11,7 +11,7 @@ import { appTheme } from '@ui-kit/app/themes/appTheme';
 export default function WebContainer() {
   const { userId } = useParams();
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState<'PERSONAL' | 'SI' | 'SM' | 'RND'>('PERSONAL');
+  const [activeTab, setActiveTab] = useState<'PERSONAL' | 'SI' | 'SM' | 'RND' | 'TOY'>('PERSONAL');
   const navigate = useNavigate();
 
   // 현재 경로가 /forjun/web으로 시작하는지 확인
@@ -26,6 +26,8 @@ export default function WebContainer() {
       setActiveTab('SM');
     } else if (location.pathname.includes('/history/rnd')) {
       setActiveTab('RND');
+    } else if (location.pathname.includes('/history/toy')) {
+      setActiveTab('TOY');
     }
   }, [location.pathname]);
 
@@ -150,6 +152,30 @@ export default function WebContainer() {
               }}
             >
               RND History
+            </Button>
+
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setActiveTab('TOY');
+                navigate(`${basePath}/${userId}/profile/history/toy`);
+              }}
+              sx={{
+                borderColor: activeTab === 'TOY' ? '#1976d2' : '#ccc',
+                color: activeTab === 'TOY' ? '#1976d2' : '#555',
+                fontWeight: 500,
+                px: 2.5,
+                py: 0.7,
+                borderRadius: 2,
+                textTransform: 'none',
+                backgroundColor: 'transparent',
+                '&:hover': {
+                  bgcolor: 'rgba(25,118,210,0.08)',
+                  borderColor: '#1976d2',
+                },
+              }}
+            >
+              Toy History
             </Button>
           </Stack>
         </Box>
