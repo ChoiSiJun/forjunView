@@ -94,11 +94,6 @@ const HeaderBar = ({ title, headerBarHeight, sidebarWidth, setSidebarOpen, isSid
         <IconButton color="inherit" onClick={handleEditClick} aria-label="개인정보 수정">
           <EditIcon />
         </IconButton>
-        <IconButton color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
       </Toolbar>
     </AppBar>
   );

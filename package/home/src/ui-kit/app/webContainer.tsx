@@ -45,61 +45,84 @@ export default function WebContainer() {
         {/* 상단 메뉴 */}
         <Box
           sx={{
-            height: 56,
-            px: 3,
-            bgcolor: 'rgba(255,255,255,0.95)',
-            backdropFilter: 'blur(6px)',
+            height: 64,
+            px: 4,
+            bgcolor: 'rgba(255,255,255,0.98)',
+            backdropFilter: 'blur(12px)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'flex-start',
-            borderBottom: '1px solid #e0e0e0',
+            borderBottom: '1px solid rgba(0,0,0,0.06)',
             position: 'sticky',
             top: 0,
             zIndex: 1000,
+            boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
           }}
         >
-          <Stack direction="row" spacing={2}>
+          <Stack
+            direction="row"
+            spacing={1.5}
+            sx={{
+              position: 'relative',
+              bgcolor: 'rgba(0,0,0,0.02)',
+              borderRadius: 3,
+              p: 0.5,
+              display: 'inline-flex',
+            }}
+          >
             <Button
-              variant="outlined"
               onClick={() => {
                 setActiveTab('PERSONAL');
                 navigate(`${basePath}/${userId}/profile/personal`);
               }}
               sx={{
-                borderColor: activeTab === 'PERSONAL' ? '#1976d2' : '#ccc',
-                color: activeTab === 'PERSONAL' ? '#1976d2' : '#555',
-                fontWeight: 500,
-                px: 2.5,
-                py: 0.7,
-                borderRadius: 2,
+                color: activeTab === 'PERSONAL' ? '#5a67d8' : '#6b7280',
+                fontWeight: activeTab === 'PERSONAL' ? 600 : 500,
+                px: 3,
+                py: 1,
+                borderRadius: 2.5,
                 textTransform: 'none',
-                backgroundColor: 'transparent',
+                fontSize: '0.875rem',
+                backgroundColor: activeTab === 'PERSONAL' ? 'rgba(102, 126, 234, 0.12)' : 'transparent',
+                boxShadow: activeTab === 'PERSONAL' ? '0 2px 8px rgba(102, 126, 234, 0.15)' : 'none',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                 '&:hover': {
-                  bgcolor: 'rgba(25,118,210,0.08)',
-                  borderColor: '#1976d2',
+                  bgcolor: 'rgba(102, 126, 234, 0.12)',
+                  color: '#5a67d8',
+                  transform: 'translateY(-1px)',
+                  boxShadow: '0 2px 8px rgba(102, 126, 234, 0.15)',
+                },
+                '&:active': {
+                  transform: 'translateY(0)',
                 },
               }}
             >
               Profile
             </Button>
             <Button
-              variant="outlined"
               onClick={() => {
                 setActiveTab('SI');
                 navigate(`${basePath}/${userId}/profile/history/si`);
               }}
               sx={{
-                borderColor: activeTab === 'SI' ? '#1976d2' : '#ccc',
-                color: activeTab === 'SI' ? '#1976d2' : '#555',
-                fontWeight: 500,
-                px: 2.5,
-                py: 0.7,
-                borderRadius: 2,
+                color: activeTab === 'SI' ? '#5a67d8' : '#6b7280',
+                fontWeight: activeTab === 'SI' ? 600 : 500,
+                px: 3,
+                py: 1,
+                borderRadius: 2.5,
                 textTransform: 'none',
-                backgroundColor: 'transparent',
+                fontSize: '0.875rem',
+                backgroundColor: activeTab === 'SI' ? 'rgba(102, 126, 234, 0.12)' : 'transparent',
+                boxShadow: activeTab === 'SI' ? '0 2px 8px rgba(102, 126, 234, 0.15)' : 'none',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                 '&:hover': {
-                  bgcolor: 'rgba(25,118,210,0.08)',
-                  borderColor: '#1976d2',
+                  bgcolor: 'rgba(102, 126, 234, 0.12)',
+                  color: '#5a67d8',
+                  transform: 'translateY(-1px)',
+                  boxShadow: '0 2px 8px rgba(102, 126, 234, 0.15)',
+                },
+                '&:active': {
+                  transform: 'translateY(0)',
                 },
               }}
             >
@@ -107,23 +130,29 @@ export default function WebContainer() {
             </Button>
 
             <Button
-              variant="outlined"
               onClick={() => {
                 setActiveTab('SM');
                 navigate(`${basePath}/${userId}/profile/history/sm`);
               }}
               sx={{
-                borderColor: activeTab === 'SM' ? '#1976d2' : '#ccc',
-                color: activeTab === 'SM' ? '#1976d2' : '#555',
-                fontWeight: 500,
-                px: 2.5,
-                py: 0.7,
-                borderRadius: 2,
+                color: activeTab === 'SM' ? '#5a67d8' : '#6b7280',
+                fontWeight: activeTab === 'SM' ? 600 : 500,
+                px: 3,
+                py: 1,
+                borderRadius: 2.5,
                 textTransform: 'none',
-                backgroundColor: 'transparent',
+                fontSize: '0.875rem',
+                backgroundColor: activeTab === 'SM' ? 'rgba(102, 126, 234, 0.12)' : 'transparent',
+                boxShadow: activeTab === 'SM' ? '0 2px 8px rgba(102, 126, 234, 0.15)' : 'none',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                 '&:hover': {
-                  bgcolor: 'rgba(25,118,210,0.08)',
-                  borderColor: '#1976d2',
+                  bgcolor: 'rgba(102, 126, 234, 0.12)',
+                  color: '#5a67d8',
+                  transform: 'translateY(-1px)',
+                  boxShadow: '0 2px 8px rgba(102, 126, 234, 0.15)',
+                },
+                '&:active': {
+                  transform: 'translateY(0)',
                 },
               }}
             >
@@ -131,23 +160,29 @@ export default function WebContainer() {
             </Button>
 
             <Button
-              variant="outlined"
               onClick={() => {
                 setActiveTab('RND');
                 navigate(`${basePath}/${userId}/profile/history/rnd`);
               }}
               sx={{
-                borderColor: activeTab === 'RND' ? '#1976d2' : '#ccc',
-                color: activeTab === 'RND' ? '#1976d2' : '#555',
-                fontWeight: 500,
-                px: 2.5,
-                py: 0.7,
-                borderRadius: 2,
+                color: activeTab === 'RND' ? '#5a67d8' : '#6b7280',
+                fontWeight: activeTab === 'RND' ? 600 : 500,
+                px: 3,
+                py: 1,
+                borderRadius: 2.5,
                 textTransform: 'none',
-                backgroundColor: 'transparent',
+                fontSize: '0.875rem',
+                backgroundColor: activeTab === 'RND' ? 'rgba(102, 126, 234, 0.12)' : 'transparent',
+                boxShadow: activeTab === 'RND' ? '0 2px 8px rgba(102, 126, 234, 0.15)' : 'none',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                 '&:hover': {
-                  bgcolor: 'rgba(25,118,210,0.08)',
-                  borderColor: '#1976d2',
+                  bgcolor: 'rgba(102, 126, 234, 0.12)',
+                  color: '#5a67d8',
+                  transform: 'translateY(-1px)',
+                  boxShadow: '0 2px 8px rgba(102, 126, 234, 0.15)',
+                },
+                '&:active': {
+                  transform: 'translateY(0)',
                 },
               }}
             >
@@ -155,23 +190,29 @@ export default function WebContainer() {
             </Button>
 
             <Button
-              variant="outlined"
               onClick={() => {
                 setActiveTab('TOY');
                 navigate(`${basePath}/${userId}/profile/history/toy`);
               }}
               sx={{
-                borderColor: activeTab === 'TOY' ? '#1976d2' : '#ccc',
-                color: activeTab === 'TOY' ? '#1976d2' : '#555',
-                fontWeight: 500,
-                px: 2.5,
-                py: 0.7,
-                borderRadius: 2,
+                color: activeTab === 'TOY' ? '#5a67d8' : '#6b7280',
+                fontWeight: activeTab === 'TOY' ? 600 : 500,
+                px: 3,
+                py: 1,
+                borderRadius: 2.5,
                 textTransform: 'none',
-                backgroundColor: 'transparent',
+                fontSize: '0.875rem',
+                backgroundColor: activeTab === 'TOY' ? 'rgba(102, 126, 234, 0.12)' : 'transparent',
+                boxShadow: activeTab === 'TOY' ? '0 2px 8px rgba(102, 126, 234, 0.15)' : 'none',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                 '&:hover': {
-                  bgcolor: 'rgba(25,118,210,0.08)',
-                  borderColor: '#1976d2',
+                  bgcolor: 'rgba(102, 126, 234, 0.12)',
+                  color: '#5a67d8',
+                  transform: 'translateY(-1px)',
+                  boxShadow: '0 2px 8px rgba(102, 126, 234, 0.15)',
+                },
+                '&:active': {
+                  transform: 'translateY(0)',
                 },
               }}
             >
