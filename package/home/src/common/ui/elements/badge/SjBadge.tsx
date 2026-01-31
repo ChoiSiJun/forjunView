@@ -4,17 +4,9 @@ import { Badge, BadgeProps, SxProps, Theme } from '@mui/material';
 import React from 'react';
 
 export type BadgeVariant = 'standard' | 'dot';
-export type BadgeColor =
-  | 'default'
-  | 'primary'
-  | 'secondary'
-  | 'error'
-  | 'info'
-  | 'success'
-  | 'warning';
+export type BadgeColor = 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning';
 
-export interface SjBadgeProps
-  extends Omit<BadgeProps, 'badgeContent' | 'color' | 'variant'> {
+export interface SjBadgeProps extends Omit<BadgeProps, 'badgeContent' | 'color' | 'variant'> {
   /** 배지에 표시할 내용 (숫자, 텍스트 등) */
   badgeContent?: React.ReactNode;
   /** 배지 색상 */
@@ -54,28 +46,23 @@ const SjBadge = ({
   badgeSx,
   ...rest
 }: SjBadgeProps) => {
+  // sx와 badgeSx를 병합하여 Badge의 sx prop에 전달
+  const mergedSx = React.useMemo(() => {
+    if (!badgeSx) return sx;
+
+    return [
+      ...(Array.isArray(sx) ? sx : sx ? [sx] : []),
+      {
+        '& .MuiBadge-badge': badgeSx,
+      },
+    ];
+  }, [sx, badgeSx]);
+
   return (
-    <Badge
-      badgeContent={badgeContent}
-      color={badgeColor}
-      variant={badgeVariant}
-      max={max}
-      invisible={invisible}
-      anchorOrigin={anchorOrigin}
-      sx={sx}
-      slotProps={{
-        badge: {
-          sx: badgeSx,
-        },
-      }}
-      {...rest}
-    >
+    <Badge badgeContent={badgeContent} color={badgeColor} variant={badgeVariant} max={max} invisible={invisible} anchorOrigin={anchorOrigin} sx={mergedSx} {...rest}>
       {children}
     </Badge>
   );
 };
 
 export default SjBadge;
-
-
-

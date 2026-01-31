@@ -1,6 +1,6 @@
 import { DataGrid, GridColDef, GridSlots } from '@mui/x-data-grid';
 import LinearProgress from '@mui/material/LinearProgress';
-import CustomNoRowsOverlay from '@common/components/elements/table/customOverlay/NoRowsOverlay';
+import CustomNoRowsOverlay from '@common/ui/elements/table/customOverlay/NoRowsOverlay';
 
 export interface SjDataTableProps {
   rows: Record<string, string | number | null>[];

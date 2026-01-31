@@ -1,6 +1,5 @@
 import Checkbox from '@mui/material/Checkbox';
 import { FormControlLabel, styled } from '@mui/material';
-import { isEmpty } from 'lodash';
 
 interface SjCheckboxProps {
   label?: string;
@@ -21,7 +20,7 @@ const SjCheckbox = ({
   color,
   onChange,
 }: SjCheckboxProps) => {
-  if (isEmpty(label)) {
+  if (!label || label.trim() === '') {
     return (
       <MuiCheckboxStyled
         defaultChecked={defaultChecked}

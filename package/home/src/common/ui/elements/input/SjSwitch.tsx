@@ -1,5 +1,4 @@
 import { FormControlLabel, Switch, styled } from '@mui/material';
-import { isEmpty } from 'lodash';
 
 export const SjSwitchGuide = {
   title: '스위치',
@@ -33,7 +32,7 @@ const SjSwitch = ({
   color,
   onChange,
 }: SjSwitchProps) => {
-  if (isEmpty(label)) {
+  if (!label || label.trim() === '') {
     return (
       <SwitchStyled
         defaultChecked={defaultChecked}

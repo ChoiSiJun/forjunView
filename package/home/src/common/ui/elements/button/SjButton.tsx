@@ -1,7 +1,6 @@
 import { styled } from '@mui/material';
 import Button, { ButtonProps } from '@mui/material/Button';
 import { useAppSelector } from 'store/ReduxHooks';
-import React from 'react';
 
 type ButtonType =
   | 'submit' // 폼 제출용
@@ -52,7 +51,7 @@ const SjButton = ({
   switch (ButtonType) {
     case 'submit':
       type = 'submit';
-    // fallthrough
+      break;
     case 'default':
     case 'confirm':
       break;

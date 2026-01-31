@@ -1,4 +1,4 @@
-import { ListSubheader, styled, Box, alpha } from '@mui/material';
+import { ListSubheader, styled, alpha } from '@mui/material';
 
 interface NavGroupProps {
   name: string;

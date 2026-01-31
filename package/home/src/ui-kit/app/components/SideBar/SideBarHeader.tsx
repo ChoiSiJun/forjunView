@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Box, Typography, styled, useTheme, Popover, MenuItem, MenuList, Paper, alpha } from '@mui/material';
+import { Box, Typography, styled, useTheme, Popover, MenuItem, MenuList, alpha } from '@mui/material';
 import forjunlogo from '/asset/forjuncloud-logo.svg';
 
 import Button from '@mui/material/Button';
@@ -13,7 +13,7 @@ import { packageAccess } from 'store/slice/MenuSlice';
 
 //**************************컴포넌트 스타일 재설정
 // Link 스타일 컴포넌트 재정의
-const LinkStyled = styled(Link)(({ theme }) => ({
+const LinkStyled = styled(Link)(() => ({
   height: '90px',
   width: '180px',
   overflow: 'hidden',
@@ -30,15 +30,6 @@ const LinkStyled = styled(Link)(({ theme }) => ({
     height: 'auto',
     objectFit: 'contain',
   },
-}));
-
-const PaperStyled = styled(Paper)(({ theme }) => ({
-  borderRadius: '12px',
-  border: 'none',
-  boxShadow: '0 8px 24px rgba(0, 0, 0, 0.12)',
-  overflow: 'hidden',
-  marginTop: '8px',
-  background: theme.palette.background.paper,
 }));
 
 // 모듈변경 버튼 컴포넌트 재정의 (세련된 카드 스타일)
@@ -105,13 +96,6 @@ const MaterialIconBox = styled(Box)(({ theme }) => ({
   boxShadow: `0 4px 12px ${alpha(theme.palette.primary.main, 0.3)}`,
   transition: 'all 0.3s ease',
   flexShrink: 0,
-}));
-
-// 드롭다운 박스
-const ModuleChangeDropBox = styled(Box)(() => ({
-  '& .MuiPaper-root': {
-    minWidth: '240px',
-  },
 }));
 
 const SideBarHeader = () => {
