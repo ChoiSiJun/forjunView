@@ -58,8 +58,8 @@ const SjConfirmDialog = () => {
           gap: 1,
         }}
       >
-        <SjButton ButtonType="cancel" buttonName={cancelText} onClick={handleClose} />
         <SjButton ButtonType="confirm" buttonName={confirmText} onClick={handleConfirm} />
+        <SjButton ButtonType="cancel" buttonName={cancelText} onClick={handleClose} />
       </DialogActions>
     </Dialog>
   );
